@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Queue Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #ffffff;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* Background walls that hide the side cards - adjust for mobile */
+        .left-wall {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 35%;
+            height: 100%;
+            background: linear-gradient(to right, 
+                #ffffff 0%, 
+                #ffffff 60%, 
+                rgba(255, 255, 255, 0.9) 90%, 
+                transparent 100%);
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .right-wall {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 35%;
+            height: 100%;
+            background: linear-gradient(to left, 
+                #ffffff 0%, 
+                #ffffff 60%, 
+                rgba(255, 255, 255, 0.9) 90%, 
+                transparent 100%);
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        /* Fixed spotlight on center only - scale with viewport */
+        .spotlight {
+            position: absolute;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(350px, 80vw);
+            height: min(600px, 120vh);
+            background: 
+                radial-gradient(ellipse 40% 80% at 50% 0%, 
+                    rgba(45, 90, 45, 0.2) 0%, 
+                    rgba(45, 90, 45, 0.1) 30%, 
+                    rgba(45, 90, 45, 0.04) 50%, 
+                    transparent 70%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Cards track - horizontal line where cards move */
+        .cards-track {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            height: min(450px, 80vh);
+            z-index: 10;
+        }
+
+        /* Card queue container - wider to allow for off-screen cards */
+        .card-queue {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: min(2rem, 4vw);
+            transition: transform 1.5s ease-in-out;
+            width: fit-content;
+        }
+
+        /* Playing card styling - make responsive */
+        .playing-card {
+            background: #ffffff;
+            border: 2px solid #2d5a2d;
+            border-radius: 15px;
+            padding: min(2.5rem, 5vw) min(2rem, 4vw);
+            width: min(340px, 80vw);
+            height: min(400px, 70vh);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 
+                0 8px 20px rgba(45, 90, 45, 0.15),
+                0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 1.5s ease-in-out;
+            position: relative;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        /* Center card (showcased) */
+        .playing-card.center {
+            transform: translateY(-40px) scale(1.0);
+            box-shadow: 
+                0 20px 40px rgba(45, 90, 45, 0.25),
+                0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: #2d5a2d;
+            border-width: 3px;
+            z-index: 15;
+            background: #ffffff;
+        }
+
+        /* Side cards (in queue or leaving) */
+        .playing-card.side {
+            transform: translateY(10px) scale(1.0);
+            opacity: 0.7;
+            z-index: 5;
+            border-color: #4a5b4a;
+        }
+
+        /* Cards that are hidden behind walls */
+        .playing-card.hidden {
+            opacity: 0.3;
+            z-index: 1;
+            transform: translateY(20px) scale(0.9);
+            border-color: #4a5b4a;
+        }
+
+        /* Card content - adjust font sizes */
+        .card-title {
+            color: #2f3e2f;
+            font-size: min(2rem, 6vw);
+            font-weight: 700;
+            margin-bottom: min(1.5rem, 3vw);
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .card-content {
+            color: #4a5b4a;
+            font-size: min(1rem, 4vw);
+            line-height: 1.6;
+            margin-bottom: min(2rem, 4vw);
+            text-align: center;
+        }
+
+        .card-btn {
+            background: #2d5a2d;
+            color: #ffffff;
+            border: none;
+            padding: min(1rem, 2vw) min(2rem, 4vw);
+            border-radius: 25px;
+            font-size: min(1rem, 4vw);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 auto;
+            width: fit-content;
+        }
+
+        .card-btn:hover {
+            background: #1f4a1f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45, 90, 45, 0.3);
+        }
+
+        /* Enhanced glow effect for center card - scale */
+        .playing-card.center::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 30px;
+            background: 
+                radial-gradient(ellipse, 
+                    rgba(45, 90, 45, 0.2) 0%, 
+                    rgba(45, 90, 45, 0.1) 50%, 
+                    transparent 100%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 1200px) {
+            .left-wall, .right-wall {
+                width: 25%;
+            }
+            
+            .playing-card.center {
+                transform: translateY(-30px) scale(1.0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .left-wall, .right-wall {
+                width: 15%;
+                background: linear-gradient(to right, 
+                    #ffffff 0%, 
+                    transparent 100%);
+                background: linear-gradient(to left, 
+                    #ffffff 0%, 
+                    transparent 100%);
+            }
+            
+            .spotlight {
+                width: 80vw;
+                height: 100vh;
+            }
+            
+            .cards-track {
+                height: 80vh;
+            }
+            
+            .playing-card {
+                width: 70vw;
+                height: 60vh;
+                padding: 1.5rem 1rem;
+            }
+            
+            .card-queue {
+                gap: 1rem;
+            }
+            
+            .playing-card.center {
+                transform: translateY(-20px) scale(1.0);
+            }
+            
+            .playing-card.side {
+                opacity: 0.5;
+                transform: translateY(5px) scale(0.95);
+            }
+            
+            .playing-card.hidden {
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                overflow-y: auto;
+            }
+            
+            .container {
+                min-height: auto;
+                height: 100vh;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: 2rem 1rem;
+            }
+            
+            .left-wall, .right-wall {
+                display: none; /* Hide walls on mobile as we show one card */
+            }
+            
+            .spotlight {
+                top: 0;
+                height: 100%;
+                width: 100%;
+            }
+            
+            .cards-track {
+                width: 100%;
+                height: auto;
+                overflow: hidden;
+            }
+            
+            .card-queue {
+                flex-direction: row;
+                justify-content: center;
+                gap: 0;
+                transition: none;
+            }
+            
+            .playing-card {
+                width: 100%;
+                height: auto;
+                min-height: 300px;
+                transform: none !important;
+                opacity: 1 !important;
+                box-shadow: 0 8px 20px rgba(45, 90, 45, 0.15);
+                border-width: 2px;
+                z-index: 10;
+            }
+            
+            /* On mobile, only show center card, hide others */
+            .playing-card:not(.center) {
+                display: none;
+            }
+            
+            .playing-card.center {
+                transform: none;
+                border-color: #2d5a2d;
+                border-width: 3px;
+                box-shadow: 
+                    0 20px 40px rgba(45, 90, 45, 0.25),
+                    0 8px 20px rgba(0, 0, 0, 0.15);
+            }
+            
+            .card-title {
+                font-size: 1.5rem;
+            }
+            
+            .card-content {
+                font-size: 0.9rem;
+            }
+            
+            .card-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Background walls that hide cards -->
+        <div class="left-wall"></div>
+        <div class="right-wall"></div>
+        
+        <!-- Fixed spotlight on center -->
+        <div class="spotlight"></div>
+        
+        <!-- Cards track -->
+        <div class="cards-track">
+            <div class="card-queue" id="cardQueue">
+                <!-- Card 1 -->
+                <div class="playing-card" data-index="0">
+                    <div class="card-title">About TCoEFS</div>
+                    <div class="card-content">
+                        Discover the foundation and core values that drive our educational framework forward.
+                    </div>
+                    <button class="card-btn">Learn More</button>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="playing-card" data-index="1">
+                    <div class="card-title">TCoEFS Programs</div>
+                    <div class="card-content">
+                        Explore our comprehensive educational programs designed to foster excellence and innovation in learning.
+                    </div>
+                    <button class="card-btn">Explore</button>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="playing-card" data-index="2">
+                    <div class="card-title">Contact Us</div>
+                    <div class="card-content">
+                        Connect with our team and discover how TCoEFS can transform your educational journey.
+                    </div>
+                    <button class="card-btn">Get in Touch</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const cards = document.querySelectorAll('.playing-card');
+        const cardQueue = document.getElementById('cardQueue');
+        let autoRotateTimer;
+        const numCards = cards.length;
+
+        function updateCardPositions() {
+            const viewportWidth = window.innerWidth;
+            const isMobile = viewportWidth <= 600;
+
+            if (isMobile) {
+                // Mobile: Show only one card at a time, no transform
+                cards.forEach((card, index) => {
+                    card.classList.remove('center', 'side', 'hidden');
+                    if (index === currentIndex) {
+                        card.classList.add('center');
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                cardQueue.style.transform = 'translateX(0)';
+                return;
+            }
+
+            // Desktop/tablet mode
+            const cardWidth = cards[0].offsetWidth;
+            const gap = parseFloat(getComputedStyle(cardQueue).gap) || 0;
+            const viewportCenter = viewportWidth / 2;
+            
+            // Calculate offset to center the current card
+            const centerOffset = viewportCenter - (cardWidth / 2) - (currentIndex * (cardWidth + gap));
+            
+            cardQueue.style.transform = `translateX(${centerOffset}px)`;
+            
+            cards.forEach((card, index) => {
+                card.classList.remove('center', 'side', 'hidden');
+                card.style.display = 'block'; // Ensure visible on larger screens
+                
+                // Calculate relative position
+                const relativePosition = (index - currentIndex + numCards) % numCards;
+                
+                if (relativePosition === 0) {
+                    card.classList.add('center');
+                } else if (relativePosition === 1 || relativePosition === numCards - 1) {
+                    card.classList.add('side');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % numCards;
+            updateCardPositions();
+        }
+
+        function prevCard() {
+            currentIndex = (currentIndex - 1 + numCards) % numCards;
+            updateCardPositions();
+        }
+
+        cards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                if (window.innerWidth > 600 && !card.classList.contains('center')) {
+                    currentIndex = index;
+                    updateCardPositions();
+                    startAutoRotate();
+                }
+            });
+        });
+
+        // Add swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX < touchStartX - 50) nextCard();
+            if (touchEndX > touchStartX + 50) prevCard();
+        });
+
+        // Initial setup
+        updateCardPositions();
+        
+        // Auto rotate only on desktop
+        function startAutoRotate() {
+            clearInterval(autoRotateTimer);
+            if (window.innerWidth > 600) {
+                autoRotateTimer = setInterval(nextCard, 8000);
+            }
+        }
+        startAutoRotate();
+
+        // Update on resize
+        window.addEventListener('resize', () => {
+            updateCardPositions();
+            startAutoRotate();
+        });
+    </script>
+</body>
+</html>
