@@ -9,7 +9,7 @@ import { Footer } from "@/components/footer";
 import FAQSection from "@/components/faq-section";
 import SpotlightsSection from "@/components/spotlights-section";
 import { AnimatedSection } from "@/components/animated-section";
-import PartnersMarquee from "@/components/partners/partners-marquee";
+// import PartnersMarquee from "@/components/partners/partners-marquee";
 import fs from "node:fs/promises";
 import path from "node:path";
 
@@ -94,9 +94,10 @@ export default async function Home() {
       <AnimatedSection animation="fade" delay={100}>
         <SpotlightsSection />
       </AnimatedSection>
-      <AnimatedSection animation="fade" delay={100}>
+      {/* Temporarily disabled PartnersMarquee for mobile testing */}
+      {/* <AnimatedSection animation="fade" delay={100}>
         <PartnersMarquee />
-      </AnimatedSection>
+      </AnimatedSection> */}
       <AnimatedSection animation="fade" delay={100}>
         <FAQSection />
       </AnimatedSection>
