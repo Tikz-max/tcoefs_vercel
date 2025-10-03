@@ -53,7 +53,9 @@ export default function HeroSection() {
         {/* Left Content Area */}
         <div className="flex-1 flex flex-col justify-center items-start px-8 lg:px-16 lg:pr-8">
           <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-6">
-            <span className="text-[#2f3e2f]">Innovation. Research. Impact</span>
+            <span className="text-[#2f3e2f]">
+              Innovation. Research. Impact TEST
+            </span>
             <span className="text-[#2f3e2f]"> — </span>
             <span className="text-[#4a5b4a] font-normal">
               For a Food-Secure Africa.
