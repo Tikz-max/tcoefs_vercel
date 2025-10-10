@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { Search, Calendar, Clock, ArrowRight, X } from "lucide-react";
@@ -13,6 +13,8 @@ const NewsEventsPage = () => {
   const [selectedNews, setSelectedNews] = useState<any>(null);
   const [externalNews, setExternalNews] = useState<any[]>([]);
   const [eventOpen, setEventOpen] = useState(false);
+  const videoPlayerRef = useRef<any>(null);
+  const [videoReady, setVideoReady] = useState(false);
 
   const searchParams = useSearchParams();
 
@@ -234,8 +236,96 @@ const NewsEventsPage = () => {
   };
 
   const closeNewsModal = () => {
+    // Clean up video player if exists
+    if (videoPlayerRef.current) {
+      try {
+        videoPlayerRef.current.destroy();
+      } catch {}
+      videoPlayerRef.current = null;
+    }
+    setVideoReady(false);
     setSelectedNews(null);
   };
+
+  // Initialize YouTube player for Day 4 news
+  useEffect(() => {
+    if (
+      !selectedNews ||
+      selectedNews.slug !==
+        "tcoefs-concludes-capacity-building-workshop-day-four"
+    ) {
+      return;
+    }
+
+    let mounted = true;
+
+    function initYouTubePlayer() {
+      if (!mounted || videoPlayerRef.current) return;
+
+      const YTGlobal = (window as any).YT;
+      if (!YTGlobal || !YTGlobal.Player) return;
+
+      const container = document.getElementById("day4-workshop-video");
+      if (!container) return;
+
+      videoPlayerRef.current = new YTGlobal.Player("day4-workshop-video", {
+        videoId: "zRMCLGrrsR0",
+        playerVars: {
+          autoplay: 1,
+          controls: 1,
+          mute: 1,
+          modestbranding: 1,
+          playsinline: 1,
+          rel: 0,
+          origin:
+            typeof window !== "undefined" ? window.location.origin : undefined,
+        },
+        events: {
+          onReady: () => {
+            setVideoReady(true);
+            try {
+              videoPlayerRef.current.playVideo();
+            } catch {}
+          },
+        },
+      });
+    }
+
+    // Load YouTube API if needed
+    const loadYouTubeAPI = () => {
+      if ((window as any).YT && (window as any).YT.Player) {
+        initYouTubePlayer();
+      } else {
+        const existing = document.getElementById("yt-iframe-api");
+        if (!existing) {
+          const tag = document.createElement("script");
+          tag.src = "https://www.youtube.com/iframe_api";
+          tag.id = "yt-iframe-api";
+          document.body.appendChild(tag);
+        }
+
+        const prev = (window as any).onYouTubeIframeAPIReady;
+        (window as any).onYouTubeIframeAPIReady = () => {
+          if (typeof prev === "function") prev();
+          initYouTubePlayer();
+        };
+      }
+    };
+
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(loadYouTubeAPI, 100);
+
+    return () => {
+      mounted = false;
+      clearTimeout(timer);
+      if (videoPlayerRef.current) {
+        try {
+          videoPlayerRef.current.destroy();
+        } catch {}
+        videoPlayerRef.current = null;
+      }
+    };
+  }, [selectedNews]);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#f8f9fa" }}>
@@ -390,13 +480,13 @@ const NewsEventsPage = () => {
                     className="font-semibold mb-1"
                     style={{ color: "#2f3e2f" }}
                   >
-                    Three-Day Capacity-Building Training Workshop
+                    USLGE and RSG Delegation Visit for SRDEP Evaluation
                   </p>
                   <p className="text-sm mb-1" style={{ color: "#4a5b4a" }}>
-                    22nd – 24th September 2025
+                    October 2025
                   </p>
                   <p className="text-sm mb-4" style={{ color: "#4a5b4a" }}>
-                    Miango Rest Home, Jos, Plateau State
+                    TCoEFS, University of Jos
                   </p>
                   <span
                     className="inline-flex items-center text-sm font-medium"
@@ -557,67 +647,96 @@ const NewsEventsPage = () => {
             <div className="p-6" style={{ color: "#4a5b4a" }}>
               <div className="mb-4">
                 <img
-                  src="/three_day_capacity_building.jpeg"
-                  alt="Three-Day Capacity-Building Training Workshop flyer"
+                  src="/latestEvent.jpg"
+                  alt="USLGE and RSG Delegation Visit"
                   className="w-full h-auto rounded-lg"
-                  onError={(e) => {
-                    const t = e.currentTarget;
-                    if (t.src.endsWith("/events/capacity-building-flyer.jpg")) {
-                      t.src = "/events/capacity-building-flyer.png";
-                    }
-                  }}
                 />
               </div>
               <h2
                 className="text-2xl font-bold mb-4"
                 style={{ color: "#2f3e2f" }}
               >
-                Three-Day Capacity-Building Training Workshop
+                DELEGATION FROM USLGE AND RSG TO VISIT TCOEFS FOR EVALUATION OF
+                PROPOSED SMALL RUMINANT DEVELOPMENT PROJECT
               </h2>
-              <p className="mb-2">
-                <strong>Date:</strong> 22nd – 24th September 2025
+              <p className="mb-4">
+                The TETFund Centre of Excellence in Food Security (TCoEFS),
+                University of Jos, will host a high-level delegation from the
+                United States Livestock Genetics Export Inc. (USLGE) and the
+                Reproduction Specialty Group (RSG) for the evaluation of the
+                proposed Small Ruminant Development Enhancement Project (SRDEP).
               </p>
               <p className="mb-4">
-                <strong>Venue:</strong> Miango Rest Home, Jos, Plateau State
+                The delegation, scheduled to visit in October 2025, will include
+                DR. Martin Sieber, President and Chief Executive Officer of
+                USLGE, and DR. Doug Edge, Chief Strategy Officer of RSG. Their
+                visit aims to assess the feasibility, visibility, and
+                institutional preparedness for the potential implementation of
+                the SRDEP in Nigeria.
+              </p>
+              <p className="mb-4">
+                The Small Ruminant Development Enhancement Project (SRDEP) is a
+                collaborative initiative developed by Dajrhas Health and Agric
+                Development Ltd in partnership with TCoEFS, the Federal Ministry
+                of Livestock Development, State Ministries of Agriculture and
+                Livestock Development (Imo, Gombe, Oyo, Plateau, and Kaduna
+                States), the National Animal Production Research Institute
+                (NAPRI), the National Veterinary Research Institute (NVRI), the
+                Sheep and Goat Farmers Association of Nigeria, Sahel Consulting
+                Agriculture and Nutrition Ltd, the Commercial Dairy Ranchers
+                Association of Nigeria (CODARAN), and the Cochran Fellows.
+              </p>
+              <p className="mb-4">
+                The project seeks to enhance Nigeria's small ruminant value
+                chains by improving breeding practices, strengthening animal
+                health systems, expanding feed production, and creating stronger
+                market linkages for smallholder farmers. If approved, the
+                initiative will contribute significantly to national food
+                security and rural livelihoods.
+              </p>
+              <p className="mb-4">
+                The evaluation visit will include stakeholder meetings, facility
+                inspections, and technical sessions coordinated by TCoEFS. The
+                Centre will highlight its research infrastructure, training
+                capacity, and ongoing programmes aligned with the project's
+                objectives.
+              </p>
+              <p className="mb-4">
+                The partnership and evaluation mission were facilitated through
+                Prof. Dauda Bawa, Director of TCoEFS and a Cochran Fellow under
+                the U.S. Department of Agriculture's Cochran Fellowship Program.
+                His fellowship experience and collaboration with U.S.
+                agricultural development institutions established the
+                professional linkages that made this engagement possible.
               </p>
               <p className="mb-6">
-                The Centre will host a three-day training workshop for staff and
-                stakeholders aimed at strengthening institutional capacity,
-                fostering innovation, and laying strategies for long-term
-                sustainability.
+                According to Prof. Bawa, "the forthcoming visit by Mr. Martin
+                Sieber and Mr. Doug Edge represents a significant opportunity to
+                strengthen international collaboration in livestock development.
+                Through this partnership, we aim to foster innovation, improve
+                smallholder productivity, and contribute to sustainable food
+                security in Nigeria."
               </p>
               <h3
                 className="text-lg font-semibold mb-2"
                 style={{ color: "#2f3e2f" }}
               >
-                Programme Focus
+                Key Highlights:
               </h3>
-              <ul className="list-disc pl-5 mb-6">
-                <li>Foundations of Centre-Based Excellence.</li>
+              <ul className="list-disc list-inside space-y-1">
                 <li>
-                  Academic–Industry Collaboration and Innovation Pathways.
+                  Evaluation of Small Ruminant Development Enhancement Project
+                  (SRDEP)
+                </li>
+                <li>High-level delegation from USLGE and RSG</li>
+                <li>Stakeholder meetings and facility inspections</li>
+                <li>
+                  Collaboration to enhance Nigeria's small ruminant value chains
                 </li>
                 <li>
-                  Practical Sessions on Sustainability and Implementation
-                  Planning.
+                  Strengthening international partnerships in livestock
+                  development
                 </li>
-              </ul>
-              <h3
-                className="text-lg font-semibold mb-2"
-                style={{ color: "#2f3e2f" }}
-              >
-                Distinguished Speakers
-              </h3>
-              <ul className="list-disc pl-5">
-                <li>
-                  Prof. Tanko Ishaya, Vice-Chancellor, University of Jos (Chief
-                  Host)
-                </li>
-                <li>
-                  Prof. Olukayode Akinyemi, Deputy Vice-Chancellor (Academics),
-                  Federal University of Agriculture, Abeokuta (Trainer)
-                </li>
-                <li>Prof. Dauda Bawa, Director, TCoEFS (Host)</li>
               </ul>
             </div>
           </div>

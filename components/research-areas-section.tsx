@@ -3,7 +3,15 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/ui/card";
-import { Wheat, TreePine, Droplets, Lightbulb, ArrowRight } from "lucide-react";
+import {
+  Wheat,
+  TreePine,
+  Droplets,
+  Lightbulb,
+  ArrowRight,
+  Beef,
+  TrendingUp,
+} from "lucide-react";
 
 type Area = {
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -46,6 +54,22 @@ const researchAreas: Area[] = [
 
     colorClass: "bg-[#f4c542]/10 text-[#2f3e2f]",
   },
+  {
+    icon: Beef,
+    title: "Livestock Productivity and Animal Health",
+    description:
+      "We partner with stakeholders to build resilient livestock systems that ensure food safety, support rural incomes, and contribute to sustainable protein supply.",
+
+    colorClass: "bg-[#2d5a2d]/10 text-[#2d5a2d]",
+  },
+  {
+    icon: TrendingUp,
+    title: "Agricultural Development and Value Chain Transformation",
+    description:
+      "By strengthening value chains, we create inclusive opportunities that drive food security, rural prosperity, and national growth.",
+
+    colorClass: "bg-[#5a7c65]/10 text-[#2f3e2f]",
+  },
 ];
 
 export default function ResearchAreasSection() {
@@ -55,14 +79,13 @@ export default function ResearchAreasSection() {
         <div className="grid grid-cols-1 gap-10">
           {/* Left: Cards (3 in first row, 1 wide below) */}
           <div className="order-2 lg:col-span-7">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {researchAreas.map((area, idx) => {
                 const Icon = area.icon;
-                const isWide = idx === 3; // last card spans full width under the three
                 return (
                   <Card
                     key={area.title}
-                    className={`group bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:border-[#5a7c65]/30 ${isWide ? "md:col-span-3" : ""}`}
+                    className="group bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:border-[#5a7c65]/30"
                   >
                     <CardContent className="p-6 h-full flex flex-col">
                       <div

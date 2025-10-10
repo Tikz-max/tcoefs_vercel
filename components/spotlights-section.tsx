@@ -9,6 +9,7 @@ interface SpotlightCard {
   description: string;
   image: string;
   images?: string[];
+  videoId?: string;
   fullContent: {
     title: string;
     content: string;
@@ -18,10 +19,38 @@ interface SpotlightCard {
 
 const spotlightCards: SpotlightCard[] = [
   {
+    id: "capacity-building-workshop-day4",
+    title: "Four-Day Capacity Building Workshop Concludes",
+    description:
+      "TCoEFS successfully concludes transformational workshop focused on teaching, research, innovation excellence, and institutional sustainability.",
+    image:
+      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img1.webp",
+    images: [
+      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img1.webp",
+      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img2.webp",
+      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img3.webp",
+      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img4.webp",
+      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img5.webp",
+    ],
+    videoId: "zRMCLGrrsR0",
+    fullContent: {
+      title: "TCoEFS Concludes Four-Day Capacity Building Workshop",
+      content:
+        "The TETFund Centre of Excellence in Food Security (TCoEFS), University of Jos, successfully concluded its Four-Day Capacity Building Workshop on Thursday, 25th September 2025, at Miango Rest Home, Jos, Plateau State. The final day focused on consolidation, networking, and action planning, marking the close of an intensive training and strategic realignment programme designed to reposition the Centre for greater institutional impact.\n\nDay Four featured interactive sessions on Monitoring and Evaluation (M&E), strategic planning, and thematic group presentations, where participants outlined actionable programmes and income-generating ideas aligned with the Centre's mandate on teaching, research, innovation, and sustainability.\n\nEach thematic team presented its roadmap covering Agricultural Economics, Animal Sciences, Crop Sciences, and Environmental Sciences. A special virtual session was delivered by Professor Olukayode Akinyemi, Deputy Vice-Chancellor (Academic), FUNAAB, who emphasized the importance of collaboration across thematic areas, international partnerships, and focus on DLI-driven performance.\n\nThe workshop achieved over 90% participant satisfaction, with strong commendation for its relevance, quality of facilitation, and practical focus. Participants described the training as 'transformational,' noting that it provided clarity, motivation, and strategic direction for the Centre's next phase.",
+      details: [
+        "Four-day intensive workshop at Miango Rest Home (Sept 22-25, 2025)",
+        "Focus on repositioning TCoEFS for teaching, research, and innovation excellence",
+        "Thematic group presentations on postgraduate programmes and income generation",
+        "Over 90% participant satisfaction with transformational outcomes",
+        "Strategic commitment to DLI implementation and institutional sustainability",
+      ],
+    },
+  },
+  {
     id: "new-lab-facility",
     title: "A New Home for TCoEFS Laboratory",
     description:
-      "University of Jos allocates a dedicated building for TCoEFS’ future laboratory facility.",
+      "University of Jos allocates a dedicated building for TCoEFS' future laboratory facility.",
     image: "/spotlight-images/spotlight-card1/img1.png",
     images: [
       "/spotlight-images/spotlight-card1/img1.png",
@@ -45,7 +74,7 @@ const spotlightCards: SpotlightCard[] = [
     title: "4.9 hectares Allocated to TCoEFS",
     description:
       "University of Jos allocates 4.9 hectares to strengthen research, innovation, and sustainable development.",
-    image: "/spotlight-images/spotlight-card2/img1.png",
+    image: "/spotlight-images/spotlight-card2/greenhouse-facility.webp",
     images: [
       "/spotlight-images/spotlight-card2/img1.png",
       "/spotlight-images/spotlight-card2/img2.png",
@@ -117,15 +146,17 @@ const upcomingEvents: UpcomingEvent[] = [
 
 export default function SpotlightsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedCard, setSelectedCard] = useState<SpotlightCard | null>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState(0);
+  const [selectedCard, setSelectedCard] = useState<SpotlightCard | null>(null);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [touchDeltaX, setTouchDeltaX] = useState(0);
   const modalRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const videoPlayerRef = useRef<any>(null);
+  const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => {
     const update = () => {
@@ -183,9 +214,90 @@ export default function SpotlightsSection() {
         if (previouslyFocusedRef.current) {
           previouslyFocusedRef.current.focus();
         }
+        // Clean up video player
+        if (videoPlayerRef.current) {
+          try {
+            videoPlayerRef.current.destroy();
+          } catch {}
+          videoPlayerRef.current = null;
+        }
+        setVideoReady(false);
       };
     }
-    return;
+  }, [selectedCard]);
+
+  // Initialize YouTube player for cards with videoId
+  useEffect(() => {
+    if (!selectedCard || !selectedCard.videoId) {
+      return;
+    }
+
+    let mounted = true;
+
+    function initYouTubePlayer() {
+      if (!mounted || videoPlayerRef.current) return;
+
+      const YTGlobal = (window as any).YT;
+      if (!YTGlobal || !YTGlobal.Player) return;
+
+      const container = document.getElementById("spotlight-video-player");
+      if (!container) return;
+
+      videoPlayerRef.current = new YTGlobal.Player("spotlight-video-player", {
+        videoId: selectedCard.videoId,
+        playerVars: {
+          autoplay: 1,
+          controls: 1,
+          mute: 1,
+          modestbranding: 1,
+          playsinline: 1,
+          rel: 0,
+          origin:
+            typeof window !== "undefined" ? window.location.origin : undefined,
+        },
+        events: {
+          onReady: () => {
+            setVideoReady(true);
+            try {
+              videoPlayerRef.current.playVideo();
+            } catch {}
+          },
+        },
+      });
+    }
+
+    const loadYouTubeAPI = () => {
+      if ((window as any).YT && (window as any).YT.Player) {
+        initYouTubePlayer();
+      } else {
+        const existing = document.getElementById("yt-iframe-api");
+        if (!existing) {
+          const tag = document.createElement("script");
+          tag.src = "https://www.youtube.com/iframe_api";
+          tag.id = "yt-iframe-api";
+          document.body.appendChild(tag);
+        }
+
+        const prev = (window as any).onYouTubeIframeAPIReady;
+        (window as any).onYouTubeIframeAPIReady = () => {
+          if (typeof prev === "function") prev();
+          initYouTubePlayer();
+        };
+      }
+    };
+
+    const timer = setTimeout(loadYouTubeAPI, 100);
+
+    return () => {
+      mounted = false;
+      clearTimeout(timer);
+      if (videoPlayerRef.current) {
+        try {
+          videoPlayerRef.current.destroy();
+        } catch {}
+        videoPlayerRef.current = null;
+      }
+    };
   }, [selectedCard]);
 
   const handleCardClick = (card: SpotlightCard) => {
@@ -419,6 +531,19 @@ export default function SpotlightsSection() {
                     {selectedCard.fullContent.title}
                   </h2>
 
+                  {/* Video player if videoId exists */}
+                  {selectedCard.videoId && (
+                    <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl mb-6">
+                      <div className="relative pt-[56.25%]">
+                        <div
+                          id="spotlight-video-player"
+                          className="absolute inset-0 w-full h-full"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Content paragraphs with interspersed images */}
                   {paragraphs.map((para, idx) => (
                     <div key={idx} className="mb-4">
                       <p
