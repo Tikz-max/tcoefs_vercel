@@ -213,7 +213,12 @@ const NewsEventsPage = () => {
     }
   }, [searchParams.get("expand"), externalNews]); // Re-run when external news arrives
 
-  const allNews = [...newsItems, ...externalNews];
+  const allNews = [...newsItems, ...externalNews].sort((a, b) => {
+    // Sort by date, newest first
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateB.getTime() - dateA.getTime();
+  });
   const filteredNews = allNews
     .filter((item) => {
       const matchesSearch =
@@ -659,55 +664,11 @@ const NewsEventsPage = () => {
                 DELEGATION FROM USLGE AND RSG TO VISIT TCOEFS FOR EVALUATION OF
                 PROPOSED SMALL RUMINANT DEVELOPMENT PROJECT
               </h2>
-              <p className="mb-4">
-                The TETFund Centre of Excellence in Food Security (TCoEFS),
-                University of Jos, will host a high-level delegation from the
-                United States Livestock Genetics Export Inc. (USLGE) and the
-                Reproduction Specialty Group (RSG) for the evaluation of the
-                proposed Small Ruminant Development Enhancement Project (SRDEP).
+              <p className="mb-2">
+                <strong>Date:</strong> 22nd – 24th September 2025
               </p>
               <p className="mb-4">
-                The delegation, scheduled to visit in October 2025, will include
-                DR. Martin Sieber, President and Chief Executive Officer of
-                USLGE, and DR. Doug Edge, Chief Strategy Officer of RSG. Their
-                visit aims to assess the feasibility, visibility, and
-                institutional preparedness for the potential implementation of
-                the SRDEP in Nigeria.
-              </p>
-              <p className="mb-4">
-                The Small Ruminant Development Enhancement Project (SRDEP) is a
-                collaborative initiative developed by Dajrhas Health and Agric
-                Development Ltd in partnership with TCoEFS, the Federal Ministry
-                of Livestock Development, State Ministries of Agriculture and
-                Livestock Development (Imo, Gombe, Oyo, Plateau, and Kaduna
-                States), the National Animal Production Research Institute
-                (NAPRI), the National Veterinary Research Institute (NVRI), the
-                Sheep and Goat Farmers Association of Nigeria, Sahel Consulting
-                Agriculture and Nutrition Ltd, the Commercial Dairy Ranchers
-                Association of Nigeria (CODARAN), and the Cochran Fellows.
-              </p>
-              <p className="mb-4">
-                The project seeks to enhance Nigeria's small ruminant value
-                chains by improving breeding practices, strengthening animal
-                health systems, expanding feed production, and creating stronger
-                market linkages for smallholder farmers. If approved, the
-                initiative will contribute significantly to national food
-                security and rural livelihoods.
-              </p>
-              <p className="mb-4">
-                The evaluation visit will include stakeholder meetings, facility
-                inspections, and technical sessions coordinated by TCoEFS. The
-                Centre will highlight its research infrastructure, training
-                capacity, and ongoing programmes aligned with the project's
-                objectives.
-              </p>
-              <p className="mb-4">
-                The partnership and evaluation mission were facilitated through
-                Prof. Dauda Bawa, Director of TCoEFS and a Cochran Fellow under
-                the U.S. Department of Agriculture's Cochran Fellowship Program.
-                His fellowship experience and collaboration with U.S.
-                agricultural development institutions established the
-                professional linkages that made this engagement possible.
+                <strong>Venue:</strong> Miango Rest Home, Jos, Plateau State
               </p>
               <p className="mb-6">
                 According to Prof. Bawa, "the forthcoming visit by Mr. Martin
@@ -725,18 +686,29 @@ const NewsEventsPage = () => {
               </h3>
               <ul className="list-disc list-inside space-y-1">
                 <li>
-                  Evaluation of Small Ruminant Development Enhancement Project
-                  (SRDEP)
-                </li>
-                <li>High-level delegation from USLGE and RSG</li>
-                <li>Stakeholder meetings and facility inspections</li>
-                <li>
-                  Collaboration to enhance Nigeria's small ruminant value chains
+                  Academic–Industry Collaboration and Innovation Pathways.
                 </li>
                 <li>
-                  Strengthening international partnerships in livestock
-                  development
+                  Practical Sessions on Sustainability and Implementation
+                  Planning.
                 </li>
+              </ul>
+              <h3
+                className="text-lg font-semibold mb-2"
+                style={{ color: "#2f3e2f" }}
+              >
+                Distinguished Speakers
+              </h3>
+              <ul className="list-disc pl-5">
+                <li>
+                  Prof. Tanko Ishaya, Vice-Chancellor, University of Jos (Chief
+                  Host)
+                </li>
+                <li>
+                  Prof. Olukayode Akinyemi, Deputy Vice-Chancellor (Academics),
+                  Federal University of Agriculture, Abeokuta (Trainer)
+                </li>
+                <li>Prof. Dauda Bawa, Director, TCoEFS (Host)</li>
               </ul>
             </div>
           </div>
