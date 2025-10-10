@@ -33,7 +33,7 @@ const NewsEventsPage = () => {
         "Leadership Transition: Prof. Dauda Bawa Appointed as New TCoEFS Director",
       excerpt:
         "Outgoing Director, Prof. Amaza, handing over leadership to the newly appointed Director of the TCoEFS, Prof. Dauda Bawa.",
-      date: "June 15, 2025",
+      date: "March 23, 2025",
       readTime: "4 min read",
       image: "/news/leadership-card.png",
       featured: true,
