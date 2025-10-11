@@ -488,10 +488,10 @@ const NewsEventsPage = () => {
                     USLGE and RSG Delegation Visit for SRDEP Evaluation
                   </p>
                   <p className="text-sm mb-1" style={{ color: "#4a5b4a" }}>
-                    October 2025
+                    12th - 17th October 2025
                   </p>
                   <p className="text-sm mb-4" style={{ color: "#4a5b4a" }}>
-                    TCoEFS, University of Jos
+                    Plateau State, Nigeria
                   </p>
                   <span
                     className="inline-flex items-center text-sm font-medium"
@@ -650,6 +650,14 @@ const NewsEventsPage = () => {
               </button>
             </div>
             <div className="p-6" style={{ color: "#4a5b4a" }}>
+              <h2
+                className="text-2xl font-bold mb-4"
+                style={{ color: "#2f3e2f" }}
+              >
+                DELEGATION FROM USLGE AND RSG TO VISIT TCOEFS AND PLATEAU STATE
+                GOVERNMENT FOR EVALUATION OF PROPOSED SMALL RUMINANT DEVELOPMENT
+                ENHANCEMENT PROJECT (SRDEP)
+              </h2>
               <div className="mb-4">
                 <img
                   src="/latestEvent.jpg"
@@ -657,59 +665,70 @@ const NewsEventsPage = () => {
                   className="w-full h-auto rounded-lg"
                 />
               </div>
-              <h2
-                className="text-2xl font-bold mb-4"
-                style={{ color: "#2f3e2f" }}
-              >
-                DELEGATION FROM USLGE AND RSG TO VISIT TCOEFS FOR EVALUATION OF
-                PROPOSED SMALL RUMINANT DEVELOPMENT PROJECT
-              </h2>
-              <p className="mb-2">
-                <strong>Date:</strong> 22nd – 24th September 2025
+              <p className="mb-4">
+                The TETFund Centre of Excellence in Food Security (TCoEFS),
+                University of Jos and Plateau State Government, will host a
+                high-level delegation from the United States Livestock Genetics
+                Export Inc. (USLGE) and the Reproduction Specialty Group (RSG)
+                U.S.A, for the evaluation of the proposed Small Ruminant
+                Development Enhancement Project (SRDEP).
               </p>
               <p className="mb-4">
-                <strong>Venue:</strong> Miango Rest Home, Jos, Plateau State
+                The delegation, scheduled to visit Plateau State, Nigeria from
+                12th - 17th of October 2025, will include Dr. Martin Sieber,
+                President and Chief Executive Officer of USLGE, and Mr. Doug
+                Edge, Chief Strategy Officer of RSG, United States of America.
+                Their visit aims to assess the feasibility, visibility, and
+                institutional preparedness for the potential implementation of
+                the SRDEP in Nigeria.
               </p>
-              <p className="mb-6">
-                According to Prof. Bawa, "the forthcoming visit by Mr. Martin
+              <p className="mb-4">
+                The Small Ruminant Development Enhancement Project (SRDEP) is a
+                collaborative initiative developed by the USDA Cochran Fellows
+                2022 in partnership with the Federal Ministry of Livestock
+                Development, State Ministries of Agriculture and Livestock
+                Development (Imo, Gombe, Oyo, Plateau, and Kaduna States), the
+                National Animal Production Research Institute (NAPRI), the
+                National Veterinary Research Institute (NVRI), the Sheep and
+                Goat Farmers Association of Nigeria, Sahel Consulting
+                Agriculture and Nutrition Ltd, the Commercial Dairy Ranchers
+                Association of Nigeria (CODARAN), TETFund Centre of Excellence
+                in Food Security (TCoEFS) and Dajrhas Health and Agric
+                Development Ltd.
+              </p>
+              <p className="mb-4">
+                The project seeks to enhance Nigeria's small ruminant value
+                chains by improving breeding practices, strengthening animal
+                health systems, expanding feed production, and creating stronger
+                market linkages for smallholder farmers. If approved, the
+                initiative will contribute significantly to national food
+                security and rural livelihoods.
+              </p>
+              <p className="mb-4">
+                The evaluation visit will include stakeholder meetings, facility
+                inspections, and technical sessions coordinated by TCoEFS. The
+                Centre will highlight its research infrastructure, training
+                capacity, and ongoing programmes aligned with the project's
+                objectives.
+              </p>
+              <p className="mb-4">
+                The partnership and evaluation mission were facilitated through
+                Prof. Dauda Bawa, Director of TCoEFS and USDA Cochran Fellow
+                2022 under the U.S. Department of Agriculture's Cochran
+                Fellowship Program. His fellowship experience and collaboration
+                with U.S. agricultural development institutions established the
+                professional linkages that made this engagement possible.
+              </p>
+              <hr className="my-6 border-gray-300" />
+              <p className="mb-4 italic">
+                According to Prof. Bawa, "the forthcoming visit by Dr. Martin
                 Sieber and Mr. Doug Edge represents a significant opportunity to
                 strengthen international collaboration in livestock development.
                 Through this partnership, we aim to foster innovation, improve
                 smallholder productivity, and contribute to sustainable food
                 security in Nigeria."
               </p>
-              <h3
-                className="text-lg font-semibold mb-2"
-                style={{ color: "#2f3e2f" }}
-              >
-                Key Highlights:
-              </h3>
-              <ul className="list-disc list-inside space-y-1">
-                <li>
-                  Academic–Industry Collaboration and Innovation Pathways.
-                </li>
-                <li>
-                  Practical Sessions on Sustainability and Implementation
-                  Planning.
-                </li>
-              </ul>
-              <h3
-                className="text-lg font-semibold mb-2"
-                style={{ color: "#2f3e2f" }}
-              >
-                Distinguished Speakers
-              </h3>
-              <ul className="list-disc pl-5">
-                <li>
-                  Prof. Tanko Ishaya, Vice-Chancellor, University of Jos (Chief
-                  Host)
-                </li>
-                <li>
-                  Prof. Olukayode Akinyemi, Deputy Vice-Chancellor (Academics),
-                  Federal University of Agriculture, Abeokuta (Trainer)
-                </li>
-                <li>Prof. Dauda Bawa, Director, TCoEFS (Host)</li>
-              </ul>
+              <hr className="my-6 border-gray-300" />
             </div>
           </div>
         </div>
