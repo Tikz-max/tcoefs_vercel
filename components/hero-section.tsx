@@ -23,7 +23,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <div className="relative h-screen w-full overflow-hidden">
+    <div className="relative h-screen w-full overflow-hidden overflow-x-clip">
       {/* Mobile Background - positioned behind everything */}
       <div className="lg:hidden absolute inset-0 z-0">
         {images.map((image, index) => (
@@ -49,9 +49,9 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-r from-white/98 via-white/85 to-white/95" />
       </div>
 
-      <div className="relative z-30 h-full flex flex-col lg:flex-row">
+      <div className="relative z-30 h-full flex flex-col lg:flex-row max-w-full">
         {/* Left Content Area */}
-        <div className="flex-1 flex flex-col justify-center items-start px-8 lg:px-16 lg:pr-8">
+        <div className="flex-1 flex flex-col justify-center items-start px-8 lg:px-16 lg:pr-8 max-w-full">
           <h1 className="text-4xl lg:text-6xl font-bold leading-tight mb-6">
             <span className="text-[#2f3e2f]">Innovation. Research. Impact</span>
             <span className="text-[#2f3e2f]"> — </span>
@@ -73,7 +73,7 @@ export default function HeroSection() {
         </div>
 
         {/* Right Visual - Desktop */}
-        <div className="hidden lg:flex flex-1 relative p-8">
+        <div className="hidden lg:flex flex-1 relative p-8 overflow-hidden">
           {/* Bottom swell background */}
           <div
             className="absolute -bottom-28 -right-20 w-[65vh] h-[65vh] rounded-tl-[58%] bg-[radial-gradient(70%_70%_at_50%_100%,rgba(45,90,45,0.28)_0%,rgba(45,90,45,0.18)_35%,rgba(74,91,74,0.12)_60%,transparent_82%)] pointer-events-none blur-2xl"
@@ -85,7 +85,7 @@ export default function HeroSection() {
             aria-hidden="true"
           />
           {/* Circular image rotator */}
-          <div className="relative w-[520px] max-w-[42vw] aspect-square ml-auto rounded-full overflow-hidden shadow-2xl shadow-[0_12px_36px_rgba(47,62,47,0.12)] ring-[6px] ring-white/60 ring-offset-2 ring-offset-white/60 border border-white/20 bg-white/30 backdrop-blur-md">
+          <div className="relative w-[520px] max-w-[42vw] aspect-square ml-auto rounded-full overflow-hidden shadow-[0_12px_36px_rgba(47,62,47,0.12)] ring-[6px] ring-white/60 ring-offset-2 ring-offset-white/60 border border-white/20 bg-white/30 backdrop-blur-md">
             {images.map((image, index) => (
               <div
                 key={index}

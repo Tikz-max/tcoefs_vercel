@@ -1,9 +1,10 @@
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { AnimatedSection } from "@/components/animated-section";
 
 export default function TrainingCapacityBuildingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-clip">
       <Navbar />
 
       {/* Hero Section */}
@@ -154,7 +155,7 @@ export default function TrainingCapacityBuildingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
             {[
               {
                 title: "Agricultural Research & Data Skills",
@@ -286,18 +287,18 @@ export default function TrainingCapacityBuildingPage() {
             ].map((area, index) => (
               <div
                 key={index}
-                className="group relative bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-8 shadow-lg hover:bg-white/90 hover:-translate-y-1 transition-all duration-300"
+                className="group relative bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 sm:p-8 shadow-lg hover:bg-white/90 hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-[#2d5a2d] to-[#4a5b4a] rounded-full flex items-center justify-center">
                   {area.icon}
                 </div>
 
-                <h3 className="text-xl font-bold text-[#2f3e2f] mb-4 text-center">
+                <h3 className="text-lg sm:text-xl font-bold text-[#2f3e2f] mb-4 text-center break-words">
                   {area.title}
                 </h3>
 
                 <div className="space-y-3">
-                  <div>
+                  <div className="break-words">
                     <span className="text-sm font-semibold text-[#2d5a2d]">
                       For:{" "}
                     </span>
@@ -305,7 +306,7 @@ export default function TrainingCapacityBuildingPage() {
                       {area.target}
                     </span>
                   </div>
-                  <div>
+                  <div className="break-words">
                     <span className="text-sm font-semibold text-[#2d5a2d]">
                       Focus:{" "}
                     </span>

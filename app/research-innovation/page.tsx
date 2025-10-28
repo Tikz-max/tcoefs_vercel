@@ -1,9 +1,10 @@
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import { AnimatedSection } from "@/components/animated-section";
 
 export default function ResearchInnovationPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-clip">
       <Navbar />
 
       {/* Hero Section with Creative Background */}
@@ -58,11 +59,15 @@ export default function ResearchInnovationPage() {
 
         {/* Content */}
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-[#2f3e2f] mb-6">Turning Science into Solutions</h1>
+          <h1 className="text-5xl md:text-6xl font-bold text-[#2f3e2f] mb-6">
+            Turning Science into Solutions
+          </h1>
           <p className="text-lg md:text-xl text-[#4a5b4a] max-w-3xl mx-auto leading-relaxed">
-            At the TETFund Centre of Excellence in Food Security (TCoEFS), research is more than an academic pursuit —
-            it is a tool for transformation. We conduct Applied Research for Development (R4D) that addresses the urgent
-            realities of Nigeria's food system, ensuring that innovations are practical, scalable, and sustainable.
+            At the TETFund Centre of Excellence in Food Security (TCoEFS),
+            research is more than an academic pursuit — it is a tool for
+            transformation. We conduct Applied Research for Development (R4D)
+            that addresses the urgent realities of Nigeria's food system,
+            ensuring that innovations are practical, scalable, and sustainable.
           </p>
         </div>
       </section>
@@ -70,31 +75,42 @@ export default function ResearchInnovationPage() {
       {/* Research Philosophy */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-[#2f3e2f] text-center mb-16">Our Research Philosophy</h2>
+          <h2 className="text-4xl font-bold text-[#2f3e2f] text-center mb-16">
+            Our Research Philosophy
+          </h2>
           <div className="grid md:grid-cols-2 gap-8">
             {[
               {
                 title: "Evidence to Action",
-                description: "Research is valuable only when it leads to adoption and impact.",
+                description:
+                  "Research is valuable only when it leads to adoption and impact.",
               },
               {
                 title: "End-User Engagement",
-                description: "Farmers, processors, and policymakers are co-creators, not just beneficiaries.",
+                description:
+                  "Farmers, processors, and policymakers are co-creators, not just beneficiaries.",
               },
               {
                 title: "Interdisciplinary Collaboration",
-                description: "Food security is a multi-sector challenge requiring diverse expertise.",
+                description:
+                  "Food security is a multi-sector challenge requiring diverse expertise.",
               },
               {
                 title: "Sustainability Focus",
-                description: "Innovations must protect natural resources while increasing productivity.",
+                description:
+                  "Innovations must protect natural resources while increasing productivity.",
               },
             ].map((item, index) => (
-              <div key={index} className="bg-white/60 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg">
+              <div
+                key={index}
+                className="bg-white/60 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg"
+              >
                 <div className="flex items-start space-x-4">
                   <div className="w-3 h-3 bg-[#2d5a2d] rounded-full mt-2 flex-shrink-0" />
                   <div>
-                    <h3 className="text-xl font-semibold text-[#2f3e2f] mb-2">{item.title}</h3>
+                    <h3 className="text-xl font-semibold text-[#2f3e2f] mb-2">
+                      {item.title}
+                    </h3>
                     <p className="text-[#4a5b4a]">{item.description}</p>
                   </div>
                 </div>
@@ -107,7 +123,9 @@ export default function ResearchInnovationPage() {
       {/* Core Research Themes */}
       <section className="py-20 px-6 bg-gray-50/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-[#2f3e2f] text-center mb-16">Core Research Themes</h2>
+          <h2 className="text-4xl font-bold text-[#2f3e2f] text-center mb-16">
+            Core Research Themes
+          </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
@@ -121,11 +139,13 @@ export default function ResearchInnovationPage() {
                 title: "Post-Harvest Technology & Value Addition",
                 description:
                   "Reducing Nigeria's high post-harvest losses through innovations in storage, preservation, and processing.",
-                example: "Bundled value-addition packages for Irish potato, maize, and tomato farmers.",
+                example:
+                  "Bundled value-addition packages for Irish potato, maize, and tomato farmers.",
               },
               {
                 title: "Nutrition & Food Safety",
-                description: "Ensuring that food security also means dietary diversity and safety.",
+                description:
+                  "Ensuring that food security also means dietary diversity and safety.",
                 example:
                   "Nutrition-sensitive agriculture models for rural communities, integrating crop diversification and food hygiene practices.",
               },
@@ -133,17 +153,27 @@ export default function ResearchInnovationPage() {
                 title: "Digital Agriculture & Precision Farming",
                 description:
                   "Harnessing data analytics, remote sensing, and mobile tools to optimize farm decision-making.",
-                example: "Digital farmer advisory systems for climate, market, and pest alerts.",
+                example:
+                  "Digital farmer advisory systems for climate, market, and pest alerts.",
               },
               {
                 title: "Agribusiness Innovation & Policy Impact",
-                description: "Linking research outputs to viable business models and policies that enable scale-up.",
-                example: "Farmer Field Business Schools (FFBS) and cooperative market-linkage models.",
+                description:
+                  "Linking research outputs to viable business models and policies that enable scale-up.",
+                example:
+                  "Farmer Field Business Schools (FFBS) and cooperative market-linkage models.",
               },
             ].map((theme, index) => (
-              <div key={index} className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-xl p-6 shadow-lg">
-                <h3 className="text-xl font-semibold text-[#2f3e2f] mb-4">{theme.title}</h3>
-                <p className="text-[#4a5b4a] mb-4 leading-relaxed">{theme.description}</p>
+              <div
+                key={index}
+                className="bg-white/80 backdrop-blur-sm border border-white/30 rounded-xl p-6 shadow-lg"
+              >
+                <h3 className="text-xl font-semibold text-[#2f3e2f] mb-4">
+                  {theme.title}
+                </h3>
+                <p className="text-[#4a5b4a] mb-4 leading-relaxed">
+                  {theme.description}
+                </p>
                 <div className="border-l-4 border-[#2d5a2d] pl-4">
                   <p className="text-sm text-[#4a5b4a] italic">
                     <strong>Example:</strong> {theme.example}
@@ -158,7 +188,9 @@ export default function ResearchInnovationPage() {
       {/* Flagship Projects */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-[#2f3e2f] text-center mb-16">Flagship Projects</h2>
+          <h2 className="text-4xl font-bold text-[#2f3e2f] text-center mb-16">
+            Flagship Projects
+          </h2>
           <div className="space-y-8">
             {[
               {
@@ -183,13 +215,17 @@ export default function ResearchInnovationPage() {
               >
                 <div className="flex items-start space-x-6">
                   <div className="w-12 h-12 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] group-hover:from-[#4a5b4a] group-hover:to-[#2d5a2d] rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                    <span className="text-white font-bold text-lg">{index + 1}</span>
+                    <span className="text-white font-bold text-lg">
+                      {index + 1}
+                    </span>
                   </div>
                   <div>
                     <h3 className="text-2xl font-semibold text-[#2f3e2f] group-hover:text-[#2d5a2d] mb-3 transition-colors duration-300">
                       {project.title}
                     </h3>
-                    <p className="text-[#4a5b4a] leading-relaxed">{project.description}</p>
+                    <p className="text-[#4a5b4a] leading-relaxed">
+                      {project.description}
+                    </p>
                   </div>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-b-xl" />
@@ -201,5 +237,5 @@ export default function ResearchInnovationPage() {
 
       <Footer />
     </div>
-  )
+  );
 }

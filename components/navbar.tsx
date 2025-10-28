@@ -9,6 +9,7 @@ import {
   SheetClose,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { ArrowUpRight } from "lucide-react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -104,7 +105,6 @@ export default function Navbar() {
               label: "Training & Capacity Building",
               href: "/training-capacity-building",
             },
-            { label: "News & Events", href: "/news-events" },
           ].map(({ label, href }) => (
             <div key={label} className="relative group">
               <Link
@@ -123,6 +123,21 @@ export default function Navbar() {
               </Link>
             </div>
           ))}
+
+          {/* Blog Link */}
+          <div className="relative group">
+            <a
+              href="https://blog.tcoefs-unijos.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-base font-medium transition-colors hover:opacity-80 pb-2 relative group-hover:opacity-80"
+              style={{ color: "#4a5b4a" }}
+            >
+              Blog
+              <ArrowUpRight className="w-4 h-4" />
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+            </a>
+          </div>
 
           <Link href="/contact">
             <Button className="text-white font-medium px-6 py-2 rounded-full hover:opacity-90 transition-all duration-300 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#4a5b4a] hover:to-[#2d5a2d] shadow-lg hover:shadow-xl transform hover:scale-105">
@@ -213,12 +228,15 @@ export default function Navbar() {
                   </Link>
                 </SheetClose>
                 <SheetClose asChild>
-                  <Link
-                    href="/news-events"
-                    className="block text-center py-4 text-gray-600 hover:text-[#2f3e2f]"
+                  <a
+                    href="https://blog.tcoefs-unijos.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 py-4 text-gray-600 hover:text-[#2f3e2f]"
                   >
-                    News & Events
-                  </Link>
+                    Blog
+                    <ArrowUpRight className="w-4 h-4" />
+                  </a>
                 </SheetClose>
               </nav>
             </SheetContent>

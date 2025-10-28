@@ -13,7 +13,7 @@ const logos = [
 
 export default function PartnersMarquee() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     // Use simple DOM-based animation for all devices to avoid mobile canvas issues
@@ -39,8 +39,8 @@ export default function PartnersMarquee() {
   }, []);
 
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="py-16 bg-white overflow-x-clip">
+      <div className="max-w-7xl mx-auto px-4 overflow-x-clip">
         {/* Heading */}
         <div className="text-center mb-8">
           <span className="inline-flex items-center px-4 py-2 rounded-full bg-[#2d5a2d]/10 text-[#2d5a2d] text-sm font-medium">
@@ -52,16 +52,17 @@ export default function PartnersMarquee() {
         </div>
 
         {/* Marquee */}
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden overflow-x-clip">
           {/* Edge masks */}
           <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10" />
 
           {/* Unified DOM-based animation for all devices */}
-          <div className="overflow-hidden">
+          <div className="overflow-hidden overflow-x-clip">
             <div
               ref={containerRef}
               className="flex items-center gap-12 will-change-transform"
+              style={{ width: "max-content" }}
             >
               {logos.concat(logos).map((logo, i) => (
                 <div

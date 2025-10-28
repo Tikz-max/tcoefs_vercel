@@ -5,7 +5,7 @@ import TeamSection from "@/components/team-section";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-clip">
       <Navbar />
 
       {/* Hero Section */}

@@ -76,6 +76,7 @@ const spotlightCards: SpotlightCard[] = [
       "University of Jos allocates 4.9 hectares to strengthen research, innovation, and sustainable development.",
     image: "/spotlight-images/spotlight-card2/greenhouse-facility.webp",
     images: [
+      "/spotlight-images/spotlight-card2/greenhouse-facility.webp",
       "/spotlight-images/spotlight-card2/img1.png",
       "/spotlight-images/spotlight-card2/img2.png",
       "/spotlight-images/spotlight-card2/img3.png",
@@ -244,7 +245,7 @@ export default function SpotlightsSection() {
       if (!container) return;
 
       videoPlayerRef.current = new YTGlobal.Player("spotlight-video-player", {
-        videoId: selectedCard.videoId,
+        videoId: selectedCard!.videoId,
         playerVars: {
           autoplay: 1,
           controls: 1,
@@ -366,96 +367,99 @@ export default function SpotlightsSection() {
         <div className="relative">
           {/* Spotlight Cards */}
           <div>
-            <div
-              ref={trackRef}
-              className="relative w-full overflow-hidden"
-              onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
-              onTouchMove={(e) => {
-                if (touchStartX !== null) {
-                  setTouchDeltaX(e.touches[0].clientX - touchStartX);
-                }
-              }}
-              onTouchEnd={() => {
-                const threshold = 50;
-                if (touchDeltaX <= -threshold) {
-                  setCurrentIndex((prev) => (prev + 1) % spotlightCards.length);
-                } else if (touchDeltaX >= threshold) {
-                  setCurrentIndex(
-                    (prev) =>
-                      (prev - 1 + spotlightCards.length) %
-                      spotlightCards.length,
-                  );
-                }
-                setTouchStartX(null);
-                setTouchDeltaX(0);
-              }}
-            >
+            {/* Spotlight Cards */}
+            <div>
               <div
-                className="relative flex items-center gap-8 transition-transform duration-700 ease-in-out will-change-transform w-fit"
-                style={{ transform: `translateX(${offset}px)` }}
+                ref={trackRef}
+                className="relative w-full overflow-hidden"
+                onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
+                onTouchMove={(e) => {
+                  if (touchStartX !== null) {
+                    setTouchDeltaX(e.touches[0].clientX - touchStartX);
+                  }
+                }}
+                onTouchEnd={() => {
+                  const threshold = 50;
+                  if (touchDeltaX <= -threshold) {
+                    setCurrentIndex(
+                      (prev) => (prev + 1) % spotlightCards.length,
+                    );
+                  } else if (touchDeltaX >= threshold) {
+                    setCurrentIndex(
+                      (prev) =>
+                        (prev - 1 + spotlightCards.length) %
+                        spotlightCards.length,
+                    );
+                  }
+                  setTouchStartX(null);
+                  setTouchDeltaX(0);
+                }}
               >
-                {spotlightCards.map((card, index) => {
-                  const relativePosition =
-                    (index - currentIndex + spotlightCards.length) %
-                    spotlightCards.length;
-                  const isCenter = relativePosition === 0;
-                  const isSide =
-                    relativePosition === 1 ||
-                    relativePosition === spotlightCards.length - 1;
-                  const stateClass = isCenter
-                    ? "-translate-y-2 scale-100 z-20 border-[#2d5a2d] border-2 shadow-2xl"
-                    : isSide
-                      ? "opacity-80 z-10"
-                      : "opacity-30 scale-95 z-0";
+                <div
+                  className="relative flex items-center gap-8 transition-transform duration-700 ease-in-out will-change-transform w-fit"
+                  style={{ transform: `translateX(${offset}px)` }}
+                >
+                  {spotlightCards.map((card, index) => {
+                    const relativePosition =
+                      (index - currentIndex + spotlightCards.length) %
+                      spotlightCards.length;
+                    const isCenter = relativePosition === 0;
+                    const isSide =
+                      relativePosition === 1 ||
+                      relativePosition === spotlightCards.length - 1;
+                    const stateClass = isCenter
+                      ? "-translate-y-2 scale-100 z-20 border-[#2d5a2d] border-2 shadow-2xl"
+                      : isSide
+                        ? "opacity-80 z-10"
+                        : "opacity-30 scale-95 z-0";
 
-                  return (
-                    <div
-                      key={card.id}
-                      data-card
-                      onClick={() =>
-                        isCenter
-                          ? handleCardClick(card)
-                          : setCurrentIndex(index)
-                      }
-                      className={`bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden shadow-lg transition-all duration-700 cursor-pointer flex-shrink-0 w-80 md:w-[340px] ${stateClass}`}
-                    >
-                      <div className="relative h-48 overflow-hidden">
-                        <Image
-                          src={card.image || "/placeholder.svg"}
-                          alt={card.title}
-                          fill
-                          className="object-cover transition-transform duration-300 hover:scale-105"
-                        />
+                    return (
+                      <div
+                        key={card.id}
+                        data-card
+                        onClick={() =>
+                          isCenter
+                            ? handleCardClick(card)
+                            : setCurrentIndex(index)
+                        }
+                        className={`bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden shadow-lg transition-all duration-700 cursor-pointer flex-shrink-0 w-80 md:w-[340px] ${stateClass}`}
+                      >
+                        <div className="relative h-48 overflow-hidden">
+                          <Image
+                            src={card.image || "/placeholder.svg"}
+                            alt={card.title}
+                            fill
+                            className="object-cover transition-transform duration-300 hover:scale-105"
+                          />
+                        </div>
+                        <div className="p-6">
+                          <h3 className="text-xl font-bold text-[#2f3e2f] mb-3">
+                            {card.title}
+                          </h3>
+                          <p className="text-[#4a5b4a] text-sm leading-relaxed mb-4">
+                            {card.description}
+                          </p>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleCardClick(card);
+                            }}
+                            className="inline-flex items-center bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] text-white px-6 py-2 rounded-lg text-sm font-semibold hover:from-[#1e4a1e] hover:to-[#2d5a2d] transition-colors"
+                          >
+                            Learn More
+                          </button>
+                        </div>
                       </div>
-                      <div className="p-6">
-                        <h3 className="text-xl font-bold text-[#2f3e2f] mb-3">
-                          {card.title}
-                        </h3>
-                        <p className="text-[#4a5b4a] text-sm leading-relaxed mb-4">
-                          {card.description}
-                        </p>
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleCardClick(card);
-                          }}
-                          className="inline-flex items-center bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] text-white px-6 py-2 rounded-lg text-sm font-semibold hover:from-[#1e4a1e] hover:to-[#2d5a2d] transition-colors"
-                        >
-                          Learn More
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
+
+            {/* Mobile View removed; grid is responsive */}
           </div>
-
-          {/* Mobile View removed; grid is responsive */}
         </div>
-
-        {/* Upcoming Events removed */}
       </div>
 
       {/* Modal for expanded card content */}
