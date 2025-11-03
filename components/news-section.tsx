@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { getYouTubeVideo } from "@/lib/services/admin";
 
 const NewsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -10,6 +11,18 @@ const NewsSection = () => {
   const playerRef = useRef<any>(null);
   const [playerReady, setPlayerReady] = useState(false);
   const [inView, setInView] = useState(false);
+  const [videoId, setVideoId] = useState("katKpm79Zus"); // Default fallback
+
+  // Load video ID from database
+  useEffect(() => {
+    const loadVideoId = async () => {
+      const video = await getYouTubeVideo();
+      if (video?.video_id) {
+        setVideoId(video.video_id);
+      }
+    };
+    loadVideoId();
+  }, []);
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -80,7 +93,7 @@ const NewsSection = () => {
       if (!YTGlobal || !YTGlobal.Player) return;
 
       playerRef.current = new YTGlobal.Player("tcoefs-video-embed", {
-        videoId: "katKpm79Zus",
+        videoId: videoId,
         playerVars: {
           start: 8,
           autoplay: 0,
@@ -123,7 +136,7 @@ const NewsSection = () => {
     return () => {
       mounted = false;
     };
-  }, [inView]);
+  }, [inView, videoId]);
 
   return (
     <section className="py-16 bg-white overflow-hidden">

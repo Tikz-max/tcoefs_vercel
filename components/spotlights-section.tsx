@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
+import { getSpotlightCards } from "@/lib/services/admin";
+import type { SpotlightCard as DBSpotlightCard } from "@/lib/types/database";
 
 interface SpotlightCard {
   id: string;
@@ -17,134 +20,6 @@ interface SpotlightCard {
   };
 }
 
-const spotlightCards: SpotlightCard[] = [
-  {
-    id: "capacity-building-workshop-day4",
-    title: "Four-Day Capacity Building Workshop Concludes",
-    description:
-      "TCoEFS successfully concludes transformational workshop focused on teaching, research, innovation excellence, and institutional sustainability.",
-    image:
-      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img1.webp",
-    images: [
-      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img1.webp",
-      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img2.webp",
-      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img3.webp",
-      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img4.webp",
-      "/news/tcoefs-concludes-capacity-building-workshop-day-four/images/img5.webp",
-    ],
-    videoId: "zRMCLGrrsR0",
-    fullContent: {
-      title: "TCoEFS Concludes Four-Day Capacity Building Workshop",
-      content:
-        "The TETFund Centre of Excellence in Food Security (TCoEFS), University of Jos, successfully concluded its Four-Day Capacity Building Workshop on Thursday, 25th September 2025, at Miango Rest Home, Jos, Plateau State. The final day focused on consolidation, networking, and action planning, marking the close of an intensive training and strategic realignment programme designed to reposition the Centre for greater institutional impact.\n\nDay Four featured interactive sessions on Monitoring and Evaluation (M&E), strategic planning, and thematic group presentations, where participants outlined actionable programmes and income-generating ideas aligned with the Centre's mandate on teaching, research, innovation, and sustainability.\n\nEach thematic team presented its roadmap covering Agricultural Economics, Animal Sciences, Crop Sciences, and Environmental Sciences. A special virtual session was delivered by Professor Olukayode Akinyemi, Deputy Vice-Chancellor (Academic), FUNAAB, who emphasized the importance of collaboration across thematic areas, international partnerships, and focus on DLI-driven performance.\n\nThe workshop achieved over 90% participant satisfaction, with strong commendation for its relevance, quality of facilitation, and practical focus. Participants described the training as 'transformational,' noting that it provided clarity, motivation, and strategic direction for the Centre's next phase.",
-      details: [
-        "Four-day intensive workshop at Miango Rest Home (Sept 22-25, 2025)",
-        "Focus on repositioning TCoEFS for teaching, research, and innovation excellence",
-        "Thematic group presentations on postgraduate programmes and income generation",
-        "Over 90% participant satisfaction with transformational outcomes",
-        "Strategic commitment to DLI implementation and institutional sustainability",
-      ],
-    },
-  },
-  {
-    id: "new-lab-facility",
-    title: "A New Home for TCoEFS Laboratory",
-    description:
-      "University of Jos allocates a dedicated building for TCoEFS' future laboratory facility.",
-    image: "/spotlight-images/spotlight-card1/img1.png",
-    images: [
-      "/spotlight-images/spotlight-card1/img1.png",
-      "/spotlight-images/spotlight-card1/img2.png",
-      "/spotlight-images/spotlight-card1/img3.png",
-    ],
-    fullContent: {
-      title: "A New Home for TCoEFS Laboratory",
-      content:
-        "The Transnational Centre of Excellence for Food Environment Studies (TCoEFS), University of Jos, has taken a major step forward with the allocation of a dedicated building that will serve as the Centre’s future laboratory facility. In a recent inspection, the Vice-Chancellor of the University of Jos and the Deputy Administrator visited the building, reaffirming the University’s strong commitment to advancing research, innovation, and academic excellence. Although the facility is yet to be equipped, this development marks a significant milestone for TCoEFS. Once fully furnished with modern laboratory equipment, the building will become a hub for cutting-edge research, capacity building, and collaborative projects that address critical issues in food environments, nutrition, and public health. This milestone not only strengthens the University’s commitment to impactful research but also positions TCoEFS as a leading centre of excellence in food environment studies within Africa and globally.",
-      details: [
-        "Dedicated building allocated for TCoEFS’ future laboratory facility",
-        "Leadership visit reaffirmed the University’s commitment to research and innovation",
-        "Facility will support cutting-edge research, training, and collaboration",
-        "Strengthens TCoEFS’ position as a leading Centre of Excellence",
-      ],
-    },
-  },
-  {
-    id: "land-allocation-4.9-hectares",
-    title: "4.9 hectares Allocated to TCoEFS",
-    description:
-      "University of Jos allocates 4.9 hectares to strengthen research, innovation, and sustainable development.",
-    image: "/spotlight-images/spotlight-card2/greenhouse-facility.webp",
-    images: [
-      "/spotlight-images/spotlight-card2/greenhouse-facility.webp",
-      "/spotlight-images/spotlight-card2/img1.png",
-      "/spotlight-images/spotlight-card2/img2.png",
-      "/spotlight-images/spotlight-card2/img3.png",
-      "/spotlight-images/spotlight-card2/img4.png",
-    ],
-    fullContent: {
-      title: "4.9 hectares Allocated to TCoEFS",
-      content:
-        "The Transnational Centre of Excellence for Food Environment Studies (TCoEFS), University of Jos, has been allocated 4.9 hectares  of land by the University management. This strategic allocation reflects the University’s commitment to strengthening research capacity, innovation, and sustainable development.\n\nThe land will serve as a research and innovation hub, supporting activities such as:\n• Development of climate-smart agricultural practices.\n• Field-based experiments and demonstration projects.\n• Practical training for students and early-career researchers.\n• Collaborative initiatives with industry, policymakers, and communities.\n\nThis milestone provides TCoEFS with a unique platform to translate research into practice and to drive transformative solutions in food environments, nutrition, and public health.",
-      details: [
-        "Strategic 4.9 hectare of land allocation by University of Jos",
-        "Supports field experiments, training, and demonstration projects",
-        "Platform for climate-smart agriculture and innovation",
-        "Enables deeper collaboration with industry and policymakers",
-      ],
-    },
-  },
-  {
-    id: "tetfund-me-visit",
-    title: "TETFund M&E Team Visits TCoEFS",
-    description:
-      "Monitoring and Evaluation visit highlights progress, engagement, and future plans.",
-    image: "/spotlight-images/spotlight-card3/img1.png",
-    images: [
-      "/spotlight-images/spotlight-card3/img1.png",
-      "/spotlight-images/spotlight-card3/img2.png",
-      "/spotlight-images/spotlight-card3/img3.png",
-    ],
-    fullContent: {
-      title: "TETFund M&E Team Visits TCoEFS",
-      content:
-        "The Transnational Centre of Excellence for Food Environment Studies (TCoEFS), University of Jos, recently welcomed the Monitoring and Evaluation (M&E) team from the TETFund Head Office. The visit was part of TETFund’s continuous effort to ensure accountability, monitor progress, and support the effective implementation of its Centres of Excellence.\n\nDuring the visit, the team held interactive sessions with students of the Centre, who shared their experiences, learning opportunities, and aspirations for the future. This engagement provided valuable feedback on how the Centre is shaping academic and research capacity.\n\nThe M&E team also met with the Vice-Chancellor of the University of Jos and the Director of the Centre, who highlighted achievements so far, outlined ongoing projects, and discussed future plans for expanding the Centre’s impact. The discussions emphasized the University’s commitment to advancing TCoEFS as a hub for innovation, research, and policy engagement in food environment studies.\n\nIn their remarks, the TETFund team commended the progress recorded by the Centre and shared insights on strategies to further strengthen implementation and enhance collaboration. Their visit underscored the importance of accountability and forward-looking planning in sustaining the Centre’s growth.",
-      details: [
-        "Interactive sessions with students and leadership",
-        "Progress review and forward plans for impact",
-        "Strengthened accountability and collaboration pathways",
-      ],
-    },
-  },
-];
-
-interface UpcomingEvent {
-  id: string;
-  title: string;
-  date: string;
-  location: string;
-  description: string;
-}
-
-const upcomingEvents: UpcomingEvent[] = [
-  {
-    id: "workshop-2024",
-    title: "Agricultural Innovation Workshop",
-    date: "March 15, 2024",
-    location: "University of Jos",
-    description:
-      "Join us for a comprehensive workshop on the latest agricultural innovations and technologies.",
-  },
-  {
-    id: "conference-2024",
-    title: "Food Security Conference",
-    date: "April 20, 2024",
-    location: "Abuja, Nigeria",
-    description:
-      "Annual conference bringing together experts to discuss food security challenges and solutions.",
-  },
-];
-
 export default function SpotlightsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -158,6 +33,40 @@ export default function SpotlightsSection() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const videoPlayerRef = useRef<any>(null);
   const [videoReady, setVideoReady] = useState(false);
+  const [spotlightCards, setSpotlightCards] = useState<SpotlightCard[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure we're mounted before using portal
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Load spotlight cards from database
+  useEffect(() => {
+    const loadSpotlights = async () => {
+      const cards = await getSpotlightCards();
+      // Transform database format to component format
+      const transformedCards: SpotlightCard[] = cards.map(
+        (card: DBSpotlightCard) => ({
+          id: card.id,
+          title: card.title,
+          description: card.description,
+          image: card.image,
+          images: card.images || [],
+          videoId: card.video_id || undefined,
+          fullContent: {
+            title: card.full_content_title,
+            content: card.full_content_text,
+            details: card.full_content_details || [],
+          },
+        }),
+      );
+      setSpotlightCards(transformedCards);
+      setLoading(false);
+    };
+    loadSpotlights();
+  }, []);
 
   useEffect(() => {
     const update = () => {
@@ -177,11 +86,12 @@ export default function SpotlightsSection() {
   }, [currentIndex]);
 
   useEffect(() => {
+    if (spotlightCards.length === 0) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % spotlightCards.length);
-    }, 12000);
+    }, 3000);
     return () => clearInterval(timer);
-  }, []);
+  }, [spotlightCards.length]);
 
   useEffect(() => {
     // Lock background scroll and manage focus while modal is open
@@ -344,6 +254,34 @@ export default function SpotlightsSection() {
     }
   };
 
+  if (loading) {
+    return (
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="animate-pulse">
+            <div className="h-10 bg-gray-200 rounded w-64 mx-auto mb-4"></div>
+            <div className="h-6 bg-gray-200 rounded w-96 mx-auto"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (spotlightCards.length === 0) {
+    return (
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Spotlights
+          </h2>
+          <p className="text-xl text-gray-600">
+            No spotlights available at the moment.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
       {/* Background spotlight/walls for center emphasis */}
@@ -488,124 +426,129 @@ export default function SpotlightsSection() {
           const headImages = images.slice(0, 2);
           const tailImages = images.slice(2);
 
-          return (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div
-                ref={modalRef}
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby={`spotlight-modal-title-${selectedCard.id}`}
-                tabIndex={-1}
-                onKeyDown={handleModalKeyDown}
-                className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
-              >
-                {/* Top bar with close (matches News modal style) */}
-                <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-end">
-                  <button
-                    ref={closeBtnRef}
-                    onClick={closeModal}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                    aria-label="Close"
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+          const modalContent = (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] overflow-y-auto">
+              <div className="min-h-screen flex items-center justify-center p-4">
+                <div
+                  ref={modalRef}
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby={`spotlight-modal-title-${selectedCard.id}`}
+                  tabIndex={-1}
+                  onKeyDown={handleModalKeyDown}
+                  className="bg-white rounded-xl max-w-4xl w-full shadow-2xl relative my-8"
+                >
+                  {/* Top bar with close (matches News modal style) */}
+                  <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-end">
+                    <button
+                      ref={closeBtnRef}
+                      onClick={closeModal}
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                      aria-label="Close"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                {/* Body with images injected between paragraphs and rest below */}
-                <div className="p-6 md:p-8">
-                  <h2
-                    id={`spotlight-modal-title-${selectedCard.id}`}
-                    ref={titleRef}
-                    tabIndex={-1}
-                    className="text-3xl font-bold mb-6"
-                    style={{ color: "#2f3e2f" }}
-                  >
-                    {selectedCard.fullContent.title}
-                  </h2>
-
-                  {/* Video player if videoId exists */}
-                  {selectedCard.videoId && (
-                    <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl mb-6">
-                      <div className="relative pt-[56.25%]">
-                        <div
-                          id="spotlight-video-player"
-                          className="absolute inset-0 w-full h-full"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Content paragraphs with interspersed images */}
-                  {paragraphs.map((para, idx) => (
-                    <div key={idx} className="mb-4">
-                      <p
-                        className="text-lg leading-relaxed"
-                        style={{ color: "#4a5b4a" }}
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                        {para}
-                      </p>
-                      {headImages[idx] && (
-                        <div className="my-6">
-                          <Image
-                            src={headImages[idx]}
-                            alt={`${selectedCard.fullContent.title} image ${idx + 1}`}
-                            width={1600}
-                            height={900}
-                            className="w-full h-auto rounded-lg object-cover"
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Body with images injected between paragraphs and rest below */}
+                  <div className="p-6 md:p-8">
+                    <h2
+                      id={`spotlight-modal-title-${selectedCard.id}`}
+                      ref={titleRef}
+                      tabIndex={-1}
+                      className="text-3xl font-bold mb-6"
+                      style={{ color: "#2f3e2f" }}
+                    >
+                      {selectedCard.fullContent.title}
+                    </h2>
+
+                    {/* Video player if videoId exists */}
+                    {selectedCard.videoId && (
+                      <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl mb-6">
+                        <div className="relative pt-[56.25%]">
+                          <div
+                            id="spotlight-video-player"
+                            className="absolute inset-0 w-full h-full"
                           />
                         </div>
-                      )}
-                    </div>
-                  ))}
-
-                  {tailImages.length > 0 && (
-                    <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {tailImages.map((src, i) => (
-                        <div
-                          key={src + i}
-                          className="relative w-full overflow-hidden rounded-lg"
-                        >
-                          <Image
-                            src={src}
-                            alt={`${selectedCard.fullContent.title} additional image ${i + 1}`}
-                            width={1200}
-                            height={800}
-                            className="w-full h-auto object-cover"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {Array.isArray(selectedCard.fullContent.details) &&
-                    selectedCard.fullContent.details.length > 0 && (
-                      <div className="mt-8 space-y-3">
-                        {selectedCard.fullContent.details.map(
-                          (detail, index) => (
-                            <div key={index} className="flex items-start">
-                              <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                              <span className="text-gray-800">{detail}</span>
-                            </div>
-                          ),
-                        )}
                       </div>
                     )}
+
+                    {/* Content paragraphs with interspersed images */}
+                    {paragraphs.map((para, idx) => (
+                      <div key={idx} className="mb-4">
+                        <p
+                          className="text-lg leading-relaxed"
+                          style={{ color: "#4a5b4a" }}
+                        >
+                          {para}
+                        </p>
+                        {headImages[idx] && (
+                          <div className="my-6">
+                            <Image
+                              src={headImages[idx]}
+                              alt={`${selectedCard.fullContent.title} image ${idx + 1}`}
+                              width={1600}
+                              height={900}
+                              className="w-full h-auto rounded-lg object-cover"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+                    {tailImages.length > 0 && (
+                      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {tailImages.map((src, i) => (
+                          <div
+                            key={src + i}
+                            className="relative w-full overflow-hidden rounded-lg"
+                          >
+                            <Image
+                              src={src}
+                              alt={`${selectedCard.fullContent.title} additional image ${i + 1}`}
+                              width={1200}
+                              height={800}
+                              className="w-full h-auto object-cover"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {Array.isArray(selectedCard.fullContent.details) &&
+                      selectedCard.fullContent.details.length > 0 && (
+                        <div className="mt-8 space-y-3">
+                          {selectedCard.fullContent.details.map(
+                            (detail, index) => (
+                              <div key={index} className="flex items-start">
+                                <span className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                <span className="text-gray-800">{detail}</span>
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      )}
+                  </div>
                 </div>
               </div>
             </div>
           );
+
+          // Use portal to render modal at document root
+          return mounted ? createPortal(modalContent, document.body) : null;
         })()}
     </section>
   );

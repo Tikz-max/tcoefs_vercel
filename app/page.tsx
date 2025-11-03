@@ -10,10 +10,27 @@ import FAQSection from "@/components/faq-section";
 import SpotlightsSection from "@/components/spotlights-section";
 import { AnimatedSection } from "@/components/animated-section";
 import PartnersMarquee from "@/components/partners/partners-marquee";
+import { createClient } from "@/lib/supabase/server";
 import fs from "node:fs/promises";
 import path from "node:path";
 
 export default async function Home() {
+  // Load upcoming event from Supabase
+  const supabase = await createClient();
+  let upcomingEvent: any = null;
+
+  try {
+    const { data } = await supabase
+      .from("upcoming_event")
+      .select("*")
+      .eq("is_active", true)
+      .single();
+
+    upcomingEvent = data;
+  } catch (error) {
+    console.error("Error fetching upcoming event:", error);
+  }
+
   // Load latest news items on the server and pass to HomeNewsSection
   let homeNewsItems: any[] = [];
   try {
@@ -96,49 +113,53 @@ export default async function Home() {
       </AnimatedSection>
 
       {/* Upcoming Event Section - No title */}
-      <AnimatedSection animation="fade" delay={100}>
-        <section className="py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto flex justify-end">
-            <div className="w-full max-w-sm">
-              <div className="bg-white rounded-xl border border-gray-200 shadow-lg p-6">
-                <h3 className="text-lg font-semibold text-[#2f3e2f] mb-4">
-                  Upcoming Event
-                </h3>
-                <h4 className="text-xl font-bold text-[#2f3e2f] mb-3">
-                  USLGE and RSG Delegation Visit for SRDEP Evaluation
-                </h4>
-                <p className="text-sm text-[#4a5b4a] mb-2">
-                  12th - 17th October 2025
-                </p>
-                <p className="text-sm text-[#4a5b4a] mb-4">
-                  Plateau State, Nigeria
-                </p>
-                <a
-                  href="https://blog.tcoefs-unijos.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center text-[#2d5a2d] hover:text-[#1e4a1e] font-medium text-sm transition-colors"
-                >
-                  View details
-                  <svg
-                    className="w-4 h-4 ml-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+      {upcomingEvent && (
+        <AnimatedSection animation="fade" delay={100}>
+          <section className="py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto flex justify-end">
+              <div className="w-full max-w-sm">
+                <div className="bg-white rounded-xl border border-gray-200 shadow-lg p-6">
+                  <h3 className="text-lg font-semibold text-[#2f3e2f] mb-4">
+                    Upcoming Event
+                  </h3>
+                  <h4 className="text-xl font-bold text-[#2f3e2f] mb-3">
+                    {upcomingEvent.title}
+                  </h4>
+                  <p className="text-sm text-[#4a5b4a] mb-2">
+                    {upcomingEvent.date_range}
+                  </p>
+                  <p className="text-sm text-[#4a5b4a] mb-4">
+                    {upcomingEvent.location}
+                  </p>
+                  <a
+                    href={
+                      upcomingEvent.link || "https://blog.tcoefs-unijos.org"
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-[#2d5a2d] hover:text-[#1e4a1e] font-medium text-sm transition-colors"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </a>
+                    View details
+                    <svg
+                      className="w-4 h-4 ml-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      </AnimatedSection>
+          </section>
+        </AnimatedSection>
+      )}
 
       <AnimatedSection animation="fade" delay={100}>
         <PartnersMarquee />
