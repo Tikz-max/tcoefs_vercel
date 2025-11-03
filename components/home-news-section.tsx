@@ -45,58 +45,27 @@ export default function HomeNewsSection({
     if (hasServerItems) return;
     const load = async () => {
       try {
-        const res = await fetch("/news/news.generated.json", {
-          cache: "no-store",
-        });
+        // Fetch from blog API
+        const res = await fetch(
+          "https://blog.tcoefs-unijos.org/api/latest-news",
+          {
+            cache: "no-store",
+          },
+        );
         if (!res.ok) return;
         const data = await res.json();
-        if (Array.isArray(data)) {
-          const isSupported = (src?: string) =>
-            typeof src === "string" && /\.(png|jpe?g|gif|webp|svg)$/i.test(src);
-          const normalized = data.map((d: any) => {
-            let hero = "";
-            if (isSupported(d?.image)) {
-              hero = d.image;
-            } else if (Array.isArray(d?.images)) {
-              const first = d.images.find((s: string) => isSupported(s));
-              if (first) hero = first;
-            }
-            const category =
-              d?.slug === "news-report"
-                ? "Research"
-                : d?.slug === "news-update"
-                  ? "Partnership"
-                  : d?.category || "News";
-            const title =
-              d?.slug === "news-report"
-                ? "International Lecture: Using Genetics to Meet the Food Demand of 2050"
-                : d?.slug === "news-update"
-                  ? "SAA and GIZ Partner with TCoEFS to Drive Institutional Innovation in Food Security"
-                  : d?.title || "Untitled";
-            const image =
-              d?.slug === "news-report"
-                ? "/news/Genetics 2050/img1.png"
-                : d?.slug === "news-update"
-                  ? "/news/saa-giz/images/meeting.png"
-                  : hero || "/news-collage.png";
-
-            return {
-              id: d.id,
-              category,
-              title,
-              slug: d.slug || "",
-              excerpt: d.excerpt || "",
-              date: d.date || "",
-              image,
-            };
-          });
-          const sorted = normalized
-            .filter((n) => n.date)
-            .sort(
-              (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-            );
-          const latest = sorted.slice(0, 3);
-          if (latest.length) setItems(latest);
+        if (data.success && Array.isArray(data.articles)) {
+          const normalized = data.articles.map((article: any) => ({
+            id: article.id,
+            category: article.category || "News",
+            title: article.title,
+            excerpt: article.excerpt || "",
+            date: article.date || "",
+            image: article.image || "/news-collage.png",
+            readTime: article.readTime || "5 min read",
+            url: article.url, // Blog URL
+          }));
+          if (normalized.length) setItems(normalized);
         }
       } catch {
         // ignore and keep fallback
@@ -151,8 +120,13 @@ export default function HomeNewsSection({
             >
               {items.map((news) => (
                 <div key={news.id} className="w-full flex-shrink-0">
-                  <Link
-                    href={`/news-events?expand=${news.id}`}
+                  <a
+                    href={
+                      news.url ||
+                      `https://blog.tcoefs-unijos.org/news/${news.id}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="group block"
                   >
                     <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:border-[#5a7c65]/30 mx-2">
@@ -193,7 +167,7 @@ export default function HomeNewsSection({
                         </div>
                       </div>
                     </div>
-                  </Link>
+                  </a>
                 </div>
               ))}
             </div>
@@ -214,13 +188,15 @@ export default function HomeNewsSection({
         </div>
 
         <div className="text-center">
-          <Link
-            href="/news-events"
+          <a
+            href="https://blog.tcoefs-unijos.org"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] text-white px-8 py-3 rounded-lg font-medium hover:from-[#1e4a1e] hover:to-[#2d5a2d] transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             View All News
             <ArrowRight className="w-5 h-5 ml-2" />
-          </Link>
+          </a>
         </div>
       </div>
     </section>
