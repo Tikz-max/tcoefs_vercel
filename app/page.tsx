@@ -11,8 +11,6 @@ import SpotlightsSection from "@/components/spotlights-section";
 import { AnimatedSection } from "@/components/animated-section";
 import PartnersMarquee from "@/components/partners/partners-marquee";
 import { createClient } from "@/lib/supabase/server";
-import fs from "node:fs/promises";
-import path from "node:path";
 
 export default async function Home() {
   // Load upcoming event from Supabase
@@ -31,62 +29,32 @@ export default async function Home() {
     console.error("Error fetching upcoming event:", error);
   }
 
-  // Load latest news items on the server and pass to HomeNewsSection
+  // Load latest news items from blog API
   let homeNewsItems: any[] = [];
   try {
-    const file = await fs.readFile(
-      path.join(process.cwd(), "public", "news", "news.generated.json"),
-      "utf8",
-    );
-    const data = JSON.parse(file);
-    if (Array.isArray(data)) {
-      const isSupported = (src?: string) =>
-        typeof src === "string" && /\.(png|jpe?g|gif|webp|svg)$/i.test(src);
+    const res = await fetch("https://blog.tcoefs-unijos.org/api/latest-news", {
+      cache: "no-store",
+      next: { revalidate: 300 }, // Revalidate every 5 minutes
+    });
 
-      const normalized = data.map((d: any) => {
-        let hero = "";
-        if (isSupported(d?.image)) {
-          hero = d.image;
-        } else if (Array.isArray(d?.images)) {
-          const first = d.images.find((s: string) => isSupported(s));
-          if (first) hero = first;
-        }
-        const category =
-          d?.slug === "news-report"
-            ? "Research"
-            : d?.slug === "news-update"
-              ? "Partnership"
-              : d?.category || "News";
-        const title =
-          d?.slug === "news-report"
-            ? "International Lecture: Using Genetics to Meet the Food Demand of 2050"
-            : d?.slug === "news-update"
-              ? "SAA and GIZ Partner with TCoEFS to Drive Institutional Innovation in Food Security"
-              : d?.title || "Untitled";
-        const image =
-          d?.slug === "news-report"
-            ? "/news/Genetics 2050/img1.png"
-            : d?.slug === "news-update"
-              ? "/news/saa-giz/images/meeting.png"
-              : hero || "/news-collage.png";
-
-        return {
-          id: d.id,
-          category,
-          title,
-          slug: d.slug || "",
-          excerpt: d.excerpt || "",
-          date: d.date || "",
-          image,
-        };
-      });
-
-      homeNewsItems = normalized
-        .filter((n) => n.date)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-        .slice(0, 3);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && Array.isArray(data.articles)) {
+        homeNewsItems = data.articles.map((article: any) => ({
+          id: article.id,
+          category: article.category || "News",
+          title: article.title,
+          excerpt: article.excerpt || "",
+          date: article.date || "",
+          image: article.image || "/news-collage.png",
+          readTime: article.readTime || "5 min read",
+          url: article.url,
+        }));
+      }
     }
-  } catch {}
+  } catch (error) {
+    console.error("Error fetching latest news:", error);
+  }
 
   return (
     <div className="min-h-screen bg-white overflow-x-clip">
