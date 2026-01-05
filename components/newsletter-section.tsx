@@ -7,12 +7,12 @@ export default function NewsletterSection() {
   const newsletter = {
     title: "TCoEFS Newsletter",
     volume: "Volume 1",
-    issue: "Issue 2",
-    date: "April 2025",
-    quarter: "Second Quarter",
+    issue: "Issue 3 & 4",
+    date: "October 2025",
+    quarter: "Third & Fourth Quarter",
     excerpt:
       "The latest edition of the TETFund Centre of Excellence in Food Security (TCoEFS) Newsletter highlights a year of strategic action, impactful initiatives, and strengthened partnerships in the pursuit of sustainable food security. This combined issue (3 & 4) brings together stories of achievement across research, policy engagement, institutional development, and practical demonstration projects.",
-    pdfUrl: "/TCoEFS_Quarterly_Newsletter.pdf",
+    pdfUrl: "/TCoEFS_Newsletter_Volume_1_Issue_3-4.pdf",
   };
 
   const event = {
