@@ -9,150 +9,255 @@ import {
   SheetClose,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { ArrowUpRight } from "lucide-react";
-
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef } from "react";
+
+type NavChild = {
+  label: string;
+  href: string;
+  external?: boolean;
+};
+
+type NavItem =
+  | { label: string; href: string; children?: undefined }
+  | { label: string; href?: undefined; children: NavChild[] };
+
+const navItems: NavItem[] = [
+  { label: "Home", href: "/" },
+  {
+    label: "About",
+    children: [
+      { label: "Overview", href: "/about" },
+      { label: "Leadership", href: "/about/leadership" },
+      {
+        label: "Strategic Repositioning",
+        href: "/about/strategic-repositioning",
+      },
+      { label: "Facilities", href: "/about/facilities" },
+    ],
+  },
+  {
+    label: "Programmes",
+    children: [
+      { label: "Postgraduate Programmes", href: "/programmes/postgraduate" },
+      {
+        label: "Research & Innovation",
+        href: "/programmes/research-innovation",
+      },
+      { label: "Training & Extension", href: "/programmes/training-extension" },
+    ],
+  },
+  {
+    label: "Enterprise & Demonstration",
+    children: [
+      {
+        label: "Agricultural Enterprise",
+        href: "/enterprise/agricultural-enterprise",
+      },
+      {
+        label: "Research & Demonstration Facilities",
+        href: "/enterprise/demonstration-facilities",
+      },
+    ],
+  },
+  { label: "Partnerships", href: "/partnerships" },
+  {
+    label: "News & Events",
+    children: [
+      { label: "News", href: "https://blog.tcoefs-unijos.org", external: true },
+      { label: "Newsletters & Events", href: "/news/newsletters-events" },
+    ],
+  },
+  { label: "Resources", href: "/resources" },
+];
 
 export { Navbar };
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
+  const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isActive = (path: string) => {
-    if (path === "/" && pathname === "/") return true;
-    if (path === "/about" && pathname === "/about") return true;
-    if (path === "/research-innovation" && pathname === "/research-innovation")
-      return true;
-    if (
-      path === "/training-capacity-building" &&
-      pathname === "/training-capacity-building"
-    )
-      return true;
+  const handleMouseEnter = (label: string) => {
+    if (leaveTimer.current) clearTimeout(leaveTimer.current);
+    setOpenDropdown(label);
+  };
 
-    if (
-      path !== "/" &&
-      path !== "/about" &&
-      path !== "/research" &&
-      pathname.startsWith(path)
-    )
-      return true;
-    return false;
+  const handleMouseLeave = () => {
+    leaveTimer.current = setTimeout(() => setOpenDropdown(null), 120);
+  };
+
+  const isExactActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname === href;
+  };
+
+  const isParentActive = (children: NavChild[]) => {
+    return children.some(
+      (child) => !child.external && pathname.startsWith(child.href),
+    );
+  };
+
+  const toggleMobileSection = (label: string) => {
+    setExpandedMobile((prev) => (prev === label ? null : label));
   };
 
   return (
-    <nav className="w-full bg-white px-6 py-4">
+    <nav
+      className="w-full bg-white border-b border-gray-100 px-6 py-4 sticky top-0 z-50"
+      suppressHydrationWarning
+    >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo and Title Section */}
+        {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 flex-shrink-0"
           aria-label="TCoEFS Home"
         >
           <Image
             src="/brand/tcoefs-logo.png"
             alt="TCoEFS Logo"
-            width={48}
-            height={48}
+            width={44}
+            height={44}
             className="rounded-full"
           />
-          <span className="text-xl font-semibold" style={{ color: "#2f3e2f" }}>
+          <span className="text-lg font-semibold" style={{ color: "#2f3e2f" }}>
             TCoEFS
           </span>
         </Link>
 
-        {/* Navigation Links and Contact Us Button - Centered */}
-        <div className="hidden lg:flex items-center gap-8">
-          <div className="relative group">
-            <Link
-              href="/"
-              className="text-base font-medium transition-colors hover:opacity-80 pb-2 relative block group-hover:opacity-80"
-              style={{ color: isActive("/") ? "#2f3e2f" : "#4a5b4a" }}
-            >
-              Home
-              {isActive("/") && (
-                <div
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 transition-all duration-200 group-hover:opacity-0"
-                  style={{ backgroundColor: "#2d5a2d" }}
-                ></div>
-              )}
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-            </Link>
-          </div>
+        {/* Desktop Nav */}
+        <div className="hidden lg:flex items-center gap-1">
+          {navItems.map((item) => {
+            if (!item.children) {
+              // Single link
+              const active = isExactActive(item.href);
+              return (
+                <div key={item.label} className="relative group px-3 py-2">
+                  <Link
+                    href={item.href}
+                    className="text-sm font-medium transition-colors relative block pb-0.5"
+                    style={{ color: active ? "#2f3e2f" : "#4a5b4a" }}
+                  >
+                    {item.label}
+                    {active && (
+                      <span
+                        className="absolute -bottom-0.5 left-0 right-0 h-0.5 transition-all duration-200 group-hover:opacity-0"
+                        style={{ backgroundColor: "#2d5a2d" }}
+                      />
+                    )}
+                    <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                  </Link>
+                </div>
+              );
+            }
 
-          <div className="relative group">
-            <Link
-              href="/about"
-              className="text-base font-medium transition-colors hover:opacity-80 pb-2 relative block group-hover:opacity-80"
-              style={{ color: isActive("/about") ? "#2f3e2f" : "#4a5b4a" }}
-            >
-              About
-              {isActive("/about") && (
-                <div
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 transition-all duration-200 group-hover:opacity-0"
-                  style={{ backgroundColor: "#2d5a2d" }}
-                ></div>
-              )}
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-            </Link>
-          </div>
+            // Dropdown
+            const parentActive = isParentActive(item.children);
+            const isOpen = openDropdown === item.label;
 
-          {[
-            { label: "Research & Innovation", href: "/research-innovation" },
-            {
-              label: "Training & Capacity Building",
-              href: "/training-capacity-building",
-            },
-          ].map(({ label, href }) => (
-            <div key={label} className="relative group">
-              <Link
-                href={href}
-                className="text-base font-medium transition-colors hover:opacity-80 pb-2 relative block group-hover:opacity-80"
-                style={{ color: isActive(href) ? "#2f3e2f" : "#4a5b4a" }}
+            return (
+              <div
+                key={item.label}
+                className="relative px-3 py-2"
+                onMouseEnter={() => handleMouseEnter(item.label)}
+                onMouseLeave={handleMouseLeave}
               >
-                {label}
-                {isActive(href) && (
-                  <div
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 transition-all duration-200 group-hover:opacity-0"
-                    style={{ backgroundColor: "#2d5a2d" }}
-                  ></div>
-                )}
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-              </Link>
-            </div>
-          ))}
+                <button
+                  className="flex items-center gap-1 text-sm font-medium transition-colors relative pb-0.5 group"
+                  style={{
+                    color: parentActive || isOpen ? "#2f3e2f" : "#4a5b4a",
+                  }}
+                  aria-expanded={isOpen}
+                  aria-haspopup="true"
+                >
+                  {item.label}
+                  <ChevronDown
+                    className="w-3.5 h-3.5 transition-transform duration-200 flex-shrink-0"
+                    style={{
+                      transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    }}
+                  />
+                  {parentActive && !isOpen && (
+                    <span
+                      className="absolute -bottom-0.5 left-0 right-0 h-0.5"
+                      style={{ backgroundColor: "#2d5a2d" }}
+                    />
+                  )}
+                  <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                </button>
 
-          {/* Blog Link */}
-          <div className="relative group">
-            <a
-              href="https://blog.tcoefs-unijos.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-base font-medium transition-colors hover:opacity-80 pb-2 relative group-hover:opacity-80"
-              style={{ color: "#4a5b4a" }}
-            >
-              Blog
-              <ArrowUpRight className="w-4 h-4" />
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-            </a>
-          </div>
+                {/* Dropdown Panel */}
+                <div
+                  className={`absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 min-w-[220px] transition-all duration-200 ${
+                    isOpen
+                      ? "opacity-100 translate-y-0 pointer-events-auto"
+                      : "opacity-0 -translate-y-1 pointer-events-none"
+                  }`}
+                  onMouseEnter={() => handleMouseEnter(item.label)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  {item.children.map((child) => {
+                    const childActive =
+                      !child.external && isExactActive(child.href);
+                    if (child.external) {
+                      return (
+                        <a
+                          key={child.label}
+                          href={child.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-between px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#2d5a2d]/5"
+                          style={{ color: "#4a5b4a" }}
+                          onClick={() => setOpenDropdown(null)}
+                        >
+                          {child.label}
+                          <ArrowUpRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
+                        </a>
+                      );
+                    }
+                    return (
+                      <Link
+                        key={child.label}
+                        href={child.href}
+                        className="block px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#2d5a2d]/5"
+                        style={{ color: childActive ? "#2f3e2f" : "#4a5b4a" }}
+                        onClick={() => setOpenDropdown(null)}
+                      >
+                        {child.label}
+                        {childActive && (
+                          <span className="ml-2 inline-block w-1.5 h-1.5 rounded-full bg-[#2d5a2d] align-middle" />
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
+        {/* Contact CTA */}
+        <div className="hidden lg:block flex-shrink-0">
           <Link href="/contact">
-            <Button className="text-white font-medium px-6 py-2 rounded-full hover:opacity-90 transition-all duration-300 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#4a5b4a] hover:to-[#2d5a2d] shadow-lg hover:shadow-xl transform hover:scale-105">
+            <Button className="text-white font-medium px-5 py-2 rounded-full transition-all duration-300 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#1e4a1e] hover:to-[#2d5a2d] shadow-md hover:shadow-lg hover:scale-105 text-sm">
               Contact Us
             </Button>
           </Link>
         </div>
 
-        {/* Mobile Actions: Contact + Menu */}
+        {/* Mobile: Contact + Hamburger */}
         <div className="flex items-center gap-3 lg:hidden">
           <Link href="/contact">
-            <Button className="h-9 px-4 text-white font-medium rounded-full hover:opacity-90 transition-all duration-300 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#4a5b4a] hover:to-[#2d5a2d] shadow-md">
+            <Button className="h-9 px-4 text-white font-medium rounded-full transition-all duration-300 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#4a5b4a] hover:to-[#2d5a2d] shadow-md text-sm">
               Contact Us
             </Button>
           </Link>
+
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger asChild>
               <button
@@ -161,7 +266,7 @@ export default function Navbar() {
               >
                 {menuOpen ? (
                   <svg
-                    className="w-6 h-6"
+                    className="w-5 h-5"
                     style={{ color: "#2f3e2f" }}
                     fill="none"
                     stroke="currentColor"
@@ -176,7 +281,7 @@ export default function Navbar() {
                   </svg>
                 ) : (
                   <svg
-                    className="w-6 h-6"
+                    className="w-5 h-5"
                     style={{ color: "#2f3e2f" }}
                     fill="none"
                     stroke="currentColor"
@@ -192,53 +297,108 @@ export default function Navbar() {
                 )}
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-white p-6">
+
+            <SheetContent side="right" className="bg-white p-0 w-[300px]">
               <SheetTitle className="sr-only">Navigation</SheetTitle>
-              <nav className="flex flex-col -mx-6 divide-y divide-gray-200">
-                <SheetClose asChild>
-                  <Link
-                    href="/"
-                    className="block text-center py-4 text-gray-600 hover:text-[#2f3e2f]"
+
+              <div className="flex flex-col h-full overflow-y-auto">
+                <div className="px-6 py-5 border-b border-gray-100">
+                  <span
+                    className="text-base font-semibold"
+                    style={{ color: "#2f3e2f" }}
                   >
-                    Home
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                  <Link
-                    href="/about"
-                    className="block text-center py-4 text-gray-600 hover:text-[#2f3e2f]"
-                  >
-                    About
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                  <Link
-                    href="/research-innovation"
-                    className="block text-center py-4 text-gray-600 hover:text-[#2f3e2f]"
-                  >
-                    Research & Innovation
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                  <Link
-                    href="/training-capacity-building"
-                    className="block text-center py-4 text-gray-600 hover:text-[#2f3e2f]"
-                  >
-                    Training & Capacity Building
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                  <a
-                    href="https://blog.tcoefs-unijos.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 py-4 text-gray-600 hover:text-[#2f3e2f]"
-                  >
-                    Blog
-                    <ArrowUpRight className="w-4 h-4" />
-                  </a>
-                </SheetClose>
-              </nav>
+                    Menu
+                  </span>
+                </div>
+
+                <nav className="flex-1 px-3 py-3">
+                  {navItems.map((item) => {
+                    if (!item.children) {
+                      return (
+                        <SheetClose asChild key={item.label}>
+                          <Link
+                            href={item.href}
+                            className="block px-3 py-3 text-sm font-medium rounded-lg transition-colors hover:bg-[#2d5a2d]/5"
+                            style={{
+                              color: isExactActive(item.href)
+                                ? "#2f3e2f"
+                                : "#4a5b4a",
+                            }}
+                          >
+                            {item.label}
+                          </Link>
+                        </SheetClose>
+                      );
+                    }
+
+                    const isExpanded = expandedMobile === item.label;
+                    const parentActive = isParentActive(item.children);
+
+                    return (
+                      <div key={item.label}>
+                        <button
+                          onClick={() => toggleMobileSection(item.label)}
+                          className="w-full flex items-center justify-between px-3 py-3 text-sm font-medium rounded-lg transition-colors hover:bg-[#2d5a2d]/5"
+                          style={{
+                            color:
+                              parentActive || isExpanded
+                                ? "#2f3e2f"
+                                : "#4a5b4a",
+                          }}
+                        >
+                          {item.label}
+                          <ChevronDown
+                            className="w-4 h-4 transition-transform duration-200 flex-shrink-0"
+                            style={{
+                              transform: isExpanded
+                                ? "rotate(180deg)"
+                                : "rotate(0deg)",
+                            }}
+                          />
+                        </button>
+
+                        {isExpanded && (
+                          <div className="ml-3 mb-1 border-l border-gray-100 pl-3">
+                            {item.children.map((child) => {
+                              if (child.external) {
+                                return (
+                                  <SheetClose asChild key={child.label}>
+                                    <a
+                                      href={child.href}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-colors hover:bg-[#2d5a2d]/5"
+                                      style={{ color: "#4a5b4a" }}
+                                    >
+                                      {child.label}
+                                      <ArrowUpRight className="w-3.5 h-3.5 opacity-50 flex-shrink-0" />
+                                    </a>
+                                  </SheetClose>
+                                );
+                              }
+                              return (
+                                <SheetClose asChild key={child.label}>
+                                  <Link
+                                    href={child.href}
+                                    className="block px-3 py-2.5 text-sm font-medium rounded-lg transition-colors hover:bg-[#2d5a2d]/5"
+                                    style={{
+                                      color: isExactActive(child.href)
+                                        ? "#2f3e2f"
+                                        : "#4a5b4a",
+                                    }}
+                                  >
+                                    {child.label}
+                                  </Link>
+                                </SheetClose>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </nav>
+              </div>
             </SheetContent>
           </Sheet>
         </div>
