@@ -263,6 +263,7 @@ export default function Navbar() {
               <button
                 className="p-2"
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
+                suppressHydrationWarning
               >
                 {menuOpen ? (
                   <svg

@@ -11,27 +11,31 @@ interface CounterData {
 
 const counterData: CounterData[] = [
   {
-    target: 1000,
+    target: 30,
+    label: "Scientific Team Members",
+    description:
+      "Researchers, faculty, and field scientists driving TCoEFS work",
+    suffix: "+",
+  },
+  {
+    target: 500,
     label: "Farmers Trained",
-    description: "In climate-smart and value addition practices",
+    description: "In climate-smart agriculture and value addition practices",
+    suffix: "+",
+  },
+  {
+    target: 15,
+    label: "Postgraduate Programmes Developed",
+    description:
+      "Accredited programmes building the next generation of food security experts",
     suffix: "+",
   },
   {
     target: 10,
-    label: "Research Projects",
+    label: "Strategic Partnerships Activated",
     description:
-      "Collaborative studies with national and international partners",
-  },
-  {
-    target: 12,
-    label: "Policy Briefs",
-    description: "Technical papers influencing government decisions",
-  },
-  {
-    target: 50,
-    label: "Reduction Achieved",
-    description: "In post-harvest losses recorded in pilot communities",
-    suffix: "%+",
+      "With national institutions, industry, and international bodies",
+    suffix: "+",
   },
 ];
 

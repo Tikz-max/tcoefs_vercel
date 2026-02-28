@@ -56,10 +56,18 @@ export default function AboutSection() {
                 climate resilience.
               </p>
 
-              <p className="text-[#4a5b4a] leading-relaxed mb-8">
+              <p className="text-[#4a5b4a] leading-relaxed mb-4">
                 Our multidisciplinary approach combines cutting-edge science
                 with practical solutions, ensuring our research translates into
                 real-world impact for communities across the continent.
+              </p>
+
+              <p className="text-[#4a5b4a] leading-relaxed mb-8 border-l-4 border-[#2d5a2d] pl-6">
+                TCoEFS has undergone structured repositioning to strengthen
+                research delivery, infrastructure readiness, enterprise
+                sustainability, postgraduate programme development, and
+                strategic partnerships in alignment with TETFund expectations
+                and Disbursement-Linked Indicators.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
