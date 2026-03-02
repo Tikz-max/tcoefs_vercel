@@ -9,6 +9,19 @@ const logos = [
   { src: "/partners/color/Pasted image (3).png", alt: "Partner 3" },
   { src: "/partners/color/Pasted image (4).png", alt: "Partner 4" },
   { src: "/partners/color/Pasted image (6).png", alt: "Partner 5" },
+  {
+    src: "/partners/color/Pasted image (7).png",
+    alt: "U.S. Livestock Genetics Export, Inc.",
+  },
+  {
+    src: "/partners/color/Pasted image (8).png",
+    alt: "EcoFarms & Agro Services Limited",
+  },
+  { src: "/partners/color/Pasted image (10).png", alt: "L-PRES" },
+  {
+    src: "/partners/color/Pasted image (11).png",
+    alt: "Dajrhas Health and Agric Development Ltd.",
+  },
 ];
 
 export default function PartnersMarquee() {

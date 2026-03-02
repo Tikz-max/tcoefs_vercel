@@ -98,13 +98,19 @@ export default function HeroSection() {
 
             {/* CTA row */}
             <div className="flex flex-col sm:flex-row gap-3 mb-10">
-              <Link href="/programmes/postgraduate">
-                <button className="w-full sm:w-auto bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#1e4a1e] hover:to-[#2d5a2d] text-white px-6 py-3 rounded-lg font-medium text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 whitespace-nowrap">
+              <Link
+                href="/programmes/postgraduate"
+                className="block sm:inline-block w-full sm:w-auto"
+              >
+                <button className="w-full bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#1e4a1e] hover:to-[#2d5a2d] text-white px-6 py-3 rounded-lg font-medium text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
                   Explore Our Programmes
                 </button>
               </Link>
-              <Link href="/contact">
-                <button className="w-full sm:w-auto border-2 border-[#2d5a2d] text-[#2d5a2d] font-semibold px-6 py-3 rounded-xl hover:bg-[#2d5a2d] hover:text-white transition-all duration-300 whitespace-nowrap">
+              <Link
+                href="/contact"
+                className="block sm:inline-block w-full sm:w-auto"
+              >
+                <button className="w-full border-2 border-[#2d5a2d] text-[#2d5a2d] font-semibold px-6 py-3 rounded-xl hover:bg-[#2d5a2d] hover:text-white transition-all duration-300">
                   Partner With Us
                 </button>
               </Link>

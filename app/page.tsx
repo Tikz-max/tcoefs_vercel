@@ -10,6 +10,7 @@ import FAQSection from "@/components/faq-section";
 import SpotlightsSection from "@/components/spotlights-section";
 import { AnimatedSection } from "@/components/animated-section";
 import PartnersMarquee from "@/components/partners/partners-marquee";
+import ProgrammesPreviewSection from "@/components/programmes-preview-section";
 import NewsletterSection from "@/components/newsletter-section";
 
 export default async function Home() {
@@ -49,6 +50,9 @@ export default async function Home() {
       </AnimatedSection>
       <AnimatedSection animation="fade" delay={100}>
         <NewsSection />
+      </AnimatedSection>
+      <AnimatedSection animation="slide-up" delay={100}>
+        <ProgrammesPreviewSection />
       </AnimatedSection>
       <AnimatedSection animation="slide-left" delay={150}>
         <ResearchAreasSection />

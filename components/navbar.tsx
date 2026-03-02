@@ -22,7 +22,7 @@ type NavChild = {
 
 type NavItem =
   | { label: string; href: string; children?: undefined }
-  | { label: string; href?: undefined; children: NavChild[] };
+  | { label: string; href?: string; children: NavChild[] };
 
 const navItems: NavItem[] = [
   { label: "Home", href: "/" },
@@ -40,7 +40,9 @@ const navItems: NavItem[] = [
   },
   {
     label: "Programmes",
+    href: "/programmes",
     children: [
+      { label: "Programmes", href: "/programmes" },
       { label: "Postgraduate Programmes", href: "/programmes/postgraduate" },
       {
         label: "Research & Innovation",
@@ -157,7 +159,9 @@ export default function Navbar() {
             }
 
             // Dropdown
-            const parentActive = isParentActive(item.children);
+            const parentActive =
+              isParentActive(item.children) ||
+              !!(item.href && isExactActive(item.href));
             const isOpen = openDropdown === item.label;
 
             return (
@@ -167,29 +171,56 @@ export default function Navbar() {
                 onMouseEnter={() => handleMouseEnter(item.label)}
                 onMouseLeave={handleMouseLeave}
               >
-                <button
-                  className="flex items-center gap-1 text-sm font-medium transition-colors relative pb-0.5 group"
-                  style={{
-                    color: parentActive || isOpen ? "#2f3e2f" : "#4a5b4a",
-                  }}
-                  aria-expanded={isOpen}
-                  aria-haspopup="true"
-                >
-                  {item.label}
-                  <ChevronDown
-                    className="w-3.5 h-3.5 transition-transform duration-200 flex-shrink-0"
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className="flex items-center gap-1 text-sm font-medium transition-colors relative pb-0.5 group"
                     style={{
-                      transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                      color: parentActive || isOpen ? "#2f3e2f" : "#4a5b4a",
                     }}
-                  />
-                  {parentActive && !isOpen && (
-                    <span
-                      className="absolute -bottom-0.5 left-0 right-0 h-0.5"
-                      style={{ backgroundColor: "#2d5a2d" }}
+                    aria-expanded={isOpen}
+                    aria-haspopup="true"
+                  >
+                    {item.label}
+                    <ChevronDown
+                      className="w-3.5 h-3.5 transition-transform duration-200 flex-shrink-0"
+                      style={{
+                        transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                      }}
                     />
-                  )}
-                  <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-                </button>
+                    {parentActive && !isOpen && (
+                      <span
+                        className="absolute -bottom-0.5 left-0 right-0 h-0.5"
+                        style={{ backgroundColor: "#2d5a2d" }}
+                      />
+                    )}
+                    <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                  </Link>
+                ) : (
+                  <button
+                    className="flex items-center gap-1 text-sm font-medium transition-colors relative pb-0.5 group"
+                    style={{
+                      color: parentActive || isOpen ? "#2f3e2f" : "#4a5b4a",
+                    }}
+                    aria-expanded={isOpen}
+                    aria-haspopup="true"
+                  >
+                    {item.label}
+                    <ChevronDown
+                      className="w-3.5 h-3.5 transition-transform duration-200 flex-shrink-0"
+                      style={{
+                        transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                      }}
+                    />
+                    {parentActive && !isOpen && (
+                      <span
+                        className="absolute -bottom-0.5 left-0 right-0 h-0.5"
+                        style={{ backgroundColor: "#2d5a2d" }}
+                      />
+                    )}
+                    <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                  </button>
+                )}
 
                 {/* Dropdown Panel */}
                 <div
@@ -201,9 +232,11 @@ export default function Navbar() {
                   onMouseEnter={() => handleMouseEnter(item.label)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  {item.children.map((child) => {
+                  {item.children.map((child, childIndex) => {
                     const childActive =
                       !child.external && isExactActive(child.href);
+                    const isFirstAndParentLink =
+                      childIndex === 0 && item.href && child.href === item.href;
                     if (child.external) {
                       return (
                         <a
@@ -221,18 +254,22 @@ export default function Navbar() {
                       );
                     }
                     return (
-                      <Link
-                        key={child.label}
-                        href={child.href}
-                        className="block px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#2d5a2d]/5"
-                        style={{ color: childActive ? "#2f3e2f" : "#4a5b4a" }}
-                        onClick={() => setOpenDropdown(null)}
-                      >
-                        {child.label}
-                        {childActive && (
-                          <span className="ml-2 inline-block w-1.5 h-1.5 rounded-full bg-[#2d5a2d] align-middle" />
+                      <div key={child.label}>
+                        <Link
+                          href={child.href}
+                          className="block px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#2d5a2d]/5"
+                          style={{ color: childActive ? "#2f3e2f" : "#4a5b4a" }}
+                          onClick={() => setOpenDropdown(null)}
+                        >
+                          {child.label}
+                          {childActive && (
+                            <span className="ml-2 inline-block w-1.5 h-1.5 rounded-full bg-[#2d5a2d] align-middle" />
+                          )}
+                        </Link>
+                        {isFirstAndParentLink && (
+                          <div className="mx-4 my-1 h-px bg-gray-100" />
                         )}
-                      </Link>
+                      </div>
                     );
                   })}
                 </div>
@@ -337,26 +374,56 @@ export default function Navbar() {
 
                     return (
                       <div key={item.label}>
-                        <button
-                          onClick={() => toggleMobileSection(item.label)}
-                          className="w-full flex items-center justify-between px-3 py-3 text-sm font-medium rounded-lg transition-colors hover:bg-[#2d5a2d]/5"
-                          style={{
-                            color:
-                              parentActive || isExpanded
-                                ? "#2f3e2f"
-                                : "#4a5b4a",
-                          }}
-                        >
-                          {item.label}
-                          <ChevronDown
-                            className="w-4 h-4 transition-transform duration-200 flex-shrink-0"
+                        <div className="w-full flex items-center justify-between rounded-lg hover:bg-[#2d5a2d]/5 transition-colors">
+                          {item.href ? (
+                            <SheetClose asChild>
+                              <Link
+                                href={item.href}
+                                className="flex-1 px-3 py-3 text-sm font-medium text-left"
+                                style={{
+                                  color:
+                                    parentActive || isExpanded
+                                      ? "#2f3e2f"
+                                      : "#4a5b4a",
+                                }}
+                              >
+                                {item.label}
+                              </Link>
+                            </SheetClose>
+                          ) : (
+                            <span
+                              className="flex-1 px-3 py-3 text-sm font-medium"
+                              style={{
+                                color:
+                                  parentActive || isExpanded
+                                    ? "#2f3e2f"
+                                    : "#4a5b4a",
+                              }}
+                            >
+                              {item.label}
+                            </span>
+                          )}
+                          <button
+                            onClick={() => toggleMobileSection(item.label)}
+                            className="px-3 py-3"
+                            aria-label={`${isExpanded ? "Collapse" : "Expand"} ${item.label}`}
                             style={{
-                              transform: isExpanded
-                                ? "rotate(180deg)"
-                                : "rotate(0deg)",
+                              color:
+                                parentActive || isExpanded
+                                  ? "#2f3e2f"
+                                  : "#4a5b4a",
                             }}
-                          />
-                        </button>
+                          >
+                            <ChevronDown
+                              className="w-4 h-4 transition-transform duration-200 flex-shrink-0"
+                              style={{
+                                transform: isExpanded
+                                  ? "rotate(180deg)"
+                                  : "rotate(0deg)",
+                              }}
+                            />
+                          </button>
+                        </div>
 
                         {isExpanded && (
                           <div className="ml-3 mb-1 border-l border-gray-100 pl-3">
