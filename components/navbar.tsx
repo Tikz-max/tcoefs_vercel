@@ -51,19 +51,7 @@ const navItems: NavItem[] = [
       { label: "Training & Extension", href: "/programmes/training-extension" },
     ],
   },
-  {
-    label: "Enterprise & Demonstration",
-    children: [
-      {
-        label: "Agricultural Enterprise",
-        href: "/enterprise/agricultural-enterprise",
-      },
-      {
-        label: "Research & Demonstration Facilities",
-        href: "/enterprise/demonstration-facilities",
-      },
-    ],
-  },
+  { label: "Enterprise & Demonstration", href: "/enterprise-demonstration" },
   { label: "Partnerships", href: "/partnerships" },
   {
     label: "News & Events",

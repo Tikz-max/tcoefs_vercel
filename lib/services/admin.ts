@@ -9,6 +9,12 @@ import type {
   UpcomingEvent,
   UpcomingEventInsert,
   UpcomingEventUpdate,
+  Newsletter,
+  NewsletterInsert,
+  NewsletterUpdate,
+  Resource,
+  ResourceInsert,
+  ResourceUpdate,
 } from "@/lib/types/database";
 
 const supabase = createClient();
@@ -275,10 +281,7 @@ export async function updateUpcomingEvent(
 export async function deleteUpcomingEvent(
   id: string,
 ): Promise<{ success: boolean; error?: string }> {
-  const { error } = await supabase
-    .from("upcoming_event")
-    .delete()
-    .eq("id", id);
+  const { error } = await supabase.from("upcoming_event").delete().eq("id", id);
 
   if (error) {
     console.error("Error deleting upcoming event:", error);
@@ -308,6 +311,284 @@ export async function setActiveEvent(
 
   if (error) {
     console.error("Error setting active event:", error);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+}
+
+// ============================================
+// Newsletter Management
+// ============================================
+
+/**
+ * Get all newsletters ordered by display_order
+ */
+export async function getNewsletters(): Promise<Newsletter[]> {
+  const { data, error } = await supabase
+    .from("newsletters")
+    .select("*")
+    .order("display_order", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching newsletters:", error);
+    return [];
+  }
+
+  return data || [];
+}
+
+/**
+ * Get the latest newsletter (is_latest = true)
+ */
+export async function getLatestNewsletter(): Promise<Newsletter | null> {
+  const { data, error } = await supabase
+    .from("newsletters")
+    .select("*")
+    .eq("is_latest", true)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error fetching latest newsletter:", error);
+    return null;
+  }
+
+  return data;
+}
+
+/**
+ * Add a new newsletter entry (marks previous latest as not latest)
+ */
+export async function addNewsletter(
+  newsletter: NewsletterInsert,
+): Promise<{ success: boolean; error?: string; data?: Newsletter }> {
+  // If this is marked as latest, unmark all others first
+  if (newsletter.is_latest) {
+    await supabase
+      .from("newsletters")
+      .update({ is_latest: false })
+      .eq("is_latest", true);
+  }
+
+  // Get current count for display_order
+  const existing = await getNewsletters();
+  const displayOrder = newsletter.display_order ?? existing.length + 1;
+
+  const { data, error } = await supabase
+    .from("newsletters")
+    .insert([{ ...newsletter, display_order: displayOrder }])
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error adding newsletter:", error);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data };
+}
+
+/**
+ * Update a newsletter entry
+ */
+export async function updateNewsletter(
+  id: string,
+  updates: NewsletterUpdate,
+): Promise<{ success: boolean; error?: string }> {
+  // If marking as latest, unmark others first
+  if (updates.is_latest) {
+    await supabase
+      .from("newsletters")
+      .update({ is_latest: false })
+      .eq("is_latest", true);
+  }
+
+  const { error } = await supabase
+    .from("newsletters")
+    .update(updates)
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error updating newsletter:", error);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+}
+
+/**
+ * Delete a newsletter entry from Supabase (does NOT delete from R2)
+ */
+export async function deleteNewsletterEntry(
+  id: string,
+): Promise<{ success: boolean; error?: string }> {
+  const { error } = await supabase.from("newsletters").delete().eq("id", id);
+
+  if (error) {
+    console.error("Error deleting newsletter entry:", error);
+    return { success: false, error: error.message };
+  }
+
+  // Reorder remaining
+  const remaining = await getNewsletters();
+  const reorderPromises = remaining.map((n, index) =>
+    supabase
+      .from("newsletters")
+      .update({ display_order: index + 1 })
+      .eq("id", n.id),
+  );
+  await Promise.all(reorderPromises);
+
+  return { success: true };
+}
+
+/**
+ * Set a newsletter as the latest
+ */
+export async function setLatestNewsletter(
+  id: string,
+): Promise<{ success: boolean; error?: string }> {
+  // Unmark all first
+  await supabase
+    .from("newsletters")
+    .update({ is_latest: false })
+    .eq("is_latest", true);
+
+  const { error } = await supabase
+    .from("newsletters")
+    .update({ is_latest: true })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error setting latest newsletter:", error);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+}
+
+// ============================================
+// Resource Management
+// ============================================
+
+/**
+ * Get all resources ordered by display_order
+ */
+export async function getResources(): Promise<Resource[]> {
+  const { data, error } = await supabase
+    .from("resources")
+    .select("*")
+    .order("display_order", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching resources:", error);
+    return [];
+  }
+
+  return data || [];
+}
+
+/**
+ * Get featured resources (is_featured = true)
+ */
+export async function getFeaturedResources(): Promise<Resource[]> {
+  const { data, error } = await supabase
+    .from("resources")
+    .select("*")
+    .eq("is_featured", true)
+    .order("display_order", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching featured resources:", error);
+    return [];
+  }
+
+  return data || [];
+}
+
+/**
+ * Add a new resource entry
+ */
+export async function addResource(
+  resource: ResourceInsert,
+): Promise<{ success: boolean; error?: string; data?: Resource }> {
+  const existing = await getResources();
+  const displayOrder = resource.display_order ?? existing.length + 1;
+
+  const { data, error } = await supabase
+    .from("resources")
+    .insert([{ ...resource, display_order: displayOrder }])
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error adding resource:", error);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true, data };
+}
+
+/**
+ * Update a resource entry
+ */
+export async function updateResource(
+  id: string,
+  updates: ResourceUpdate,
+): Promise<{ success: boolean; error?: string }> {
+  const { error } = await supabase
+    .from("resources")
+    .update(updates)
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error updating resource:", error);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+}
+
+/**
+ * Delete a resource entry from Supabase (does NOT delete from R2)
+ */
+export async function deleteResourceEntry(
+  id: string,
+): Promise<{ success: boolean; error?: string }> {
+  const { error } = await supabase.from("resources").delete().eq("id", id);
+
+  if (error) {
+    console.error("Error deleting resource entry:", error);
+    return { success: false, error: error.message };
+  }
+
+  // Reorder remaining
+  const remaining = await getResources();
+  const reorderPromises = remaining.map((r, index) =>
+    supabase
+      .from("resources")
+      .update({ display_order: index + 1 })
+      .eq("id", r.id),
+  );
+  await Promise.all(reorderPromises);
+
+  return { success: true };
+}
+
+/**
+ * Toggle featured status of a resource
+ */
+export async function toggleResourceFeatured(
+  id: string,
+  is_featured: boolean,
+): Promise<{ success: boolean; error?: string }> {
+  const { error } = await supabase
+    .from("resources")
+    .update({ is_featured })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error toggling resource featured:", error);
     return { success: false, error: error.message };
   }
 

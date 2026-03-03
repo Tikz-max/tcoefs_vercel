@@ -131,10 +131,36 @@ CREATE TRIGGER update_upcoming_event_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
+-- 4. Newsletters Table
+CREATE TABLE IF NOT EXISTS newsletters (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT NOT NULL,
+  volume TEXT NOT NULL,
+  issue TEXT NOT NULL,
+  date TEXT NOT NULL,
+  excerpt TEXT NOT NULL,
+  r2_key TEXT NOT NULL,
+  display_order INTEGER NOT NULL DEFAULT 0,
+  is_latest BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_by TEXT
+);
+
+-- Create index on display_order for sorting
+CREATE INDEX IF NOT EXISTS idx_newsletters_display_order ON newsletters(display_order);
+
+-- Create trigger for updated_at
+CREATE TRIGGER update_newsletters_updated_at
+  BEFORE UPDATE ON newsletters
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
 -- Enable Row Level Security
 ALTER TABLE youtube_video ENABLE ROW LEVEL SECURITY;
 ALTER TABLE spotlight_cards ENABLE ROW LEVEL SECURITY;
 ALTER TABLE upcoming_event ENABLE ROW LEVEL SECURITY;
+ALTER TABLE newsletters ENABLE ROW LEVEL SECURITY;
 
 -- Public read access
 CREATE POLICY "Allow public read access on youtube_video"
@@ -187,5 +213,70 @@ CREATE POLICY "Allow authenticated update on upcoming_event"
 
 CREATE POLICY "Allow authenticated delete on upcoming_event"
   ON upcoming_event FOR DELETE
+  TO authenticated
+  USING (true);
+
+-- Newsletters policies
+CREATE POLICY "Allow public read access on newsletters"
+  ON newsletters FOR SELECT
+  USING (true);
+
+CREATE POLICY "Allow authenticated insert on newsletters"
+  ON newsletters FOR INSERT
+  TO authenticated
+  WITH CHECK (true);
+
+CREATE POLICY "Allow authenticated update on newsletters"
+  ON newsletters FOR UPDATE
+  TO authenticated
+  USING (true);
+
+CREATE POLICY "Allow authenticated delete on newsletters"
+  ON newsletters FOR DELETE
+  TO authenticated
+  USING (true);
+
+-- 5. Resources Table
+CREATE TABLE IF NOT EXISTS resources (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title TEXT NOT NULL,
+  category TEXT NOT NULL,
+  description TEXT NOT NULL DEFAULT '',
+  r2_key TEXT NOT NULL,
+  year TEXT NOT NULL DEFAULT '2025',
+  is_featured BOOLEAN DEFAULT false,
+  display_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_by TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_resources_display_order ON resources(display_order);
+CREATE INDEX IF NOT EXISTS idx_resources_category ON resources(category);
+CREATE INDEX IF NOT EXISTS idx_resources_is_featured ON resources(is_featured);
+
+CREATE TRIGGER update_resources_updated_at
+  BEFORE UPDATE ON resources
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+ALTER TABLE resources ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read access on resources"
+  ON resources FOR SELECT
+  USING (true);
+
+CREATE POLICY "Allow authenticated insert on resources"
+  ON resources FOR INSERT
+  TO authenticated
+  WITH CHECK (true);
+
+CREATE POLICY "Allow authenticated update on resources"
+  ON resources FOR UPDATE
+  TO authenticated
+  USING (true);
+
+CREATE POLICY "Allow authenticated delete on resources"
+  ON resources FOR DELETE
   TO authenticated
   USING (true);

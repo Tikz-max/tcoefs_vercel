@@ -64,6 +64,83 @@ export interface UpcomingEventInsert {
   updated_by?: string | null;
 }
 
+// Newsletter types
+export interface Newsletter {
+  id: string;
+  title: string;
+  volume: string;
+  issue: string;
+  date: string;
+  excerpt: string;
+  r2_key: string;
+  display_order: number;
+  is_latest: boolean;
+  created_at: string;
+  updated_at: string;
+  updated_by: string | null;
+}
+
+export interface NewsletterInsert {
+  title: string;
+  volume: string;
+  issue: string;
+  date: string;
+  excerpt: string;
+  r2_key: string;
+  display_order?: number;
+  is_latest?: boolean;
+  updated_by?: string | null;
+}
+
+export interface NewsletterUpdate {
+  title?: string;
+  volume?: string;
+  issue?: string;
+  date?: string;
+  excerpt?: string;
+  r2_key?: string;
+  display_order?: number;
+  is_latest?: boolean;
+  updated_by?: string | null;
+}
+
+// Resource types
+export interface Resource {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  r2_key: string;
+  year: string;
+  is_featured: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+  updated_by: string | null;
+}
+
+export interface ResourceInsert {
+  title: string;
+  category: string;
+  description: string;
+  r2_key: string;
+  year: string;
+  is_featured?: boolean;
+  display_order?: number;
+  updated_by?: string | null;
+}
+
+export interface ResourceUpdate {
+  title?: string;
+  category?: string;
+  description?: string;
+  r2_key?: string;
+  year?: string;
+  is_featured?: boolean;
+  display_order?: number;
+  updated_by?: string | null;
+}
+
 // Update types (all fields optional except id)
 export interface YouTubeVideoUpdate {
   video_id?: string;

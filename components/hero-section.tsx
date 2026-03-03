@@ -44,12 +44,9 @@ export default function HeroSection() {
   }, [advance]);
 
   return (
-    <div className="relative min-h-screen lg:h-screen w-full overflow-hidden">
-      {/* ── Mobile: full-bleed image stack with white overlay ────────────────── */}
-      <div
-        className="lg:hidden absolute inset-0 min-h-full z-0"
-        aria-hidden="true"
-      >
+    <div className="relative h-screen lg:h-screen w-full overflow-hidden">
+      {/* ── Mobile: full-bleed image layer ───────────────────────────────────── */}
+      <div className="lg:hidden absolute inset-0 z-0" aria-hidden="true">
         {slides.map((slide, i) => (
           <div
             key={i}
@@ -63,33 +60,34 @@ export default function HeroSection() {
               fill
               sizes="100vw"
               priority={i === 0}
-              className="object-cover"
+              className="object-cover object-center"
             />
           </div>
         ))}
-        {/* Heavy white veil — keeps text fully legible on any image */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/96 via-white/91 to-white/95" />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/98 via-white/86 to-white/96" />
+
+        {/* Cinematic bottom gradient — text legibility without killing the image */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/82 via-black/40 to-black/18" />
+        {/* Left-edge shadow for editorial depth */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-transparent" />
       </div>
 
       {/* ── Full-bleed layout wrapper ─────────────────────────────────────────── */}
-      <div className="absolute inset-0 min-h-full z-10 flex flex-col lg:flex-row">
+      <div className="absolute inset-0 z-10 flex flex-col lg:flex-row">
         {/* ── Left panel: content ──────────────────────────────────────────────── */}
-        <div className="relative flex flex-col justify-center px-8 sm:px-12 lg:px-16 xl:px-20 py-20 lg:py-0 flex-1 lg:flex-none lg:w-[52%] bg-transparent lg:bg-white">
-          {/* Content */}
+        <div className="relative flex flex-col justify-end lg:justify-center px-7 sm:px-12 lg:px-16 xl:px-20 pb-14 pt-28 lg:py-0 flex-1 lg:flex-none lg:w-[52%] bg-transparent lg:bg-white">
           <div className="w-full">
-            {/* H1 — authority voice leads, researcher voice lands */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[2.65rem] xl:text-5xl 2xl:text-6xl font-bold leading-tight mb-6">
-              <span className="text-[#2f3e2f]">
+            {/* H1 */}
+            <h1 className="text-[2.1rem] sm:text-5xl lg:text-[2.65rem] xl:text-5xl 2xl:text-6xl font-bold leading-[1.15] mb-5">
+              <span className="text-white lg:text-[#2f3e2f]">
                 Advancing Research, Innovation, and Enterprise
               </span>{" "}
-              <span className="text-[#4a5b4a] font-normal">
+              <span className="text-white/75 lg:text-[#4a5b4a] font-normal">
                 for Sustainable Food Security.
               </span>
             </h1>
 
             {/* Subtext */}
-            <p className="text-lg leading-relaxed text-[#4a5b4a] mb-10">
+            <p className="text-[0.95rem] sm:text-lg leading-relaxed text-white/68 lg:text-[#4a5b4a] mb-9 lg:mb-10 max-w-prose">
               The TETFund Centre of Excellence in Food Security (TCoEFS),
               University of Jos, advances climate-smart agriculture,
               postgraduate education, enterprise-driven demonstration, and
@@ -97,12 +95,12 @@ export default function HeroSection() {
             </p>
 
             {/* CTA row */}
-            <div className="flex flex-col sm:flex-row gap-3 mb-10">
+            <div className="flex flex-col sm:flex-row gap-3">
               <Link
                 href="/programmes/postgraduate"
                 className="block sm:inline-block w-full sm:w-auto"
               >
-                <button className="w-full bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#1e4a1e] hover:to-[#2d5a2d] text-white px-6 py-3 rounded-lg font-medium text-base shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                <button className="w-full bg-white text-[#2d5a2d] lg:bg-gradient-to-r lg:from-[#2d5a2d] lg:to-[#4a5b4a] lg:text-white px-6 py-3.5 rounded-lg font-semibold text-[0.95rem] sm:text-base shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
                   Explore Our Programmes
                 </button>
               </Link>
@@ -110,15 +108,15 @@ export default function HeroSection() {
                 href="/contact"
                 className="block sm:inline-block w-full sm:w-auto"
               >
-                <button className="w-full border-2 border-[#2d5a2d] text-[#2d5a2d] font-semibold px-6 py-3 rounded-xl hover:bg-[#2d5a2d] hover:text-white transition-all duration-300">
+                <button className="w-full border-2 border-white/60 text-white lg:border-[#2d5a2d] lg:text-[#2d5a2d] font-semibold px-6 py-3.5 rounded-xl text-[0.95rem] sm:text-base hover:bg-white/10 lg:hover:bg-[#2d5a2d] lg:hover:text-white transition-all duration-300">
                   Partner With Us
                 </button>
               </Link>
             </div>
 
-            {/* Slide position indicators */}
+            {/* Slide position indicators — desktop only */}
             <div
-              className="flex items-center gap-2"
+              className="hidden lg:flex items-center gap-2 mt-10"
               role="tablist"
               aria-label="Image slides"
             >
@@ -172,7 +170,7 @@ export default function HeroSection() {
             }}
           />
 
-          {/* Bottom depth vignette: subtle grounding, never darkens the image */}
+          {/* Bottom depth vignette */}
           <div
             className="absolute inset-x-0 bottom-0 h-36 pointer-events-none z-10"
             style={{
