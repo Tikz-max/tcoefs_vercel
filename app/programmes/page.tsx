@@ -135,11 +135,28 @@ export default function ProgrammesPage() {
               </h2>
             </div>
 
-            {/* Pathway cards — 3-col equal feature blocks */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {pathways.map((pathway) => {
+            {/* ── Desktop: horizontal pathway with connectors ─────────────────── */}
+            <div className="hidden lg:grid lg:grid-cols-[1fr_52px_1fr_52px_1fr] items-stretch">
+              {pathways.flatMap((pathway, i) => {
                 const Icon = pathway.icon;
-                return (
+                const elements = [];
+
+                if (i > 0) {
+                  elements.push(
+                    <div
+                      key={`connector-${i}`}
+                      className="flex items-center justify-center"
+                    >
+                      <div className="flex items-center gap-1 text-[#2d5a2d]/30">
+                        <div className="w-3 h-px bg-[#2d5a2d]/20" />
+                        <ArrowRight className="w-4 h-4" />
+                        <div className="w-3 h-px bg-[#2d5a2d]/20" />
+                      </div>
+                    </div>,
+                  );
+                }
+
+                elements.push(
                   <Link
                     key={pathway.title}
                     href={pathway.href}
@@ -148,10 +165,15 @@ export default function ProgrammesPage() {
                     {/* Signature hover accent bar */}
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-t-2xl" />
 
-                    {/* Overline */}
-                    <span className="text-xs font-bold text-[#4a5b4a]/55 uppercase tracking-widest mb-5">
-                      {pathway.overline}
-                    </span>
+                    {/* Overline + step number */}
+                    <div className="flex items-center justify-between mb-5">
+                      <span className="text-xs font-bold text-[#4a5b4a]/55 uppercase tracking-widest">
+                        {pathway.overline}
+                      </span>
+                      <span className="text-3xl font-bold text-[#2d5a2d]/[0.07] tabular-nums leading-none select-none">
+                        0{i + 1}
+                      </span>
+                    </div>
 
                     {/* Icon container */}
                     <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#2d5a2d] to-[#4a5b4a] mb-5 group-hover:scale-110 group-hover:rotate-1 transition-all duration-300">
@@ -173,9 +195,66 @@ export default function ProgrammesPage() {
                       {pathway.cta}
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200 flex-shrink-0" />
                     </div>
-                  </Link>
+                  </Link>,
                 );
+
+                return elements;
               })}
+            </div>
+
+            {/* ── Mobile: vertical pathway with track line ────────────────────── */}
+            <div className="lg:hidden relative">
+              {/* Vertical track line */}
+              <div className="absolute left-[18px] top-8 bottom-8 w-px bg-[#2d5a2d]/15" />
+
+              <div className="space-y-4">
+                {pathways.map((pathway, i) => {
+                  const Icon = pathway.icon;
+                  return (
+                    <div key={pathway.title} className="flex items-start gap-5">
+                      {/* Track node */}
+                      <div className="flex-shrink-0 w-9 flex justify-center pt-8">
+                        <div className="w-2.5 h-2.5 rounded-full border-2 border-[#2d5a2d]/45 bg-white z-10" />
+                      </div>
+
+                      {/* Card */}
+                      <Link
+                        href={pathway.href}
+                        className="flex-1 group relative overflow-hidden flex flex-col bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-[#5a7c65]/30"
+                      >
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-t-2xl" />
+
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-xs font-bold text-[#4a5b4a]/55 uppercase tracking-widest">
+                            {pathway.overline}
+                          </span>
+                          <span className="text-xl font-bold text-[#2d5a2d]/[0.08] tabular-nums leading-none select-none">
+                            0{i + 1}
+                          </span>
+                        </div>
+
+                        <div className="flex items-start gap-4">
+                          <div className="w-10 h-10 flex-shrink-0 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#2d5a2d] to-[#4a5b4a] group-hover:scale-110 transition-all duration-300">
+                            <Icon className="w-4 h-4 text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-lg font-semibold text-[#2f3e2f] mb-2 leading-tight">
+                              {pathway.title}
+                            </h3>
+                            <p className="text-sm text-[#4a5b4a] leading-relaxed mb-4">
+                              {pathway.description}
+                            </p>
+                            <div className="flex items-center gap-1.5 text-[#2d5a2d] text-sm font-medium pt-3 border-t border-gray-100">
+                              {pathway.cta}
+                              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200 flex-shrink-0" />
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>

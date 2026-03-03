@@ -67,7 +67,7 @@ export default function TrainingExtensionPage() {
         {/* Right: image panel — visible, no veil ─────────────────────────── */}
         <div className="relative hidden lg:block">
           <Image
-            src="/agricultural-training-workshop.png"
+            src="/agricultural-training-workshop.jpg"
             alt="Training workshop at TCoEFS"
             fill
             priority
@@ -87,7 +87,7 @@ export default function TrainingExtensionPage() {
         {/* Mobile: faint image background */}
         <div className="lg:hidden absolute inset-0 z-0" aria-hidden="true">
           <Image
-            src="/agricultural-training-workshop.png"
+            src="/agricultural-training-workshop.jpg"
             alt=""
             fill
             priority
@@ -107,8 +107,8 @@ export default function TrainingExtensionPage() {
             <p className="text-xl text-[#4a5b4a] leading-relaxed mb-5">
               The TETFund Centre of Excellence in Food Security delivers
               structured training programmes, farmer-focused extension clinics,
-              and capacity-building workshops designed to translate research into
-              measurable field-level impact.
+              and capacity-building workshops designed to translate research
+              into measurable field-level impact.
             </p>
             <p className="text-[#4a5b4a] leading-relaxed">
               Our training initiatives bridge academic knowledge and practical
@@ -159,13 +159,13 @@ export default function TrainingExtensionPage() {
                 <div className="space-y-4">
                   <p className="text-[#4a5b4a] leading-relaxed">
                     A structured short course focused on reducing post-harvest
-                    losses, improving produce handling, value addition, packaging
-                    systems, and market readiness.
+                    losses, improving produce handling, value addition,
+                    packaging systems, and market readiness.
                   </p>
                   <p className="text-[#4a5b4a] leading-relaxed border-l-4 border-[#2d5a2d] pl-5">
                     Participants engaged in both theoretical sessions and
-                    hands-on practical demonstrations designed to enhance product
-                    quality and shelf-life management.
+                    hands-on practical demonstrations designed to enhance
+                    product quality and shelf-life management.
                   </p>
                 </div>
               </div>
@@ -307,7 +307,8 @@ export default function TrainingExtensionPage() {
             </div>
             <p className="text-lg text-[#4a5b4a] leading-relaxed mb-8">
               Visitors are encouraged to check regularly for updates on upcoming
-              short courses, specialized workshops, and farmer training sessions.
+              short courses, specialized workshops, and farmer training
+              sessions.
             </p>
             <Link
               href="/contact"

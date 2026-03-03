@@ -32,42 +32,48 @@ const CATEGORIES = [
   {
     key: "Publications",
     icon: BookOpen,
-    description: "Peer-reviewed articles, conference papers, and scholarly outputs.",
+    description:
+      "Peer-reviewed articles, conference papers, and scholarly outputs.",
     color: "bg-emerald-50 text-emerald-700 border-emerald-100",
     iconBg: "bg-emerald-100",
   },
   {
     key: "Policy Briefs",
     icon: Lightbulb,
-    description: "Evidence-based summaries designed to inform decision-making and policy engagement.",
+    description:
+      "Evidence-based summaries designed to inform decision-making and policy engagement.",
     color: "bg-amber-50 text-amber-700 border-amber-100",
     iconBg: "bg-amber-100",
   },
   {
     key: "Technical & Activity Reports",
     icon: ClipboardList,
-    description: "Project reports, enterprise documentation, monitoring updates, and institutional reports.",
+    description:
+      "Project reports, enterprise documentation, monitoring updates, and institutional reports.",
     color: "bg-blue-50 text-blue-700 border-blue-100",
     iconBg: "bg-blue-100",
   },
   {
     key: "Training Materials",
     icon: GraduationCap,
-    description: "Workshop manuals, extension guides, course materials, and instructional resources.",
+    description:
+      "Workshop manuals, extension guides, course materials, and instructional resources.",
     color: "bg-purple-50 text-purple-700 border-purple-100",
     iconBg: "bg-purple-100",
   },
   {
     key: "Institutional Documents",
     icon: Building2,
-    description: "Concept notes, strategic documents, partnership briefs, and official publications.",
+    description:
+      "Concept notes, strategic documents, partnership briefs, and official publications.",
     color: "bg-rose-50 text-rose-700 border-rose-100",
     iconBg: "bg-rose-100",
   },
   {
     key: "Media & Gallery",
     icon: ImageIcon,
-    description: "Curated visual highlights from trainings, facilities, partnerships, and events.",
+    description:
+      "Curated visual highlights from trainings, facilities, partnerships, and events.",
     color: "bg-teal-50 text-teal-700 border-teal-100",
     iconBg: "bg-teal-100",
   },
@@ -138,13 +144,15 @@ function CategoryCard({
     >
       {/* Top accent line on hover/active */}
       <div
-        className={`absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl bg-gradient-to-r from-[#2d5a2d] to-[#f4c542] transition-transform duration-300 ${
+        className={`absolute top-0 left-0 right-0 h-1 rounded-t-2xl bg-gradient-to-r from-[#5a7c65] to-[#f4c542] origin-left transition-transform duration-300 ${
           active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
         }`}
       />
 
       <div className="flex items-start justify-between gap-3 mb-3">
-        <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${cat.iconBg}`}>
+        <div
+          className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${cat.iconBg}`}
+        >
           <Icon className={`w-4 h-4 ${cat.color.split(" ")[1]}`} />
         </div>
         {count > 0 && (
@@ -174,7 +182,9 @@ function FeaturedRow({ resource }: { resource: Resource }) {
   return (
     <div className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 px-5 py-4 rounded-xl hover:bg-gray-50 transition-colors duration-150 border border-transparent hover:border-gray-100">
       {/* Icon */}
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${style.iconBg}`}>
+      <div
+        className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${style.iconBg}`}
+      >
         <Icon className={`w-5 h-5 ${style.color.split(" ")[1]}`} />
       </div>
 
@@ -221,7 +231,9 @@ function LibraryRow({ resource }: { resource: Resource }) {
   return (
     <div className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 px-5 py-4 border-b border-gray-50 last:border-0 hover:bg-gray-50/60 transition-colors duration-150">
       {/* Icon */}
-      <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${style.iconBg}`}>
+      <div
+        className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${style.iconBg}`}
+      >
         <Icon className={`w-4 h-4 ${style.color.split(" ")[1]}`} />
       </div>
 
@@ -348,9 +360,15 @@ export default function ResourcesPage() {
 
     // Sort
     if (sortBy === "newest") {
-      list.sort((a, b) => Number(b.year) - Number(a.year) || a.display_order - b.display_order);
+      list.sort(
+        (a, b) =>
+          Number(b.year) - Number(a.year) || a.display_order - b.display_order,
+      );
     } else if (sortBy === "oldest") {
-      list.sort((a, b) => Number(a.year) - Number(b.year) || a.display_order - b.display_order);
+      list.sort(
+        (a, b) =>
+          Number(a.year) - Number(b.year) || a.display_order - b.display_order,
+      );
     } else if (sortBy === "az") {
       list.sort((a, b) => a.title.localeCompare(b.title));
     } else if (sortBy === "za") {
@@ -367,7 +385,10 @@ export default function ResourcesPage() {
     setActiveCategory((prev) => (prev === key ? null : key));
     // Scroll to library smoothly
     setTimeout(() => {
-      libraryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      libraryRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }, 80);
   }
 
@@ -477,7 +498,10 @@ export default function ResourcesPage() {
                 {loading ? (
                   <div className="divide-y divide-gray-50">
                     {[1, 2, 3].map((i) => (
-                      <div key={i} className="px-5 py-4 flex items-center gap-4 animate-pulse">
+                      <div
+                        key={i}
+                        className="px-5 py-4 flex items-center gap-4 animate-pulse"
+                      >
                         <div className="w-10 h-10 rounded-xl bg-gray-100 flex-shrink-0" />
                         <div className="flex-1 space-y-2">
                           <div className="h-4 bg-gray-100 rounded w-3/4" />

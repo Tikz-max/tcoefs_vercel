@@ -94,7 +94,7 @@ export default function ResearchInnovationPage() {
           className="absolute right-0 top-0 bottom-0 flex items-center pr-8 pointer-events-none select-none"
           aria-hidden="true"
         >
-          <span className="text-[20rem] font-bold leading-none text-[#2f3e2f]/[0.025] tracking-tighter">
+          <span className="text-[20rem] font-bold leading-none text-[#2f3e2f]/[0.07] tracking-tighter">
             R&I
           </span>
         </div>
