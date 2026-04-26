@@ -239,6 +239,18 @@ export const scientificTeam: TeamProfile[] = [
     group: "Scientific Team",
     specialization: "Agricultural Economics & Extension",
     image: "/people/daniel-lenka.png",
+    email: "lenkad@unijos.edu.ng",
+    phone: "+2348035372803",
+    googleScholar: "https://scholar.google.com/citations?user=kkwDjVQAAAAJ&hl=id",
+    qualifications: ["M.Sc. Agricultural Economics", "PhD"],
+    researchInterests: ["Production economics", "Marketing", "Econometrics", "Seed Systems", "Socioeconomic Studies"],
+    profileSummary: [
+      "Professor Daniel Musa Lenka is a distinguished scholar in the Department of Agricultural Economics and Extension, Faculty of Agriculture, University of Jos. He specializes in Agricultural Economics, with core expertise in Production Economics and Econometrics.",
+      "He obtained his M.Sc. in Agricultural Economics from Odessa Agricultural Institute, Ukraine, in 1992, and later earned his Ph.D. from Abubakar Tafawa Balewa University, Bauchi.",
+      "He currently serves as a Professor and also holds academic responsibilities as the Departmental SIWES Coordinator and 500 Level Coordinator, Faculty Examination Officer University of Jos.",
+      "Prof. Lenka has over two decades of professional experience in agricultural research, teaching, and development. Before joining the university system, he served extensively at the National Root Crops Research Institute, Umudike, where he contributed significantly to potato, ginger, and product development programmes.",
+      "He has presented scholarly papers at reputable conferences such as the African Potato Association and the International Society for Tropical Root Crops Conference. Through numerous publications, consultancy engagements, and professional memberships, Prof. Lenka continues to contribute meaningfully to agricultural transformation, food security, and rural development in Nigeria."
+    ],
   },
   {
     slug: "asinamai-bitrus",
