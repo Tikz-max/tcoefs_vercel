@@ -136,15 +136,6 @@ export default function LeadershipPage() {
                   impact, interdisciplinary collaboration, and long-term
                   institutional sustainability.
                 </p>
-                <div className="mt-8">
-                  <Link
-                    href={`/about/leadership/${director.slug}`}
-                    className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#244f2b] transition hover:-translate-y-0.5 hover:bg-[#f7f3df]"
-                  >
-                    View Full Profile
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </div>
               </div>
             </div>
           </div>
