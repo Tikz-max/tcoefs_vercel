@@ -42,6 +42,7 @@ export const deputies: TeamProfile[] = [
     imagePosition: "center 15%",
     roleAtCentre: "Deputy Director (Innovation and Entrepreneurship)",
     email: "deshik@unijos.edu.ng",
+    googleScholar: "https://scholar.google.com/citations?user=z5ObiLQAAAAJ&hl=en",
     phone: "+2348060997792",
     qualifications: ["PhD Plant Physiology", "M.Sc. Cytogenetics and Plant Breeding"],
     researchInterests: [
@@ -72,6 +73,7 @@ export const deputies: TeamProfile[] = [
     imagePosition: "center 15%",
     roleAtCentre: "Researcher and Deputy Director Training & Research",
     email: "Okpanachiu@unijos.edu.ng",
+    googleScholar: "https://scholar.google.com/citations?hl=en&user=16hLHPcAAAAJ",
     phone: "+2348034377953",
     qualifications: [
       "B.Agric. Animal Production",
@@ -113,6 +115,7 @@ export const scientificTeam: TeamProfile[] = [
     group: "Scientific Team",
     specialization: "Animal Production",
     image: "/people/idachaba-udagbene.jpg",
+    googleScholar: "https://scholar.google.com/citations?user=REYAbTQAAAAJ",
     email: "udagbenei@unijos.edu.ng",
     phone: "+2348066222650",
     qualifications: ["B.Agric.", "M.Sc.", "PhD Animal Science"],
@@ -180,6 +183,7 @@ export const scientificTeam: TeamProfile[] = [
     specialization: "Animal Production",
     image: "/people/olusegun-oshibanjo.jpeg",
     email: "oshibanjoo@unijos.edu.ng",
+    googleScholar: "https://scholar.google.com/citations?user=7O-NR40AAAAJ&hl=en",
     phone: "+2348055438564",
     qualifications: ["PhD Animal Products and Processing Nutrition"],
     researchInterests: [
@@ -224,6 +228,7 @@ export const scientificTeam: TeamProfile[] = [
     role: "Scientific Team Member",
     group: "Scientific Team",
     specialization: "Veterinary Medicine",
+    googleScholar: "https://scholar.google.com/citations?hl=en&user=3iNXILcAAAAJ",
   },
   {
     slug: "adebisi-folashade",
@@ -260,6 +265,7 @@ export const scientificTeam: TeamProfile[] = [
     specialization: "Animal Production",
     image: "/people/asinamai-bitrus.jpeg",
     email: "bitrusaa@unijos.edu.ng",
+    googleScholar: "https://scholar.google.com/citations?user=e4AwF9IAAAAJ&hl=en",
     phone: "+2348065680664",
     qualifications: ["PhD Bacteriology and Molecular Biology"],
     researchInterests: [
@@ -293,6 +299,7 @@ export const scientificTeam: TeamProfile[] = [
     roleAtCentre: "Researcher / Scientific Team Member",
     email: "kunlea@unijos.edu.ng",
     phone: "+2348039136703",
+    googleScholar: "https://scholar.google.com/citations?hl=en&user=r4O6vkQAAAAJ",
     qualifications: ["B.Sc. Food Science and Technology", "M.Sc. Food Technology"],
     researchInterests: ["Food Biotechnology", "Fermentation", "Functional Food", "Food Safety"],
     profileSummary: [
@@ -311,6 +318,7 @@ export const scientificTeam: TeamProfile[] = [
     image: "/people/simi-chuktu.jpg",
     imagePosition: "center 33%",
     roleAtCentre: "Safeguard Officer / Scientific Team Member",
+    googleScholar: "https://scholar.google.com/citations?user=ZgBdShIAAAAJ&hl=en",
     email: "goyols@unijos.edu.ng",
     qualifications: ["PhD Disaster Management", "M.Sc. Environmental and Resources Planning", "B.Sc. Geography"],
     researchInterests: [
@@ -337,6 +345,7 @@ export const scientificTeam: TeamProfile[] = [
     image: "/people/mohammed-yahaya.jpg",
     imagePosition: "center 35%",
     email: "yahayam@unijos.edu.ng",
+    googleScholar: "https://scholar.google.com/citations?user=IOhf3psAAAAJ&hl=en",
     phone: "+2348144031535",
     qualifications: ["M.Sc. Fisheries and Aquaculture"],
     researchInterests: ["Fisheries and Aquaculture", "Aquatic Toxicology"],
@@ -354,6 +363,7 @@ export const scientificTeam: TeamProfile[] = [
     specialization: "Geography",
     image: "/people/elijah-akintunde.jpeg",
     roleAtCentre: "Scientific Team Member",
+    googleScholar: "https://scholar.google.com/citations?hl=en&user=gW6u-5QAAAAJ",
     email: "akinyelea@unijos.edu.ng",
     phone: "+2348068241066",
     qualifications: ["PhD Environmental Management"],
@@ -386,6 +396,7 @@ export const scientificTeam: TeamProfile[] = [
     image: "/people/sahmicit-kumswa.jpeg",
     roleAtCentre: "Researcher / Visiting Lecturer",
     email: "kumswas@unijos.edu.ng",
+    googleScholar: "https://scholar.google.com/citations?user=Crm1FmQAAAAJ&hl=en",
     qualifications: ["PhD Sociology"],
     researchInterests: ["Sociology", "Demography", "Gender", "Qualitative Research Methodology"],
     profileSummary: [
@@ -407,6 +418,7 @@ export const supportTeam: TeamProfile[] = [
     image: "/people/jimme-matyek.png",
     roleAtCentre: "Communication and Documentation Officer",
     email: "matyekj@unijos.edu.ng",
+    googleScholar: "https://scholar.google.com/citations?user=8Ld-8LwAAAAJ&hl=en",
     phone: "+2349097419923",
     qualifications: ["M.Sc. Mass Communication"],
     researchInterests: [
