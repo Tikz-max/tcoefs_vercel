@@ -31,10 +31,6 @@ const navItems: NavItem[] = [
     children: [
       { label: "Overview", href: "/about" },
       { label: "Leadership", href: "/about/leadership" },
-      {
-        label: "Strategic Repositioning",
-        href: "/about/strategic-repositioning",
-      },
       { label: "Facilities", href: "/about/facilities" },
     ],
   },
@@ -115,7 +111,7 @@ export default function Navbar() {
             height={44}
             className="rounded-full"
           />
-          <span className="text-lg font-semibold" style={{ color: "#2f3e2f" }}>
+          <span className="text-sm font-semibold" style={{ color: "#2f3e2f" }}>
             TCoEFS
           </span>
         </Link>

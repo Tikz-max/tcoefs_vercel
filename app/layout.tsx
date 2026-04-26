@@ -5,7 +5,7 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "TCoEFS",
+  title: "TETFUND Centre of Excellence in Food Security - University of Jos",
   description:
     "TETFUND Centre of Excellence in Food Security (TCoEFS), University of Jos",
 };

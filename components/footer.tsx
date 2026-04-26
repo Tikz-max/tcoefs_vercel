@@ -119,7 +119,7 @@ export default function Footer() {
           {/* ── Column 1: Brand ─────────────────────────────────────────────── */}
           <div className="space-y-6">
             <div>
-              <h2 className="text-4xl font-bold text-white leading-none mb-1">
+              <h2 className="text-3xl font-bold text-white leading-none mb-1">
                 TCoEFS
               </h2>
               <p className="text-white/50 text-xs font-medium uppercase tracking-widest mt-1">

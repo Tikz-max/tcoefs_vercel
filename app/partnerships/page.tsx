@@ -66,39 +66,81 @@ const opportunityCards = [
 
 const partners = [
   {
-    src: "/partners/color/Pasted image (7).png",
-    name: "U.S. Livestock Genetics Export, Inc.",
+    src: "/partners/color/tetfund.png",
+    name: "Tertiary Education Trust Fund (TETFund)",
+    tag: "Funding Partner",
+    description:
+      "The Tertiary Education Trust Fund is a federal government agency established to provide funding support for public tertiary institutions in Nigeria. Through strategic investments in infrastructure, research, academic development, and capacity building, TETFund strengthens institutional performance and promotes innovation across higher education.",
+  },
+  {
+    src: "/partners/color/university-of-jos.png",
+    name: "University of Jos",
+    tag: "Host Institution",
+    description:
+      "The University of Jos is a leading public university in Nigeria committed to academic excellence, research advancement, and national development. With strong interdisciplinary capacity across science, technology, social sciences, and policy research, the institution serves as a hub for innovation, capacity development, and strategic partnerships.",
+  },
+  {
+    src: "/partners/color/saa.png",
+    name: "Sasakawa Africa Association (SAA)",
+    tag: "Development Partner",
+    description:
+      "Sasakawa Africa Association is an international non-profit organization dedicated to strengthening agricultural systems across Africa. It promotes sustainable farming practices, capacity development for extension services, and nutrition-sensitive agricultural interventions aimed at improving productivity, food security, and rural livelihoods.",
+  },
+  {
+    src: "/partners/color/giz.png",
+    name: "GIZ",
+    tag: "Development Partner",
+    description:
+      "GIZ (Deutsche Gesellschaft für Internationale Zusammenarbeit) works on behalf of the German government in Nigeria, supporting development projects in agriculture, rural development, and institutional capacity building.",
+  },
+  {
+    src: "/partners/color/plsg.png",
+    name: "Plateau State Government (PLSG)",
+    tag: "Government Partner",
+    description:
+      "The Plateau State Government is the governing authority responsible for public administration, policy development, and socio-economic advancement within Plateau State, Nigeria. It drives initiatives in infrastructure, education, digital innovation, security, and economic growth, fostering an enabling environment for institutional excellence and strategic development partnerships.",
+  },
+  {
+    src: "/partners/color/uslge.png",
+    name: "U.S. Livestock Genetics Export, Inc. (USLGE)",
     tag: "SRDEP Partner",
     description:
-      "Collaborative research and development in livestock genetics, supporting breed improvement and genetic resource exchange for enhanced productivity in Nigerian livestock systems.",
+      "U.S. Livestock Genetics Export, Inc. facilitates the global exchange of advanced livestock genetics and reproductive technologies. The organization supports genetic improvement, herd productivity, and sustainable livestock development through international collaboration and technical expertise.",
   },
   {
-    src: "/partners/color/Pasted image (10).png",
-    name: "L-PRES",
-    tag: "Livestock Productivity",
-    description:
-      "Partnership focused on improving livestock performance, health management, and building resilient supply chains across smallholder farming communities.",
-  },
-  {
-    src: "/partners/color/Pasted image (8).png",
-    name: "Ecofarms & Agro Services Limited",
+    src: "/partners/color/ecofarms-agro.png",
+    name: "Ecofarms and Agroservices Ltd",
     tag: "Enterprise Partner",
     description:
-      "Enterprise partner in agribusiness development, crop production systems, and value chain strengthening across agro-ecological zones.",
+      "Ecofarms and Agroservices Ltd is an agribusiness enterprise engaged in modern farming operations, agricultural services, and value chain development. The company supports sustainable production systems and contributes to strengthening agricultural productivity and rural economic growth.",
   },
   {
-    src: "/partners/color/Pasted image (9).png",
-    name: "Reproduction Specialty Group",
+    src: "/partners/color/reproduction-specialty-group.png",
+    name: "Reproduction Specialty Group, Inc. (RSG)",
     tag: "Biotechnology Partner",
     description:
-      "Specialised partnership in reproductive biotechnology, animal genetics, and livestock health services for improved herd productivity and genetic advancement.",
+      "Reproduction Specialty Group, Inc. specializes in advanced reproductive technologies and breeding services for livestock systems. The organization provides expertise in genetic improvement, reproductive management, and technical support to enhance productivity and performance.",
   },
   {
-    src: "/partners/color/Pasted image (11).png",
-    name: "Dajrhas Health and Agric Development Ltd.",
+    src: "/partners/color/lpres.png",
+    name: "Livestock Productivity & Resilience Support Project (L-PRES)",
+    tag: "Development Partner",
+    description:
+      "The Livestock Productivity and Resilience Support Project is a development initiative focused on enhancing livestock value chains, strengthening resilience in pastoral and agro-pastoral systems, and improving productivity through technical support, infrastructure development, and stakeholder collaboration.",
+  },
+  {
+    src: "/partners/color/dajrhas.png",
+    name: "Dajrhas Health and Agric Development Ltd",
     tag: "Health & Agriculture",
     description:
-      "Integrated farming systems partner supporting animal health services, rural enterprise development, and sustainable agri-health programming.",
+      "Dajrhas Health and Agric Development Ltd operates at the intersection of agriculture and community development, delivering services that promote food production, health integration, and sustainable livelihood enhancement within rural and peri-urban communities.",
+  },
+  {
+    src: "/partners/color/datacraft.png",
+    name: "Data-craft Analytics Solutions Inc.",
+    tag: "Technology Partner",
+    description:
+      "Data-craft Analytics Solutions Inc. is a technology and data analytics firm providing advanced analytical services, digital solutions, and decision-support systems. The company leverages data science and technological innovation to support institutional efficiency and strategic growth.",
   },
 ];
 

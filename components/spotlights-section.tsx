@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getSpotlightCards } from "@/lib/services/admin";
 import type { SpotlightCard as DBSpotlightCard } from "@/lib/types/database";
 
@@ -36,11 +37,32 @@ export default function SpotlightsSection() {
   const [spotlightCards, setSpotlightCards] = useState<SpotlightCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [arrowsVisible, setArrowsVisible] = useState(true);
 
   // Ensure we're mounted before using portal
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Auto-hide arrows after 3 seconds of inactivity
+  useEffect(() => {
+    if (spotlightCards.length === 0) return;
+    let timer: ReturnType<typeof setTimeout>;
+    const showArrows = () => {
+      setArrowsVisible(true);
+      clearTimeout(timer);
+      timer = setTimeout(() => setArrowsVisible(false), 3000);
+    };
+    showArrows();
+    const handleInteraction = () => showArrows();
+    window.addEventListener("mousemove", handleInteraction);
+    window.addEventListener("touchstart", handleInteraction);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("mousemove", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+    };
+  }, [spotlightCards.length]);
 
   // Load spotlight cards from database
   useEffect(() => {
@@ -213,6 +235,14 @@ export default function SpotlightsSection() {
 
   const handleCardClick = (card: SpotlightCard) => {
     setSelectedCard(card);
+  };
+
+  const goToPrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + spotlightCards.length) % spotlightCards.length);
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % spotlightCards.length);
   };
 
   const closeModal = () => {
@@ -397,6 +427,28 @@ export default function SpotlightsSection() {
 
             {/* Mobile View removed; grid is responsive */}
           </div>
+
+          {/* Arrow Controls - Left */}
+          <button
+            onClick={goToPrev}
+            className={`absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center transition-all duration-300 ${
+              arrowsVisible ? "opacity-100" : "opacity-0"
+            }`}
+            aria-label="Previous spotlight"
+          >
+            <ChevronLeft className="w-6 h-6 text-[#2d5a2d]" />
+          </button>
+
+          {/* Arrow Controls - Right */}
+          <button
+            onClick={goToNext}
+            className={`absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-white/80 hover:bg-white shadow-lg flex items-center justify-center transition-all duration-300 ${
+              arrowsVisible ? "opacity-100" : "opacity-0"
+            }`}
+            aria-label="Next spotlight"
+          >
+            <ChevronRight className="w-6 h-6 text-[#2d5a2d]" />
+          </button>
         </div>
       </div>
 

@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { AnimatedSection } from "@/components/animated-section";
-import TeamSection from "@/components/team-section";
 import {
   FlaskConical,
   GraduationCap,
@@ -438,9 +437,6 @@ export default function AboutPage() {
           </div>
         </section>
       </AnimatedSection>
-
-      {/* ── Team ─────────────────────────────────────────────────────────────── */}
-      <TeamSection />
 
       <Footer />
     </div>
