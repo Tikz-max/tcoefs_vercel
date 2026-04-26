@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Mail, Phone } from "lucide-react";
+import { ArrowLeft, Mail, Phone, ExternalLink } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import {
@@ -157,7 +157,18 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                         {profile.phone}
                       </a>
                     )}
-                    {!profile.email && !profile.phone && (
+                    {profile.googleScholar && (
+                      <a
+                        href={profile.googleScholar}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2.5 text-sm text-blue-600 hover:text-blue-800"
+                      >
+                        <ExternalLink className="h-4 w-4 shrink-0" />
+                        Google Scholar Profile
+                      </a>
+                    )}
+                    {!profile.email && !profile.phone && !profile.googleScholar && (
                       <p className="text-sm text-[#4a5b4a]">
                         Contact details will be shown once approved for publication.
                       </p>

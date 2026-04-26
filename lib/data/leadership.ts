@@ -16,6 +16,7 @@ export type TeamProfile = {
   roleAtCentre?: string;
   email?: string;
   phone?: string;
+  googleScholar?: string;
 };
 
 export const director: TeamProfile = {
@@ -136,6 +137,24 @@ export const scientificTeam: TeamProfile[] = [
     role: "Scientific Team Member",
     group: "Scientific Team",
     specialization: "Agricultural Economics & Extension",
+  },
+  {
+    slug: "daniel-idakwo",
+    name: "Daniel A. Idakwo",
+    role: "Scientific Team Member",
+    group: "Scientific Team",
+    specialization: "Agricultural Economics",
+    image: "/people/daniel-idakwo.png",
+    email: "idakwod@unijos.edu.ng",
+    phone: "+2348039665035",
+    qualifications: ["M.Sc. Agricultural Economics"],
+    researchInterests: ["Agricultural Economics", "Agribusiness", "Development Economics", "Production Economics"],
+    profileSummary: [
+      "Daniel A. Idakwo is a lecturer and doctoral researcher in Agricultural Economics at the University of Jos, Nigeria, with a strong commitment to advancing empirical research and policy-relevant analysis in the field of development economics.",
+      "His academic work is situated at the intersection of food security, rural livelihoods, and applied econometrics, with particular emphasis on smallholder agriculture and household welfare dynamics in Nigeria.",
+      "He holds extensive teaching and administrative experience, currently serving as an Exams Officer in the Department of Agricultural Economics and Extension, where he plays a key role in academic coordination and assessment management.",
+      "His research portfolio spans critical areas such as food security among smallholder farmers, post-harvest losses, agricultural value chains, and the impact of development interventions, including the Fadama III-Additional Financing Project."
+    ],
   },
   {
     slug: "solomon-folorunso",

@@ -102,17 +102,17 @@ export default function Navbar() {
         <Link
           href="/"
           className="flex items-center gap-3 flex-shrink-0"
-          aria-label="TCoEFS Home"
+          aria-label="TCETFUND Centre of Excellence for Food Security Home"
         >
           <Image
             src="/brand/tcoefs-logo.png"
-            alt="TCoEFS Logo"
+            alt="TCETFUND Centre of Excellence for Food Security Logo"
             width={44}
             height={44}
             className="rounded-full"
           />
           <span className="text-sm font-semibold" style={{ color: "#2f3e2f" }}>
-            TCoEFS
+            TCETFUND Centre of Excellence for Food Security
           </span>
         </Link>
 

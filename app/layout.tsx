@@ -7,7 +7,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "TETFUND Centre of Excellence in Food Security - University of Jos",
   description:
-    "TETFUND Centre of Excellence in Food Security (TCoEFS), University of Jos",
+    "TETFUND Centre of Excellence for Food Security, University of Jos",
 };
 
 export default function RootLayout({
