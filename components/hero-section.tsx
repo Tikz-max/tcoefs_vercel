@@ -77,12 +77,13 @@ export default function HeroSection() {
         <div className="relative flex flex-col justify-end lg:justify-center px-7 sm:px-12 lg:px-16 xl:px-20 pb-14 pt-28 lg:py-0 flex-1 lg:flex-none lg:w-[52%] bg-transparent lg:bg-white">
           <div className="w-full">
             {/* H1 */}
-            <h1 className="text-[2.1rem] sm:text-5xl lg:text-[2.65rem] xl:text-5xl 2xl:text-6xl font-bold leading-[1.15] mb-5">
-              <span className="text-white lg:text-[#2f3e2f]">
-                Advancing Research, Innovation, and Enterprise
-              </span>{" "}
-              <span className="text-white/75 lg:text-[#4a5b4a] font-normal">
-                for Sustainable Food Security.
+            <h1 className="text-[2rem] leading-[1.08] sm:text-5xl lg:text-[2.65rem] xl:text-5xl 2xl:text-6xl font-bold mb-5 max-w-[12ch] sm:max-w-[14ch] lg:max-w-none">
+              <span className="block text-white lg:text-[#2f3e2f]">
+                TETFund Center of Excellence for Food Security
+              </span>
+              <span className="mt-3 block text-white/75 lg:text-[#4a5b4a] font-normal text-[0.98em] sm:text-[0.92em]">
+                Advancing research, innovation, and enterprise for sustainable
+                food security.
               </span>
             </h1>
 
