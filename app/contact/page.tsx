@@ -1,346 +1,550 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Globe,
+  Send,
+  ArrowRight,
+  CheckCircle2,
+  Facebook,
+  Linkedin,
+  Instagram,
+} from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { AnimatedSection } from "@/components/animated-section";
 
+// ─── YouTube icon (Lucide does not ship one) ─────────────────────────────────
+function YoutubeIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    </svg>
+  );
+}
+
+// ─── Contact detail cards data ───────────────────────────────────────────────
+const contactDetails = [
+  {
+    icon: Mail,
+    label: "Email",
+    lines: ["tcoefs@unijos.edu.ng"],
+    href: "mailto:tcoefs@unijos.edu.ng",
+    hrefLabel: "tcoefs@unijos.edu.ng",
+  },
+  {
+    icon: Phone,
+    label: "Phone",
+    lines: ["+234 803 437 7953"],
+    href: "tel:+2348034377953",
+    hrefLabel: "+234 803 437 7953",
+  },
+  {
+    icon: Globe,
+    label: "Website",
+    lines: ["www.tcoefs-unijos.org"],
+    href: "https://www.tcoefs-unijos.org",
+    hrefLabel: "www.tcoefs-unijos.org",
+  },
+  {
+    icon: MapPin,
+    label: "Location",
+    lines: [
+      "TETFund Centre of Excellence in Food Security (TCoEFS)",
+      "University of Jos, Naraguta Campus",
+      "Plateau State, Nigeria",
+    ],
+    href: "https://maps.app.goo.gl/TB3bqphYLNCMVNGq8",
+    hrefLabel: "View on map",
+  },
+];
+
+// ─── Social channels data ────────────────────────────────────────────────────
+const socials = [
+  {
+    platform: "LinkedIn",
+    handle: "TETFund Centre of Excellence in Food Security (TCoEFS)",
+    url: "https://www.linkedin.com/company/tetfund-centre-of-excellence-in-food-security-tcoefs-university-of-jos/",
+    Icon: Linkedin,
+  },
+  {
+    platform: "Facebook",
+    handle: "TCoEFS (Official)",
+    url: "https://www.facebook.com/share/19vqPg5CmF/",
+    Icon: Facebook,
+  },
+  {
+    platform: "Instagram",
+    handle: "@tcoefs",
+    url: "https://www.instagram.com/tcoefs?igsh=MXQwNjlvN3AwN2JyYw==",
+    Icon: Instagram,
+  },
+  {
+    platform: "YouTube",
+    handle: "@TETFund_TCoEFS",
+    url: "https://www.youtube.com/@TETFund_TCoEFS",
+    Icon: YoutubeIcon,
+  },
+];
+
+// ─── Contact Form ─────────────────────────────────────────────────────────────
+function ContactForm() {
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+  const [status, setStatus] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
+
+  const inputClass =
+    "w-full px-4 py-3 border border-gray-200 rounded-lg bg-white/70 backdrop-blur-sm text-[#2f3e2f] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/30 transition-all text-sm";
+  const labelClass = "block text-sm font-semibold text-[#2f3e2f] mb-1.5";
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("submitting");
+    // Replace with your actual submission endpoint
+    await new Promise((r) => setTimeout(r, 1200));
+    setStatus("success");
+  };
+
+  if (status === "success") {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center gap-5">
+        <div className="w-14 h-14 rounded-full bg-[#2d5a2d]/10 flex items-center justify-center">
+          <CheckCircle2 className="w-7 h-7 text-[#2d5a2d]" />
+        </div>
+        <div>
+          <h4 className="text-xl font-bold text-[#2f3e2f] mb-2">
+            Message Received
+          </h4>
+          <p className="text-sm text-[#4a5b4a] leading-relaxed max-w-sm">
+            Thank you. Your message has been received. A member of our team will
+            respond promptly.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div>
+          <label className={labelClass} htmlFor="fullName">
+            Full Name
+          </label>
+          <input
+            id="fullName"
+            name="fullName"
+            type="text"
+            required
+            value={form.fullName}
+            onChange={handleChange}
+            placeholder="Enter your full name"
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className={labelClass} htmlFor="email">
+            Email Address
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            value={form.email}
+            onChange={handleChange}
+            placeholder="you@example.com"
+            className={inputClass}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div>
+          <label className={labelClass} htmlFor="phone">
+            Phone Number{" "}
+            <span className="text-gray-400 font-normal">(Optional)</span>
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            value={form.phone}
+            onChange={handleChange}
+            placeholder="+234 000 000 0000"
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className={labelClass} htmlFor="subject">
+            Subject
+          </label>
+          <select
+            id="subject"
+            name="subject"
+            required
+            value={form.subject}
+            onChange={handleChange}
+            className={inputClass}
+          >
+            <option value="">Select a subject</option>
+            <option value="general">General Enquiry</option>
+            <option value="partnership">Partnership &amp; Collaboration</option>
+            <option value="research">Research Engagement</option>
+            <option value="training">Training &amp; Short Courses</option>
+            <option value="enterprise">Enterprise &amp; Investment</option>
+            <option value="media">Media &amp; Communications</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label className={labelClass} htmlFor="message">
+          Message
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          rows={5}
+          required
+          value={form.message}
+          onChange={handleChange}
+          placeholder="Tell us how we can help…"
+          className={`${inputClass} resize-none`}
+        />
+      </div>
+
+      <button
+        type="submit"
+        disabled={status === "submitting"}
+        className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#4a5b4a] hover:to-[#2d5a2d] text-white font-medium py-3.5 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        <Send className="w-4 h-4" />
+        {status === "submitting" ? "Sending…" : "Send Message"}
+      </button>
+    </form>
+  );
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-white overflow-x-clip">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-green-50/30 to-green-100/20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#2f3e2f] leading-tight mb-8">
-            Contact Us
-          </h1>
-        </div>
-      </section>
+      {/* ── HERO ─────────────────────────────────────────────────────────────── */}
+      <AnimatedSection animation="fade">
+        <section className="pt-24 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-green-50/30 to-green-100/20">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* H1 */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#2f3e2f] leading-tight mb-6">
+              Contact Us
+            </h1>
 
-      {/* Main Contact Section */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <div className="order-2 lg:order-1">
-              <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl p-8 shadow-lg">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#2d5a2d] to-[#4a5b4a] rounded-full flex items-center justify-center">
-                    <Send className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#2f3e2f]">
-                    Quick Contact Form
-                  </h3>
-                </div>
+            {/* Divider */}
+            <div className="w-16 h-px bg-gradient-to-r from-transparent via-[#2d5a2d]/40 to-transparent mx-auto mb-6" />
 
-                <form className="space-y-6">
-                  <div>
-                    <label
-                      htmlFor="fullName"
-                      className="block text-sm font-medium text-[#2f3e2f] mb-2"
-                    >
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      id="fullName"
-                      name="fullName"
-                      required
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-white/70 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/30 transition-all"
-                      placeholder="Enter your full name"
-                    />
-                  </div>
+            {/* Subtitle */}
+            <p className="text-lg md:text-xl text-[#4a5b4a] leading-relaxed max-w-2xl mx-auto mb-10">
+              For enquiries, partnerships, research collaboration, training, and
+              institutional engagement.
+            </p>
 
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-[#2f3e2f] mb-2"
-                    >
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-white/70 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/30 transition-all"
-                      placeholder="Enter your email address"
-                    />
-                  </div>
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                href="/about"
+                className="block sm:inline-block w-full sm:w-auto"
+              >
+                <button className="w-full border-2 border-[#2d5a2d] text-[#2d5a2d] font-semibold px-7 py-3 rounded-xl hover:bg-[#2d5a2d] hover:text-white transition-all duration-300">
+                  Learn More
+                </button>
+              </Link>
+              <a
+                href="#contact-form"
+                className="block w-full sm:inline-flex sm:w-auto items-center justify-center gap-2 group bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#1e4a1e] hover:to-[#2d5a2d] text-white font-medium px-4 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-center"
+              >
+                <span className="inline-flex items-center justify-center gap-2">
+                  Contact Us
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+                </span>
+              </a>
+            </div>
+          </div>
+        </section>
+      </AnimatedSection>
 
-                  <div>
-                    <label
-                      htmlFor="phone"
-                      className="block text-sm font-medium text-[#2f3e2f] mb-2"
-                    >
-                      Phone Number (Optional)
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-white/70 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/30 transition-all"
-                      placeholder="Enter your phone number"
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="subject"
-                      className="block text-sm font-medium text-[#2f3e2f] mb-2"
-                    >
-                      Subject
-                    </label>
-                    <select
-                      id="subject"
-                      name="subject"
-                      required
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-white/70 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/30 transition-all"
-                    >
-                      <option value="">Select a subject</option>
-                      <option value="research">Research</option>
-                      <option value="training">Training</option>
-                      <option value="partnership">Partnership</option>
-                      <option value="media">Media</option>
-                      <option value="general">General Inquiry</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="block text-sm font-medium text-[#2f3e2f] mb-2"
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={5}
-                      required
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-white/70 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/30 transition-all resize-none"
-                      placeholder="Enter your message"
-                    ></textarea>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] text-white font-medium py-3 px-6 rounded-lg hover:from-[#4a5b4a] hover:to-[#2d5a2d] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
-                  >
-                    <Send className="w-5 h-5" />
-                    Send Message
-                  </button>
-                </form>
+      {/* ── SECTION 1: CONTACT DETAILS ───────────────────────────────────────── */}
+      <AnimatedSection animation="slide-up">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+          <div className="max-w-6xl mx-auto">
+            {/* Section opening */}
+            <div className="mb-12">
+              <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#2d5a2d]/10 text-[#2d5a2d] text-sm font-medium mb-4">
+                Contact Details
               </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-[#2f3e2f] leading-tight">
+                How to Reach Us
+              </h2>
             </div>
 
-            {/* Contact Information */}
-            <div className="order-1 lg:order-2 space-y-8">
-              {/* Office Location */}
-              <div className="group relative bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-t-xl" />
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#2d5a2d] to-[#4a5b4a] rounded-full flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#2f3e2f] mb-2">
-                      Our Office Location
-                    </h3>
-                    <p className="text-[#4a5b4a] leading-relaxed">
-                      TETFund Centre of Excellence in Food Security (TCoEFS)
-                      <br />
-                      Faculty of Agriculture, University of Jos,
-                      <br />
-                      PMB 2084, Jos, Plateau State, Nigeria.
-                    </p>
-                  </div>
-                </div>
-              </div>
+            {/* 2×2 card grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {contactDetails.map(
+                ({ icon: Icon, label, lines, href, hrefLabel }) => (
+                  <div
+                    key={label}
+                    className="group relative overflow-hidden bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6"
+                  >
+                    {/* Signature hover bar */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-t-xl" />
 
-              {/* Phone Numbers */}
-              <div className="group relative bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-t-xl" />
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#2d5a2d] to-[#4a5b4a] rounded-full flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#2f3e2f] mb-2">
-                      Call Us
-                    </h3>
-                    <div className="space-y-1 text-[#4a5b4a]">
-                      <p>08034390119</p>
+                    <div className="flex items-start gap-5">
+                      <div className="w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-[#2d5a2d] to-[#4a5b4a] group-hover:scale-110 group-hover:rotate-1 transition-all duration-300">
+                        <Icon className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">
+                          {label}
+                        </p>
+                        <div className="space-y-0.5 mb-3">
+                          {lines.map((line, i) => (
+                            <p
+                              key={i}
+                              className="text-sm text-[#4a5b4a] leading-relaxed"
+                            >
+                              {line}
+                            </p>
+                          ))}
+                        </div>
+                        <a
+                          href={href}
+                          target={
+                            href.startsWith("http") ? "_blank" : undefined
+                          }
+                          rel={
+                            href.startsWith("http")
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
+                          className="text-sm text-[#2d5a2d] font-medium hover:text-[#1e4a1e] transition-colors duration-200 inline-flex items-center gap-1 group/link"
+                        >
+                          {hrefLabel}
+                          <ArrowRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform duration-200" />
+                        </a>
+                      </div>
                     </div>
                   </div>
+                ),
+              )}
+            </div>
+          </div>
+        </section>
+      </AnimatedSection>
+
+      {/* ── SECTION 2: SEND A MESSAGE ────────────────────────────────────────── */}
+      <AnimatedSection animation="slide-left">
+        <section
+          id="contact-form"
+          className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50/30"
+        >
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
+              {/* Left — heading block */}
+              <div className="lg:col-span-2">
+                <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#2d5a2d]/10 text-[#2d5a2d] text-sm font-medium mb-6">
+                  Send a Message
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold text-[#2f3e2f] leading-tight mb-6">
+                  We Are Listening
+                </h2>
+                <p className="text-lg text-[#4a5b4a] leading-relaxed mb-8">
+                  Whether you are a researcher, a prospective student, a
+                  development partner, or a member of the press — complete the
+                  form and the right team member will respond.
+                </p>
+
+                {/* Quick contact reference */}
+                <div className="space-y-4 pt-6 border-t border-gray-100">
+                  <div className="flex items-center gap-3">
+                    <Mail className="w-4 h-4 text-[#2d5a2d] flex-shrink-0" />
+                    <a
+                      href="mailto:tcoefs@unijos.edu.ng"
+                      className="text-sm text-[#4a5b4a] hover:text-[#2d5a2d] transition-colors duration-200"
+                    >
+                      tcoefs@unijos.edu.ng
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Phone className="w-4 h-4 text-[#2d5a2d] flex-shrink-0" />
+                    <a
+                      href="tel:+2348034377953"
+                      className="text-sm text-[#4a5b4a] hover:text-[#2d5a2d] transition-colors duration-200"
+                    >
+                      +234 803 437 7953
+                    </a>
+                  </div>
                 </div>
               </div>
 
-              {/* Email Addresses */}
-              <div className="group relative bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-t-xl" />
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#2d5a2d] to-[#4a5b4a] rounded-full flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#2f3e2f] mb-2">
-                      Email Us
-                    </h3>
-                    <div className="space-y-1 text-[#4a5b4a] text-sm">
-                      <p>General Inquiries: info@tcoefs.unijos.edu.ng</p>
-                      <p>
-                        Research Partnerships: research@tcoefs.unijos.edu.ng
+              {/* Right — form card */}
+              <div className="lg:col-span-3">
+                <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl shadow-lg p-8">
+                  <div className="flex items-center gap-3 mb-7">
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-gradient-to-br from-[#2d5a2d] to-[#4a5b4a]">
+                      <Send className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-[#2f3e2f] leading-tight">
+                        Send a Message
+                      </h3>
+                      <p className="text-xs text-[#4a5b4a] mt-0.5">
+                        We respond within one working day
                       </p>
-                      <p>Media & Communications: media@tcoefs.unijos.edu.ng</p>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Office Hours */}
-              <div className="group relative bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-t-xl" />
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#2d5a2d] to-[#4a5b4a] rounded-full flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#2f3e2f] mb-2">
-                      Office Hours
-                    </h3>
-                    <div className="space-y-1 text-[#4a5b4a]">
-                      <p>Monday – Friday: 8:00 AM – 5:00 PM (WAT)</p>
-                      <p>Saturday – Sunday: Closed</p>
-                      <p className="text-sm text-[#4a5b4a]/80">
-                        (Except for special events and training sessions)
-                      </p>
-                    </div>
-                  </div>
+                  <ContactForm />
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </AnimatedSection>
 
-      {/* Map Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50/30">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#2f3e2f] mb-4">
-              Find Us on the <span className="text-[#2d5a2d]">Map</span>
-            </h2>
-            <p className="text-lg text-[#4a5b4a] leading-relaxed">
-              Visit us at the University of Jos, Faculty of Agriculture
+      {/* ── SECTION 3: CONNECT WITH US ───────────────────────────────────────── */}
+      <AnimatedSection animation="slide-up">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+          <div className="max-w-6xl mx-auto">
+            {/* Section opening */}
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#2d5a2d]/10 text-[#2d5a2d] text-sm font-medium mb-4">
+                Connect With Us
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-[#2f3e2f] leading-tight mb-4">
+                Follow Our Work
+              </h2>
+              <p className="text-lg text-[#4a5b4a] leading-relaxed max-w-xl mx-auto">
+                Stay informed on research updates, training announcements, and
+                institutional news across our official channels.
+              </p>
+            </div>
+
+            {/* Social cards — 4-col */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {socials.map(({ platform, handle, url, Icon }) => (
+                <a
+                  key={platform}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative overflow-hidden bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-6 flex flex-col items-center text-center"
+                >
+                  {/* Signature hover bar */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-t-xl" />
+
+                  <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-[#2d5a2d]/10 mb-4 group-hover:scale-110 group-hover:rotate-1 transition-all duration-300">
+                    <Icon className="w-7 h-7 text-[#2d5a2d]" />
+                  </div>
+
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
+                    {platform}
+                  </p>
+                  <p className="text-sm font-medium text-[#2f3e2f] leading-snug">
+                    {handle}
+                  </p>
+                </a>
+              ))}
+            </div>
+
+            {/* Universal handle note */}
+            <p className="text-center text-sm text-[#4a5b4a] mt-8">
+              All platforms:{" "}
+              <span className="font-semibold text-[#2d5a2d]">@tcoefs</span>
+              {"  ·  "}YouTube:{" "}
+              <span className="font-semibold text-[#2d5a2d]">
+                @TETFund_TCoEFS
+              </span>
             </p>
           </div>
+        </section>
+      </AnimatedSection>
 
-          <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl overflow-hidden shadow-lg">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2023.6623327205368!2d8.878163947965762!3d9.963869171306849!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10537281a77bb175%3A0x4992da7ae7f572b5!2sUniversity%20Of%20Jos%20Permanent%20Site!5e1!3m2!1sen!2sng!4v1755900963322!5m2!1sen!2sng"
-              width="600"
-              height="450"
-              style={{ border: 0 }}
-              allowFullScreen={true}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="w-full"
-            />
-          </div>
-        </div>
-      </section>
+      {/* ── SECTION 4: MAP ───────────────────────────────────────────────────── */}
+      <AnimatedSection animation="fade">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50/30">
+          <div className="max-w-6xl mx-auto">
+            {/* Section opening */}
+            <div className="mb-10">
+              <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#2d5a2d]/10 text-[#2d5a2d] text-sm font-medium mb-4">
+                Location
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-[#2f3e2f] leading-tight mb-3">
+                Find Us
+              </h2>
+              <p className="text-lg text-[#4a5b4a] leading-relaxed max-w-xl">
+                University of Jos, Naraguta Campus, Plateau State, Nigeria.
+              </p>
+            </div>
 
-      {/* Social Media Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#2f3e2f] mb-4">
-            Connect With Us <span className="text-[#2d5a2d]">Online</span>
-          </h2>
-          <p className="text-lg text-[#4a5b4a] leading-relaxed mb-12">
-            Follow our activities, research updates, and events on our official
-            channels
-          </p>
+            {/* Map embed */}
+            <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl overflow-hidden shadow-lg">
+              <iframe
+                src="https://maps.google.com/maps?q=9.964017,8.880296&z=16&output=embed&hl=en"
+                width="600"
+                height="480"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="TCoEFS location — University of Jos Naraguta Campus"
+                className="w-full"
+              />
+            </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              {
-                name: "Facebook",
-                url: "https://www.facebook.com/share/19vqPg5CmF/",
-                logo: (
-                  <svg
-                    className="w-8 h-8"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                  </svg>
-                ),
-              },
-              {
-                name: "LinkedIn",
-                url: "https://www.linkedin.com/company/tetfund-centre-of-excellence-in-food-security-tcoefs-university-of-jos/",
-                logo: (
-                  <svg
-                    className="w-8 h-8"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                  </svg>
-                ),
-              },
-              {
-                name: "X (formerly Twitter)",
-                url: "https://x.com/TETFundCoEFS?t=LPdrGIpLtPrnXTVia-BPvQ&s=09",
-                logo: (
-                  <svg
-                    className="w-8 h-8"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                  </svg>
-                ),
-              },
-              {
-                name: "Instagram",
-                url: "https://www.instagram.com/tcoefs?igsh=MXQwNjlvN3AwN2JyYw==",
-                logo: (
-                  <svg
-                    className="w-8 h-8"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12.017 0C8.396 0 7.989.013 7.041.048 6.094.082 5.52.204 5.036.388a5.918 5.918 0 0 0-2.14 1.393A5.918 5.918 0 0 0 1.503 4.92c-.184.484-.306 1.058-.34 2.005C1.128 7.989 1.115 8.396 1.115 12.017c0 3.621.013 4.028.048 4.976.034.947.156 1.521.34 2.005a5.918 5.918 0 0 0 2.14 1.393 5.918 5.918 0 0 0 2.14 1.393c.484.184 1.058.306 2.005.34.948.035 1.355.048 4.976.048 3.621 0 4.028-.013 4.976-.048.947-.034 1.521-.156 2.005-.34a5.918 5.918 0 0 0 2.14-1.393 5.918 5.918 0 0 0 1.393-2.14c.184-.484.306-1.058.34-2.005.035-.948.048-1.355.048-4.976 0-3.621-.013-4.028-.048-4.976-.034-.947-.156-1.521-.34-2.005a5.918 5.918 0 0 0-1.393-2.14A5.918 5.918 0 0 0 19.078.388c-.484-.184-1.058-.306-2.005-.34C16.025.013 15.618 0 12.017 0zm0 2.16c3.557 0 3.98.013 5.386.048.947.034 1.462.156 1.804.26.453.176.777.387 1.117.727.34.34.551.664.727 1.117.104.342.226.857.26 1.804.035 1.406.048 1.829.048 5.386 0 3.557-.013 3.98-.048 5.386-.034.947-.156 1.462-.26 1.804-.176.453-.387.777-.727 1.117-.34.34-.664.551-1.117.727-.342.104-.857.226-1.804.26-1.406.035-1.829.048-5.386.048-3.557 0-3.98-.013-5.386-.048-.947-.034-1.462-.156-1.804-.26-.453-.176-.777-.387-1.117-.727-.34-.34-.551-.664-.727-1.117-.104-.342-.226-.857-.26-1.804-.035-1.406-.048-1.829-.048-5.386 0-3.557.013-3.98.048-5.386.034-.947.156-1.462.26-1.804.176-.453.387-.777.727-1.117.34-.34.664-.551 1.117-.727.342-.104.857-.226 1.804-.26 1.406-.035 1.829-.048 5.386-.048z" />
-                    <path d="M12.017 15.33a3.313 3.313 0 1 1 0-6.626 3.313 3.313 0 0 1 0 6.626zm0-8.466a5.153 5.153 0 1 0 0 10.306 5.153 5.153 0 0 0 0-10.306z" />
-                    <path d="M19.846 6.595a1.204 1.204 0 1 1-2.408 0 1.204 1.204 0 0 1 2.408 0z" />
-                  </svg>
-                ),
-              },
-            ].map((social, index) => (
+            {/* Address strip below map */}
+            <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-4 h-4 text-[#2d5a2d] flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-[#4a5b4a] leading-relaxed">
+                  TETFund Centre of Excellence in Food Security (TCoEFS),
+                  University of Jos, Naraguta Campus, Plateau State, Nigeria
+                </p>
+              </div>
               <a
-                key={index}
-                href={social.url}
+                href="https://maps.app.goo.gl/TB3bqphYLNCMVNGq8"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+                className="inline-flex items-center gap-2 group text-sm text-[#2d5a2d] font-medium hover:text-[#1e4a1e] transition-colors duration-200 whitespace-nowrap flex-shrink-0"
               >
-                <div className="text-center">
-                  <div className="text-[#2d5a2d] mb-3 flex justify-center">
-                    {social.logo}
-                  </div>
-                  <h3 className="text-lg font-semibold text-[#2f3e2f] mb-2">
-                    {social.name}
-                  </h3>
-                  <p className="text-sm text-[#4a5b4a] break-all">
-                    {social.url.replace("https://", "")}
-                  </p>
-                </div>
+                Open in Google Maps
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform duration-200" />
               </a>
-            ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </AnimatedSection>
 
       <Footer />
     </div>

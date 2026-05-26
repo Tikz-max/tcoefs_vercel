@@ -148,7 +148,7 @@ const NewsSection = () => {
           }`}
           style={{ transformOrigin: "center" }}
         >
-          <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl">
+          <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl bg-[#0f1a0f]">
             {/* 16:9 responsive container */}
             <div className="relative pt-[56.25%]">
               <div

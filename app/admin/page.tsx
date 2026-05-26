@@ -14,6 +14,10 @@ import {
   X,
   Upload,
   Image as ImageIcon,
+  FileText,
+  Star,
+  Download,
+  BookOpen,
 } from "lucide-react";
 import {
   getYouTubeVideo,
@@ -26,6 +30,12 @@ import {
   addUpcomingEvent,
   updateUpcomingEvent,
   extractYouTubeVideoId,
+  getNewsletters,
+  setLatestNewsletter,
+  deleteNewsletterEntry,
+  getResources,
+  toggleResourceFeatured,
+  deleteResourceEntry,
 } from "@/lib/services/admin";
 import type {
   YouTubeVideo,
@@ -33,14 +43,16 @@ import type {
   UpcomingEvent,
   SpotlightCardInsert,
   UpcomingEventInsert,
+  Newsletter,
+  Resource,
 } from "@/lib/types/database";
 
 export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"video" | "spotlight" | "event">(
-    "video",
-  );
+  const [activeTab, setActiveTab] = useState<
+    "video" | "spotlight" | "event" | "newsletters" | "resources"
+  >("video");
   const router = useRouter();
   const supabase = createClient();
 
@@ -62,6 +74,39 @@ export default function AdminDashboard() {
   );
   const [showEventForm, setShowEventForm] = useState(false);
   const [eventSaving, setEventSaving] = useState(false);
+
+  // Resources State
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [resourceUploading, setResourceUploading] = useState(false);
+  const [showResourceForm, setShowResourceForm] = useState(false);
+  const [resourceError, setResourceError] = useState<string | null>(null);
+  const [resourceSuccess, setResourceSuccess] = useState<string | null>(null);
+  const [selectedResourceFile, setSelectedResourceFile] = useState<File | null>(
+    null,
+  );
+  const [resourceForm, setResourceForm] = useState({
+    title: "",
+    category: "Publications",
+    description: "",
+    year: new Date().getFullYear().toString(),
+    is_featured: false,
+  });
+
+  // Newsletter State
+  const [newsletters, setNewsletters] = useState<Newsletter[]>([]);
+  const [newsletterUploading, setNewsletterUploading] = useState(false);
+  const [showNewsletterForm, setShowNewsletterForm] = useState(false);
+  const [newsletterForm, setNewsletterForm] = useState({
+    title: "From the Office of the Director.",
+    volume: "",
+    issue: "",
+    date: "",
+    excerpt: "",
+    is_latest: true,
+  });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
 
   // Form states
   const [spotlightForm, setSpotlightForm] = useState({
@@ -115,6 +160,14 @@ export default function AdminDashboard() {
     // Load upcoming event
     const event = await getUpcomingEvent();
     setUpcomingEvent(event);
+
+    // Load newsletters
+    const nl = await getNewsletters();
+    setNewsletters(nl);
+
+    // Load resources
+    const res = await getResources();
+    setResources(res);
   };
 
   const handleLogout = async () => {
@@ -291,6 +344,220 @@ export default function AdminDashboard() {
     setEventSaving(false);
   };
 
+  // ── Resource handlers ────────────────────────────────────────────────────
+
+  const handleResourceFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    setSelectedResourceFile(file);
+    setResourceError(null);
+    setResourceSuccess(null);
+    // Auto-fill title from filename if empty
+    if (file && !resourceForm.title) {
+      const name = file.name
+        .replace(/\.pdf$/i, "")
+        .replace(/[_-]+/g, " ")
+        .trim();
+      setResourceForm((prev) => ({ ...prev, title: name }));
+    }
+  };
+
+  const handleUploadResource = async () => {
+    setResourceError(null);
+    setResourceSuccess(null);
+
+    if (!selectedResourceFile) {
+      setResourceError("Please select a PDF file.");
+      return;
+    }
+    if (
+      !resourceForm.title ||
+      !resourceForm.category ||
+      !resourceForm.description ||
+      !resourceForm.year
+    ) {
+      setResourceError("Please fill in all required fields.");
+      return;
+    }
+
+    setResourceUploading(true);
+
+    const formData = new FormData();
+    formData.append("file", selectedResourceFile);
+    formData.append("title", resourceForm.title);
+    formData.append("category", resourceForm.category);
+    formData.append("description", resourceForm.description);
+    formData.append("year", resourceForm.year);
+    formData.append("is_featured", String(resourceForm.is_featured));
+    formData.append(
+      "updated_by",
+      user?.user_metadata?.user_name || user?.email || "",
+    );
+
+    try {
+      const res = await fetch("/api/resources/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        setResourceError(json.error ?? "Upload failed.");
+      } else {
+        setResourceSuccess("Resource uploaded successfully!");
+        setShowResourceForm(false);
+        setSelectedResourceFile(null);
+        setResourceForm({
+          title: "",
+          category: "Publications",
+          description: "",
+          year: new Date().getFullYear().toString(),
+          is_featured: false,
+        });
+        await loadData();
+      }
+    } catch (err: any) {
+      setResourceError(err?.message ?? "Unexpected error.");
+    } finally {
+      setResourceUploading(false);
+    }
+  };
+
+  const handleDeleteResource = async (id: string, title: string) => {
+    if (
+      !confirm(
+        `Delete resource "${title}"? This will also remove it from R2 storage.`,
+      )
+    )
+      return;
+    const resource = resources.find((r) => r.id === id);
+    if (!resource) return;
+
+    const res = await fetch("/api/resources/delete", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, r2_key: resource.r2_key }),
+    });
+    const json = await res.json();
+    if (!json.success) {
+      alert(`Error: ${json.error}`);
+    } else {
+      await loadData();
+    }
+  };
+
+  const handleToggleFeatured = async (id: string, current: boolean) => {
+    const result = await toggleResourceFeatured(id, !current);
+    if (!result.success) {
+      alert(`Error: ${result.error}`);
+    } else {
+      await loadData();
+    }
+  };
+
+  // ── Newsletter handlers ──────────────────────────────────────────────────
+
+  const handleNewsletterFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0] ?? null;
+    setSelectedFile(file);
+    setUploadError(null);
+    setUploadSuccess(null);
+  };
+
+  const handleUploadNewsletter = async () => {
+    setUploadError(null);
+    setUploadSuccess(null);
+
+    if (!selectedFile) {
+      setUploadError("Please select a PDF file.");
+      return;
+    }
+    if (
+      !newsletterForm.volume ||
+      !newsletterForm.issue ||
+      !newsletterForm.date ||
+      !newsletterForm.excerpt
+    ) {
+      setUploadError("Please fill in all required fields.");
+      return;
+    }
+
+    setNewsletterUploading(true);
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("title", newsletterForm.title);
+    formData.append("volume", newsletterForm.volume);
+    formData.append("issue", newsletterForm.issue);
+    formData.append("date", newsletterForm.date);
+    formData.append("excerpt", newsletterForm.excerpt);
+    formData.append("is_latest", String(newsletterForm.is_latest));
+    formData.append(
+      "updated_by",
+      user?.user_metadata?.user_name || user?.email || "",
+    );
+
+    try {
+      const res = await fetch("/api/newsletters/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        setUploadError(json.error ?? "Upload failed.");
+      } else {
+        setUploadSuccess("Newsletter uploaded successfully!");
+        setShowNewsletterForm(false);
+        setSelectedFile(null);
+        setNewsletterForm({
+          title: "From the Office of the Director.",
+          volume: "",
+          issue: "",
+          date: "",
+          excerpt: "",
+          is_latest: true,
+        });
+        await loadData();
+      }
+    } catch (err: any) {
+      setUploadError(err?.message ?? "Unexpected error.");
+    } finally {
+      setNewsletterUploading(false);
+    }
+  };
+
+  const handleDeleteNewsletter = async (id: string, title: string) => {
+    if (
+      !confirm(
+        `Delete newsletter "${title}"? This will also remove it from R2 storage.`,
+      )
+    )
+      return;
+    const nl = newsletters.find((n) => n.id === id);
+    if (!nl) return;
+
+    const res = await fetch("/api/newsletters/delete", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, r2_key: nl.r2_key }),
+    });
+    const json = await res.json();
+    if (!json.success) {
+      alert(`Error: ${json.error}`);
+    } else {
+      await loadData();
+    }
+  };
+
+  const handleSetLatest = async (id: string) => {
+    const result = await setLatestNewsletter(id);
+    if (!result.success) {
+      alert(`Error: ${result.error}`);
+    } else {
+      await loadData();
+    }
+  };
+
   const handleResetEvent = () => {
     if (upcomingEvent) {
       setEventForm({
@@ -355,10 +622,10 @@ export default function AdminDashboard() {
       {/* Navigation Tabs */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-8">
+          <nav className="flex space-x-6 overflow-x-auto">
             <button
               onClick={() => setActiveTab("video")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
                 activeTab === "video"
                   ? "border-[#316840] text-[#316840]"
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
@@ -371,7 +638,7 @@ export default function AdminDashboard() {
             </button>
             <button
               onClick={() => setActiveTab("spotlight")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
                 activeTab === "spotlight"
                   ? "border-[#316840] text-[#316840]"
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
@@ -384,7 +651,7 @@ export default function AdminDashboard() {
             </button>
             <button
               onClick={() => setActiveTab("event")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
                 activeTab === "event"
                   ? "border-[#316840] text-[#316840]"
                   : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
@@ -393,6 +660,32 @@ export default function AdminDashboard() {
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
                 Upcoming Event
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab("newsletters")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
+                activeTab === "newsletters"
+                  ? "border-[#316840] text-[#316840]"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                Newsletters ({newsletters.length})
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab("resources")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
+                activeTab === "resources"
+                  ? "border-[#316840] text-[#316840]"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <BookOpen className="w-5 h-5" />
+                Resources ({resources.length})
               </div>
             </button>
           </nav>
@@ -853,6 +1146,639 @@ export default function AdminDashboard() {
                 >
                   Add Event
                 </button>
+              </div>
+            )}
+          </div>
+        )}
+        {/* Resources Tab */}
+        {activeTab === "resources" && (
+          <div className="space-y-6">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <BookOpen className="w-6 h-6 text-[#316840]" />
+                  <h2 className="text-xl font-semibold text-[#2f3e2f]">
+                    Resource Management
+                  </h2>
+                </div>
+                <button
+                  onClick={() => {
+                    setResourceError(null);
+                    setResourceSuccess(null);
+                    setShowResourceForm(true);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-[#316840] text-white rounded-lg hover:bg-[#2d5a2d] transition-colors"
+                >
+                  <Upload className="w-4 h-4" />
+                  Upload Resource
+                </button>
+              </div>
+
+              <p className="text-gray-500 text-sm mb-6">
+                PDFs are uploaded to Cloudflare R2 (
+                <code className="bg-gray-100 px-1 rounded text-xs">
+                  tcoefs-resources/tcoefs-pdfs/
+                </code>
+                ) and metadata saved to Supabase. Star a resource to feature it
+                on the Resources page.
+              </p>
+
+              {/* Resource list */}
+              <div className="space-y-3">
+                {resources.length === 0 ? (
+                  <div className="text-center py-12 text-gray-400">
+                    <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                    <p>No resources yet. Upload the first one above.</p>
+                  </div>
+                ) : (
+                  resources.map((r) => (
+                    <div
+                      key={r.id}
+                      className="flex items-start justify-between gap-4 border border-gray-200 rounded-lg p-4 hover:border-[#316840]/40 transition-colors"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <span className="font-semibold text-gray-900 text-sm">
+                            {r.title}
+                          </span>
+                          {r.is_featured && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#316840]/10 text-[#316840] text-xs font-semibold">
+                              <Star className="w-3 h-3" />
+                              Featured
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 flex-wrap text-xs text-gray-500">
+                          <span className="px-2 py-0.5 rounded-full bg-gray-100 font-medium">
+                            {r.category}
+                          </span>
+                          <span>{r.year}</span>
+                          <span className="text-gray-400">·</span>
+                          <span className="truncate max-w-xs">
+                            {r.description}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-300 mt-1 font-mono truncate">
+                          {r.r2_key}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <button
+                          onClick={() =>
+                            handleToggleFeatured(r.id, r.is_featured)
+                          }
+                          title={
+                            r.is_featured
+                              ? "Unfeature"
+                              : "Feature this resource"
+                          }
+                          className={`p-1.5 border rounded-lg transition-colors ${
+                            r.is_featured
+                              ? "text-yellow-500 border-yellow-300 hover:bg-yellow-50"
+                              : "text-gray-400 border-gray-200 hover:text-yellow-500 hover:border-yellow-300 hover:bg-yellow-50"
+                          }`}
+                        >
+                          <Star className="w-4 h-4" />
+                        </button>
+                        <a
+                          href={`${process.env.NEXT_PUBLIC_R2_PUBLIC_BASE_URL ?? ""}/${r.r2_key.split("/").map(encodeURIComponent).join("/")}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Preview PDF"
+                          className="p-1.5 text-[#316840] border border-[#316840]/40 rounded-lg hover:bg-[#316840]/5 transition-colors"
+                        >
+                          <Download className="w-4 h-4" />
+                        </a>
+                        <button
+                          onClick={() => handleDeleteResource(r.id, r.title)}
+                          title="Delete"
+                          className="p-1.5 text-red-500 border border-red-300 rounded-lg hover:bg-red-50 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Upload form modal */}
+            {showResourceForm && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto">
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-xl font-semibold text-[#2f3e2f]">
+                        Upload Resource
+                      </h3>
+                      <button
+                        onClick={() => setShowResourceForm(false)}
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    <div className="space-y-4">
+                      {/* File picker */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          PDF File *
+                        </label>
+                        <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[#316840] hover:bg-[#316840]/5 transition-colors">
+                          <Upload className="w-6 h-6 text-gray-400 mb-1" />
+                          <span className="text-sm text-gray-500">
+                            {selectedResourceFile
+                              ? selectedResourceFile.name
+                              : "Click to choose a PDF"}
+                          </span>
+                          {selectedResourceFile && (
+                            <span className="text-xs text-gray-400 mt-0.5">
+                              {(
+                                selectedResourceFile.size /
+                                1024 /
+                                1024
+                              ).toFixed(2)}{" "}
+                              MB
+                            </span>
+                          )}
+                          <input
+                            type="file"
+                            accept=".pdf,application/pdf"
+                            className="hidden"
+                            onChange={handleResourceFileChange}
+                          />
+                        </label>
+                      </div>
+
+                      {/* Title */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Title *
+                        </label>
+                        <input
+                          type="text"
+                          value={resourceForm.title}
+                          onChange={(e) =>
+                            setResourceForm({
+                              ...resourceForm,
+                              title: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#316840] focus:border-transparent"
+                          placeholder="e.g. Post-Harvest Management Training Manual"
+                        />
+                      </div>
+
+                      {/* Category + Year */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Category *
+                          </label>
+                          <select
+                            value={resourceForm.category}
+                            onChange={(e) =>
+                              setResourceForm({
+                                ...resourceForm,
+                                category: e.target.value,
+                              })
+                            }
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#316840] focus:border-transparent text-sm"
+                          >
+                            {[
+                              "Publications",
+                              "Policy Briefs",
+                              "Technical & Activity Reports",
+                              "Training Materials",
+                              "Institutional Documents",
+                              "Media & Gallery",
+                            ].map((c) => (
+                              <option key={c} value={c}>
+                                {c}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Year *
+                          </label>
+                          <input
+                            type="text"
+                            value={resourceForm.year}
+                            onChange={(e) =>
+                              setResourceForm({
+                                ...resourceForm,
+                                year: e.target.value,
+                              })
+                            }
+                            placeholder="e.g. 2025"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#316840] focus:border-transparent"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Description */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Short Description *
+                        </label>
+                        <textarea
+                          value={resourceForm.description}
+                          onChange={(e) =>
+                            setResourceForm({
+                              ...resourceForm,
+                              description: e.target.value,
+                            })
+                          }
+                          rows={2}
+                          placeholder="One-line description of this document…"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#316840] focus:border-transparent resize-none text-sm"
+                        />
+                      </div>
+
+                      {/* Featured toggle */}
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          id="resource_featured"
+                          checked={resourceForm.is_featured}
+                          onChange={(e) =>
+                            setResourceForm({
+                              ...resourceForm,
+                              is_featured: e.target.checked,
+                            })
+                          }
+                          className="w-4 h-4 accent-[#316840]"
+                        />
+                        <label
+                          htmlFor="resource_featured"
+                          className="text-sm text-gray-700"
+                        >
+                          Feature this resource (shown in Featured Documents
+                          section)
+                        </label>
+                      </div>
+
+                      {/* Error / success */}
+                      {resourceError && (
+                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                          {resourceError}
+                        </div>
+                      )}
+                      {resourceSuccess && (
+                        <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
+                          {resourceSuccess}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-3 mt-6 pt-5 border-t border-gray-200">
+                      <button
+                        onClick={handleUploadResource}
+                        disabled={resourceUploading}
+                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-[#316840] text-white rounded-lg hover:bg-[#2d5a2d] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {resourceUploading ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            Uploading…
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4" />
+                            Upload to R2
+                          </>
+                        )}
+                      </button>
+                      <button
+                        onClick={() => setShowResourceForm(false)}
+                        className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Newsletters Tab */}
+        {activeTab === "newsletters" && (
+          <div className="space-y-6">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <FileText className="w-6 h-6 text-[#316840]" />
+                  <h2 className="text-xl font-semibold text-[#2f3e2f]">
+                    Newsletter Management
+                  </h2>
+                </div>
+                <button
+                  onClick={() => {
+                    setUploadError(null);
+                    setUploadSuccess(null);
+                    setShowNewsletterForm(true);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-[#316840] text-white rounded-lg hover:bg-[#2d5a2d] transition-colors"
+                >
+                  <Upload className="w-4 h-4" />
+                  Upload Newsletter
+                </button>
+              </div>
+
+              <p className="text-gray-500 text-sm mb-6">
+                PDFs are uploaded to Cloudflare R2 (
+                <code className="bg-gray-100 px-1 rounded text-xs">
+                  tcoefs-resources/newsletters/
+                </code>
+                ) and metadata is saved to Supabase. Mark one as "Latest" to
+                feature it on the homepage and the Newsletters &amp; Events
+                page.
+              </p>
+
+              {/* Existing newsletters list */}
+              <div className="space-y-3">
+                {newsletters.length === 0 ? (
+                  <div className="text-center py-12 text-gray-400">
+                    <FileText className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                    <p>No newsletters yet. Upload the first one above.</p>
+                  </div>
+                ) : (
+                  newsletters.map((nl) => (
+                    <div
+                      key={nl.id}
+                      className="flex items-start justify-between gap-4 border border-gray-200 rounded-lg p-4 hover:border-[#316840]/40 transition-colors"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
+                          <span className="font-semibold text-gray-900 text-sm">
+                            {nl.volume} | {nl.issue}
+                          </span>
+                          <span className="text-gray-400 text-xs">—</span>
+                          <span className="text-gray-500 text-xs">
+                            {nl.date}
+                          </span>
+                          {nl.is_latest && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#316840]/10 text-[#316840] text-xs font-semibold">
+                              <Star className="w-3 h-3" />
+                              Latest
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-600 line-clamp-2">
+                          {nl.excerpt}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1 font-mono truncate">
+                          {nl.r2_key}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {!nl.is_latest && (
+                          <button
+                            onClick={() => handleSetLatest(nl.id)}
+                            title="Set as latest"
+                            className="p-1.5 text-yellow-500 border border-yellow-300 rounded-lg hover:bg-yellow-50 transition-colors"
+                          >
+                            <Star className="w-4 h-4" />
+                          </button>
+                        )}
+                        <a
+                          href={`${process.env.NEXT_PUBLIC_R2_PUBLIC_BASE_URL ?? ""}/${nl.r2_key}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Download PDF"
+                          className="p-1.5 text-[#316840] border border-[#316840]/40 rounded-lg hover:bg-[#316840]/5 transition-colors"
+                        >
+                          <Download className="w-4 h-4" />
+                        </a>
+                        <button
+                          onClick={() =>
+                            handleDeleteNewsletter(
+                              nl.id,
+                              `${nl.volume} ${nl.issue}`,
+                            )
+                          }
+                          title="Delete"
+                          className="p-1.5 text-red-500 border border-red-300 rounded-lg hover:bg-red-50 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Upload form modal */}
+            {showNewsletterForm && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto">
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-xl font-semibold text-[#2f3e2f]">
+                        Upload Newsletter
+                      </h3>
+                      <button
+                        onClick={() => setShowNewsletterForm(false)}
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    <div className="space-y-4">
+                      {/* PDF file picker */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          PDF File *
+                        </label>
+                        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[#316840] hover:bg-[#316840]/5 transition-colors">
+                          <div className="flex flex-col items-center gap-1">
+                            <Upload className="w-6 h-6 text-gray-400" />
+                            <span className="text-sm text-gray-500">
+                              {selectedFile
+                                ? selectedFile.name
+                                : "Click to choose a PDF"}
+                            </span>
+                            {selectedFile && (
+                              <span className="text-xs text-gray-400">
+                                {(selectedFile.size / 1024 / 1024).toFixed(2)}{" "}
+                                MB
+                              </span>
+                            )}
+                          </div>
+                          <input
+                            type="file"
+                            accept=".pdf,application/pdf"
+                            className="hidden"
+                            onChange={handleNewsletterFileChange}
+                          />
+                        </label>
+                      </div>
+
+                      {/* Title */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Newsletter Title *
+                        </label>
+                        <input
+                          type="text"
+                          value={newsletterForm.title}
+                          onChange={(e) =>
+                            setNewsletterForm({
+                              ...newsletterForm,
+                              title: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#316840] focus:border-transparent"
+                        />
+                      </div>
+
+                      {/* Volume & Issue */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Volume *
+                          </label>
+                          <input
+                            type="text"
+                            value={newsletterForm.volume}
+                            onChange={(e) =>
+                              setNewsletterForm({
+                                ...newsletterForm,
+                                volume: e.target.value,
+                              })
+                            }
+                            placeholder="e.g. Volume 1"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#316840] focus:border-transparent"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Issue *
+                          </label>
+                          <input
+                            type="text"
+                            value={newsletterForm.issue}
+                            onChange={(e) =>
+                              setNewsletterForm({
+                                ...newsletterForm,
+                                issue: e.target.value,
+                              })
+                            }
+                            placeholder="e.g. Issue 3 & 4"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#316840] focus:border-transparent"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Date */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Date *
+                        </label>
+                        <input
+                          type="text"
+                          value={newsletterForm.date}
+                          onChange={(e) =>
+                            setNewsletterForm({
+                              ...newsletterForm,
+                              date: e.target.value,
+                            })
+                          }
+                          placeholder="e.g. October 2025"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#316840] focus:border-transparent"
+                        />
+                      </div>
+
+                      {/* Excerpt */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Excerpt / Description *
+                        </label>
+                        <textarea
+                          value={newsletterForm.excerpt}
+                          onChange={(e) =>
+                            setNewsletterForm({
+                              ...newsletterForm,
+                              excerpt: e.target.value,
+                            })
+                          }
+                          rows={4}
+                          placeholder="Brief summary of this newsletter issue..."
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#316840] focus:border-transparent resize-none"
+                        />
+                      </div>
+
+                      {/* Mark as latest */}
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          id="is_latest"
+                          checked={newsletterForm.is_latest}
+                          onChange={(e) =>
+                            setNewsletterForm({
+                              ...newsletterForm,
+                              is_latest: e.target.checked,
+                            })
+                          }
+                          className="w-4 h-4 accent-[#316840]"
+                        />
+                        <label
+                          htmlFor="is_latest"
+                          className="text-sm text-gray-700"
+                        >
+                          Mark as latest issue (featured on homepage &amp;
+                          newsletters page)
+                        </label>
+                      </div>
+
+                      {/* Error / success feedback */}
+                      {uploadError && (
+                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                          {uploadError}
+                        </div>
+                      )}
+                      {uploadSuccess && (
+                        <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
+                          {uploadSuccess}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-3 mt-6 pt-5 border-t border-gray-200">
+                      <button
+                        onClick={handleUploadNewsletter}
+                        disabled={newsletterUploading}
+                        className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-[#316840] text-white rounded-lg hover:bg-[#2d5a2d] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {newsletterUploading ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            Uploading…
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4" />
+                            Upload to R2
+                          </>
+                        )}
+                      </button>
+                      <button
+                        onClick={() => setShowNewsletterForm(false)}
+                        className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>

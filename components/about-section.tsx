@@ -63,8 +63,11 @@ export default function AboutSection() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/about">
-                  <Button className="text-white font-medium px-6 py-3 rounded-lg transition-all duration-300 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#1e4a1e] hover:to-[#2d5a2d] shadow-lg hover:shadow-xl">
+                <Link
+                  href="/about"
+                  className="block sm:inline-block w-full sm:w-auto"
+                >
+                  <Button className="w-full text-white font-medium px-6 py-3 rounded-lg transition-all duration-300 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#1e4a1e] hover:to-[#2d5a2d] shadow-lg hover:shadow-xl">
                     Learn More About Us
                   </Button>
                 </Link>

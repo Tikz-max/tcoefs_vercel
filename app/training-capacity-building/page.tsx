@@ -15,7 +15,6 @@ export default function TrainingCapacityBuildingPage() {
             Empowering People • Transforming Food Systems
           </h1>
 
-          {/* Subtitle */}
           <h2 className="text-2xl md:text-3xl font-semibold text-[#2f3e2f] mb-12">
             Training & Capacity Building
           </h2>
@@ -394,7 +393,7 @@ export default function TrainingCapacityBuildingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-4 border-2 border-[#2d5a2d] text-[#2d5a2d] hover:bg-[#2d5a2d] hover:text-white font-semibold rounded-xl transition-all duration-300">
+            <button className="w-full sm:w-auto px-8 py-4 border-2 border-[#2d5a2d] text-[#2d5a2d] hover:bg-[#2d5a2d] hover:text-white font-semibold rounded-xl transition-all duration-300">
               Contact Training Team
             </button>
           </div>

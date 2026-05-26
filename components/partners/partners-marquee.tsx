@@ -4,11 +4,17 @@ import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 
 const logos = [
-  { src: "/partners/color/Pasted image.png", alt: "Partner 1" },
-  { src: "/partners/color/Pasted image (2).png", alt: "Partner 2" },
-  { src: "/partners/color/Pasted image (3).png", alt: "Partner 3" },
-  { src: "/partners/color/Pasted image (4).png", alt: "Partner 4" },
-  { src: "/partners/color/Pasted image (6).png", alt: "Partner 5" },
+  { src: "/partners/color/tetfund.png", alt: "Tertiary Education Trust Fund (TETFund)" },
+  { src: "/partners/color/university-of-jos.png", alt: "University of Jos" },
+  { src: "/partners/color/saa.png", alt: "Sasakawa Africa Association (SAA)" },
+  { src: "/partners/color/giz.png", alt: "GIZ" },
+  { src: "/partners/color/uslge.png", alt: "U.S. Livestock Genetics Export, Inc. (USLGE)", special: true },
+  { src: "/partners/color/plsg.png", alt: "Plateau State Government (PLSG)" },
+  { src: "/partners/color/ecofarms-agro.png", alt: "Ecofarms and Agroservices Ltd" },
+  { src: "/partners/color/reproduction-specialty-group.png", alt: "Reproduction Specialty Group, Inc. (RSG)" },
+  { src: "/partners/color/lpres.png", alt: "Livestock Productivity & Resilience Support Project (L-PRES)" },
+  { src: "/partners/color/dajrhas.png", alt: "Dajrhas Health and Agric Development Ltd" },
+  { src: "/partners/color/datacraft.png", alt: "Data-craft Analytics Solutions Inc.", special: true },
 ];
 
 export default function PartnersMarquee() {
@@ -61,20 +67,20 @@ export default function PartnersMarquee() {
           <div className="overflow-hidden overflow-x-clip">
             <div
               ref={containerRef}
-              className="flex items-center gap-12 will-change-transform"
+              className="flex items-center gap-8 md:gap-10 will-change-transform"
               style={{ width: "max-content" }}
             >
               {logos.concat(logos).map((logo, i) => (
                 <div
                   key={`${logo.alt}-${i}`}
-                  className="flex-shrink-0 w-32 md:w-40"
+                  className="flex-shrink-0 w-28 md:w-36"
                 >
                   <Image
                     src={logo.src}
                     alt={logo.alt}
                     width={160}
                     height={60}
-                    className="h-8 md:h-12 w-full object-contain opacity-90"
+                    className={`h-8 md:h-10 w-full object-contain ${logo.special ? "opacity-100" : "opacity-80"}`}
                     loading="eager"
                   />
                 </div>
