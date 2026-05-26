@@ -175,6 +175,7 @@ export const scientificTeam: TeamProfile[] = [
     group: "Scientific Team",
     specialization: "Animal Production",
     image: "/people/olusegun-oshibanjo.jpeg",
+    roleAtCentre: "Animal Production Lead",
     email: "oshibanjoo@unijos.edu.ng",
     googleScholar: "https://scholar.google.com/citations?user=7O-NR40AAAAJ&hl=en",
     phone: "+2348055438564",

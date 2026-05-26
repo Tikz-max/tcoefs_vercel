@@ -84,14 +84,6 @@ function ContentSection({
   );
 }
 
-function PendingContent() {
-  return (
-    <p className="rounded-2xl bg-[#eef3ed] p-5 text-[#4a5b4a]">
-      Profile details will be added once available.
-    </p>
-  );
-}
-
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const { slug } = await params;
   const profile = getLeadershipProfile(slug);
@@ -124,7 +116,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                   {profile.name}
                 </h1>
                 <p className="mt-5 text-xl font-semibold text-[#2d5a2d]">
-                  {profile.role}
+                  {profile.roleAtCentre ?? profile.role}
                 </p>
                 <p className="mt-3 max-w-2xl text-base leading-7 text-[#4a5b4a]">
                   {profile.specialization}
@@ -190,50 +182,40 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 <p>Professional Summary</p>
                 <p>Qualifications</p>
                 <p>Research Interests</p>
-                <p>Role at TCoEFS</p>
               </div>
             </aside>
 
             <div className="rounded-2xl bg-white p-6 shadow-[0_18px_60px_rgba(47,62,47,0.08)] ring-1 ring-[#2d5a2d]/10 md:p-8">
-              <ContentSection title="Professional Summary">
-                {profile.profileSummary?.length ? (
+              {profile.profileSummary?.length ? (
+                <ContentSection title="Professional Summary">
                   <div className="space-y-5">
                     {profile.profileSummary.map((paragraph) => (
                       <p key={paragraph}>{paragraph}</p>
                     ))}
                   </div>
-                ) : (
-                  <PendingContent />
-                )}
-              </ContentSection>
+                </ContentSection>
+              ) : null}
 
-              <ContentSection title="Qualifications">
-                {profile.qualifications?.length ? (
+              {profile.qualifications?.length ? (
+                <ContentSection title="Qualifications">
                   <ul className="list-disc space-y-2 pl-5">
                     {profile.qualifications.map((qualification) => (
                       <li key={qualification}>{qualification}</li>
                     ))}
                   </ul>
-                ) : (
-                  <PendingContent />
-                )}
-              </ContentSection>
+                </ContentSection>
+              ) : null}
 
-              <ContentSection title="Research Interests">
-                {profile.researchInterests?.length ? (
+              {profile.researchInterests?.length ? (
+                <ContentSection title="Research Interests">
                   <ul className="list-disc space-y-2 pl-5">
                     {profile.researchInterests.map((interest) => (
                       <li key={interest}>{interest}</li>
                     ))}
                   </ul>
-                ) : (
-                  <PendingContent />
-                )}
-              </ContentSection>
+                </ContentSection>
+              ) : null}
 
-              <ContentSection title="Role at TCoEFS">
-                {profile.roleAtCentre ? <p>{profile.roleAtCentre}</p> : <PendingContent />}
-              </ContentSection>
             </div>
           </div>
         </section>
