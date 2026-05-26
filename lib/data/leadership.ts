@@ -102,7 +102,7 @@ export const deputies: TeamProfile[] = [
 export const scientificTeam: TeamProfile[] = [
   {
     slug: "rosemary-anga",
-    name: "Rosemary Anga",
+    name: "Dr. Rosemary Anga",
     role: "Scientific Team Member",
     group: "Scientific Team",
     specialization: "Economics",
@@ -110,7 +110,7 @@ export const scientificTeam: TeamProfile[] = [
   },
   {
     slug: "idachaba-udagbene",
-    name: "Idachaba Collins Udagbene",
+    name: "Dr. Idachaba Collins Udagbene",
     role: "Scientific Team Member",
     group: "Scientific Team",
     specialization: "Animal Production",
@@ -133,13 +133,6 @@ export const scientificTeam: TeamProfile[] = [
       "In addition to his research contributions, he plays key leadership roles within the University of Jos, including Departmental Examination Officer and Departmental Postgraduate Coordinator. He has previously served as SIWES Coordinator and Faculty Level Coordinator, demonstrating strong administrative and mentoring capacity.",
       "Dr. Idachaba actively supervises postgraduate research at M.Sc. and Ph.D. levels, fostering the next generation of animal nutrition scientists. He is a member of several professional bodies and a recipient of TETFund Institutional Research Grants."
     ],
-  },
-  {
-    slug: "idakwo-acheneje",
-    name: "Mr. Idakwo Daniel Acheneje",
-    role: "Scientific Team Member",
-    group: "Scientific Team",
-    specialization: "Agricultural Economics & Extension",
   },
   {
     slug: "daniel-idakwo",
@@ -210,7 +203,7 @@ export const scientificTeam: TeamProfile[] = [
   },
   {
     slug: "stephen-dachi",
-    name: "Dr. Stephen Nanbahal Dachi",
+    name: "Prof. Stephen Nanbahal Dachi",
     role: "Scientific Team Member",
     group: "Scientific Team",
     specialization: "Crop Production",
@@ -225,10 +218,25 @@ export const scientificTeam: TeamProfile[] = [
   {
     slug: "ameji-onogu",
     name: "Dr. Ameji Negedu Onogu",
-    role: "Scientific Team Member",
+    role: "Research Team Lead",
     group: "Scientific Team",
-    specialization: "Veterinary Medicine",
+    specialization: "Veterinary Science / Animal Production",
     googleScholar: "https://scholar.google.com/citations?hl=en&user=3iNXILcAAAAJ",
+    email: "amejio@unijos.edu.ng",
+    phone: "+2348035907570",
+    qualifications: [
+      "Doctor of Veterinary Medicine (DVM, 2001)",
+      "Master of Science in Veterinary Medicine (MSc, 2010)",
+      "Doctor of Philosophy in Avian Medicine (PhD, 2015)",
+    ],
+    researchInterests: [
+      "Avian and wildlife medicine",
+      "Avian wildlife conservation and biodiversity",
+    ],
+    profileSummary: [
+      "Dr. Ameji Negedu Onogu is a Research Team Lead in Veterinary Science / Animal Production at the University of Jos, Nigeria.",
+      "He holds a DVM (2001), MSc in Veterinary Medicine (2010), and PhD in Avian Medicine (2015), with research interests in avian and wildlife medicine as well as avian wildlife conservation and biodiversity."
+    ],
   },
   {
     slug: "adebisi-folashade",
@@ -259,7 +267,7 @@ export const scientificTeam: TeamProfile[] = [
   },
   {
     slug: "asinamai-bitrus",
-    name: "Dr. Asinamai Athliamai Bitrus",
+    name: "Assoc. Prof. Asinamai Athliamai Bitrus",
     role: "Scientific Team Member",
     group: "Scientific Team",
     specialization: "Animal Production",
@@ -311,7 +319,7 @@ export const scientificTeam: TeamProfile[] = [
   },
   {
     slug: "simi-chuktu",
-    name: "Dr. Simi Sekyen Goyol Chuktu",
+    name: "Dr. Simi Sekyen Goyol",
     role: "Scientific Team Member",
     group: "Scientific Team",
     specialization: "Geography",

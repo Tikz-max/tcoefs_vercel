@@ -202,12 +202,12 @@ export default function Footer() {
               </a>
 
               <a
-                href="tel:+2348034390119"
+                href="tel:+2348034377953"
                 className="flex items-center gap-3 group"
               >
                 <Phone className="w-4 h-4 text-white/40 flex-shrink-0" />
                 <span className="text-white/65 hover:text-white text-sm transition-colors duration-200">
-                  +234 803 439 0119
+                  +234 803 437 7953
                 </span>
               </a>
 

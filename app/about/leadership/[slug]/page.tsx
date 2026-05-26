@@ -87,7 +87,7 @@ function ContentSection({
 function PendingContent() {
   return (
     <p className="rounded-2xl bg-[#eef3ed] p-5 text-[#4a5b4a]">
-      Profile information is being compiled and will be added once approved.
+      Profile details will be added once available.
     </p>
   );
 }

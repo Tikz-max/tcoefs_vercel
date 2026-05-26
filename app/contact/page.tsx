@@ -44,9 +44,9 @@ const contactDetails = [
   {
     icon: Phone,
     label: "Phone",
-    lines: ["+234 803 439 0119", "+234 803 437 7953"],
-    href: "tel:+2348034390119",
-    hrefLabel: "+234 803 439 0119",
+    lines: ["+234 803 437 7953"],
+    href: "tel:+2348034377953",
+    hrefLabel: "+234 803 437 7953",
   },
   {
     icon: Globe,
@@ -400,10 +400,10 @@ export default function ContactPage() {
                   <div className="flex items-center gap-3">
                     <Phone className="w-4 h-4 text-[#2d5a2d] flex-shrink-0" />
                     <a
-                      href="tel:+2348034390119"
+                      href="tel:+2348034377953"
                       className="text-sm text-[#4a5b4a] hover:text-[#2d5a2d] transition-colors duration-200"
                     >
-                      +234 803 439 0119
+                      +234 803 437 7953
                     </a>
                   </div>
                 </div>
