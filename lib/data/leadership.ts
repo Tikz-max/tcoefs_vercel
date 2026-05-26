@@ -221,6 +221,8 @@ export const scientificTeam: TeamProfile[] = [
     role: "Research Team Lead",
     group: "Scientific Team",
     specialization: "Veterinary Science / Animal Production",
+    roleAtCentre: "Research Team Lead",
+    image: "/people/ameji-onogu.png",
     googleScholar: "https://scholar.google.com/citations?hl=en&user=3iNXILcAAAAJ",
     email: "amejio@unijos.edu.ng",
     phone: "+2348035907570",
