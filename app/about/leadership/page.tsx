@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, UsersRound } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { PageHero } from "@/components/site/page-hero";
+import { Portrait } from "@/components/site/profile";
+import { Eyebrow, Section, SectionHeader, TextLink } from "@/components/site/ui";
+import { Reveal, SplitText, Stagger } from "@/components/site/motion";
 import {
   deputies,
   director,
@@ -13,233 +16,168 @@ import {
 } from "@/lib/data/leadership";
 
 export const metadata: Metadata = {
-  title:
-    "Leadership and Scientific Team | TETFUND Centre of Excellence in Food Security - University of Jos",
+  title: "Leadership and Scientific Team",
   description:
     "Meet the leadership, scientific team, and administrative support team driving research excellence, innovation, and institutional transformation at TCoEFS.",
 };
 
-function ProfileImage({ profile, large = false }: { profile: TeamProfile; large?: boolean }) {
-  if (profile.image) {
-    return (
-      <div className="relative h-full w-full">
-        <Image
-          src={profile.image}
-          alt={profile.name}
-          fill
-          className="object-cover"
-          style={{ objectPosition: profile.imagePosition ?? "center top" }}
-          priority={large}
-        />
-      </div>
-    );
-  }
-
-  const initials = profile.name
-    .replace(/^(Prof\.|Dr\.|Mr\.|Mrs\.|Ms\.)\s+/i, "")
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join("");
-
-  return (
-    <div className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_30%_20%,rgba(244,197,66,0.26),transparent_32%),linear-gradient(135deg,rgba(45,90,45,0.12),rgba(90,124,101,0.22))]">
-      <span className="text-3xl font-bold tracking-tight text-[#2f3e2f]/55">
-        {initials}
-      </span>
-    </div>
-  );
-}
-
 function TeamCard({ profile }: { profile: TeamProfile }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-[0_18px_50px_rgba(47,62,47,0.08)] ring-1 ring-[#2d5a2d]/10 transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_70px_rgba(47,62,47,0.13)]">
-      <div className="aspect-[4/3] overflow-hidden bg-[#eef3ed]">
-        <ProfileImage profile={profile} />
-      </div>
-      <div className="flex flex-1 flex-col p-5">
-        <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#2d5a2d]/70">
-          {profile.group}
-        </p>
-        <h3 className="text-lg font-semibold leading-snug tracking-[-0.01em] text-[#2f3e2f]">
-          {profile.name}
-        </h3>
-        <p className="mt-2 text-sm leading-relaxed text-[#4a5b4a]">
-          {profile.specialization}
-        </p>
-        <div className="mt-auto pt-5">
-          <Link
-            href={`/about/leadership/${profile.slug}`}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#2d5a2d] transition group-hover:gap-3"
-          >
-            View Profile
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+    <Link
+      href={`/about/leadership/${profile.slug}`}
+      className="group block h-full"
+    >
+      <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-mist">
+        <div className="absolute inset-0 transition-transform duration-[1400ms] ease-expo group-hover:scale-[1.05]">
+          <Portrait profile={profile} />
         </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+        <span className="absolute bottom-4 right-4 grid size-11 translate-y-3 place-items-center rounded-full bg-wheat text-ink opacity-0 transition-all duration-500 ease-expo group-hover:translate-y-0 group-hover:opacity-100">
+          <ArrowUpRight className="size-[1.125rem]" />
+        </span>
       </div>
-    </article>
+      <h3 className="mt-5 font-display text-[1.3rem] leading-tight tracking-[-0.01em] text-ink">
+        <span className="link-draw pb-0.5">{profile.name}</span>
+      </h3>
+      <p className="mt-2 text-[0.875rem] leading-snug text-stone">
+        {profile.specialization}
+      </p>
+    </Link>
   );
 }
 
 export default function LeadershipPage() {
   return (
-    <div className="min-h-screen bg-[#fbfcf8] text-[#2f3e2f]">
+    <>
       <Navbar />
       <main>
-        <section className="relative overflow-hidden px-4 pb-20 pt-24 sm:px-6 lg:px-8">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_20%,rgba(244,197,66,0.18),transparent_30%),linear-gradient(180deg,rgba(45,90,45,0.09),rgba(251,252,248,0))]" />
-          <div className="mx-auto max-w-7xl">
-            <div className="max-w-4xl">
-              <p className="mb-5 inline-flex rounded-full bg-[#2d5a2d]/10 px-4 py-2 text-sm font-semibold text-[#2d5a2d]">
-                About / Leadership
-              </p>
-              <h1 className="text-4xl font-bold leading-[1.04] tracking-[-0.03em] text-[#2f3e2f] md:text-6xl lg:text-7xl">
-                Leadership and Scientific Team
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#4a5b4a] md:text-xl">
-                A multidisciplinary team driving research excellence, innovation,
-                and institutional transformation.
-              </p>
-            </div>
-          </div>
-        </section>
+        <PageHero
+          crumbs={[{ label: "About", href: "/about" }, { label: "Leadership" }]}
+          title="Leadership and *Scientific Team.*"
+          lede="A multidisciplinary team driving research excellence, innovation, and institutional transformation."
+        />
 
-        <section className="px-4 py-10 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-8 rounded-[2rem] bg-[#244f2b] p-4 text-white shadow-[0_28px_90px_rgba(36,79,43,0.22)] md:grid-cols-[0.9fr_1.1fr] md:p-6 lg:gap-12 lg:p-8">
-              <div className="min-h-[420px] overflow-hidden rounded-[1.5rem] bg-white/10">
-                <ProfileImage profile={director} large />
+        {/* Director */}
+        <Section>
+          <div className="grid gap-x-12 gap-y-12 lg:grid-cols-12">
+            <Reveal className="lg:col-span-5">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-mist lg:sticky lg:top-28">
+                <Portrait
+                  profile={director}
+                  priority
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                />
               </div>
-              <div className="flex flex-col justify-center px-2 py-8 md:px-4 lg:px-8">
-                <p className="mb-4 text-sm font-semibold uppercase tracking-[0.09em] text-[#f4c542]">
+            </Reveal>
+            <div className="lg:col-span-6 lg:col-start-7">
+              <Reveal y={12}>
+                <Eyebrow index="01" className="mb-6">
                   Director
-                </p>
-                <h2 className="text-4xl font-bold leading-tight tracking-[-0.025em] md:text-5xl">
-                  {director.name}
-                </h2>
-                <p className="mt-3 max-w-xl text-base font-medium text-white/82">
+                </Eyebrow>
+              </Reveal>
+              <SplitText
+                as="h2"
+                text={director.name}
+                className="display display-xl block text-ink"
+              />
+              <Reveal delay={0.1}>
+                <p className="mt-6 text-[1.0625rem] font-medium text-pine">
                   {director.role}
                 </p>
-                <p className="mt-1 max-w-xl text-sm text-white/68">
+                <p className="mt-1 text-[0.9375rem] text-stone">
                   {director.institution}
                 </p>
-                <div className="my-7 h-px w-full bg-white/14" />
-                <h3 className="text-xl font-semibold tracking-[-0.01em]">
-                  Executive Profile
+              </Reveal>
+              <Reveal delay={0.15}>
+                <h3 className="eyebrow mt-12 border-t border-line pt-6 text-wheat-deep">
+                  Executive profile
                 </h3>
-                <p className="mt-4 max-w-2xl text-base leading-8 text-white/76">
-                  {director.featuredSummary}
-                </p>
-                <p className="mt-5 max-w-2xl text-base leading-8 text-white/76">
-                  His leadership approach emphasizes accountability, measurable
-                  impact, interdisciplinary collaboration, and long-term
-                  institutional sustainability.
-                </p>
-              </div>
+                <div className="prose-body mt-5 space-y-5 text-stone">
+                  <p>{director.featuredSummary}</p>
+                  <p>
+                    His leadership approach emphasises accountability,
+                    measurable impact, interdisciplinary collaboration, and
+                    long-term institutional sustainability.
+                  </p>
+                </div>
+              </Reveal>
             </div>
           </div>
-        </section>
+        </Section>
 
-        <section className="px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-8 flex items-end justify-between gap-6">
-              <div>
-                <p className="mb-3 text-sm font-semibold uppercase tracking-[0.08em] text-[#2d5a2d]">
-                  Deputies
-                </p>
-                <h2 className="text-3xl font-bold tracking-[-0.02em] text-[#2f3e2f] md:text-4xl">
-                  Director & Deputies
-                </h2>
-              </div>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2">
-              {deputies.map((profile) => (
-                <article
-                  key={profile.slug}
-                  className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-[0_18px_50px_rgba(47,62,47,0.08)] ring-1 ring-[#2d5a2d]/10"
-                >
-                  <div className="aspect-[4/3] overflow-hidden bg-[#eef3ed]">
-                    <ProfileImage profile={profile} />
+        {/* Deputies */}
+        <Section tone="mist">
+          <SectionHeader
+            eyebrow="Deputies"
+            index="02"
+            title="Director & *Deputies.*"
+          />
+          <div className="mt-16 grid gap-8 lg:grid-cols-2">
+            {deputies.map((profile, i) => (
+              <Reveal key={profile.slug} delay={i * 0.1}>
+                <article className="group grid h-full gap-7 rounded-[3px] bg-paper p-5 sm:grid-cols-5 sm:p-6">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-mist sm:col-span-2">
+                    <Portrait profile={profile} sizes="(min-width: 640px) 20vw, 100vw" />
                   </div>
-                  <div className="flex flex-1 flex-col p-7">
-                    <p className="text-sm font-semibold text-[#2d5a2d]">
-                      {profile.role}
-                    </p>
-                    <h3 className="mt-2 text-2xl font-bold tracking-[-0.02em] text-[#2f3e2f]">
+                  <div className="flex flex-col sm:col-span-3 sm:py-2">
+                    <p className="eyebrow text-wheat-deep">{profile.role}</p>
+                    <h3 className="display display-md mt-4 text-ink">
                       {profile.name}
                     </h3>
-                    <p className="mt-4 text-base leading-8 text-[#4a5b4a]">
-                      {profile.featuredSummary}
-                    </p>
-                    <Link
+                    {profile.featuredSummary && (
+                      <p className="mt-4 text-[0.9375rem] leading-relaxed text-stone">
+                        {profile.featuredSummary}
+                      </p>
+                    )}
+                    <TextLink
                       href={`/about/leadership/${profile.slug}`}
-                      className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#2d5a2d]"
+                      className="mt-auto pt-8 text-pine"
                     >
-                      View Profile
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
+                      View profile
+                    </TextLink>
                   </div>
                 </article>
-              ))}
-            </div>
+              </Reveal>
+            ))}
           </div>
-        </section>
+        </Section>
 
-        <section className="bg-white px-4 py-20 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
-              <div>
-                <p className="mb-3 text-sm font-semibold uppercase tracking-[0.08em] text-[#2d5a2d]">
-                  Scientific Team
-                </p>
-                <h2 className="text-3xl font-bold tracking-[-0.02em] text-[#2f3e2f] md:text-5xl">
-                  Multidisciplinary research capacity
-                </h2>
-              </div>
-              <p className="max-w-3xl text-base leading-8 text-[#4a5b4a] lg:justify-self-end">
-                The Centre is supported by a multidisciplinary Scientific Team
-                drawn from diverse academic fields including agricultural
-                economics, animal production, crop science, veterinary medicine,
-                plant biotechnology, geography, sociology, and communication.
-                Over twenty Scientific Team members were appointed to strengthen
-                research delivery and postgraduate supervision across the
-                Centre's thematic focus areas.
-              </p>
-            </div>
+        {/* Scientific team */}
+        <Section>
+          <SectionHeader
+            eyebrow="Scientific team"
+            index="03"
+            title="Multidisciplinary research *capacity.*"
+            lede="The Centre is supported by a multidisciplinary Scientific Team drawn from diverse academic fields including agricultural economics, animal production, crop science, veterinary medicine, plant biotechnology, geography, sociology, and communication. Over twenty Scientific Team members were appointed to strengthen research delivery and postgraduate supervision across the Centre's thematic focus areas."
+          />
+          <Stagger
+            gap={0.05}
+            className="mt-16 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8"
+          >
+            {scientificTeam.map((profile) => (
+              <TeamCard key={profile.slug} profile={profile} />
+            ))}
+          </Stagger>
+        </Section>
 
-            <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {scientificTeam.map((profile) => (
-                <TeamCard key={profile.slug} profile={profile} />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="px-4 py-20 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-10 flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#2d5a2d]/10 text-[#2d5a2d]">
-                <UsersRound className="h-6 w-6" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.08em] text-[#2d5a2d]">
-                  Administrative & Support
-                </p>
-                <h2 className="text-3xl font-bold tracking-[-0.02em] text-[#2f3e2f]">
-                  Administrative & Support Team
-                </h2>
-              </div>
-            </div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {supportTeam.map((profile) => (
-                <TeamCard key={profile.slug} profile={profile} />
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Support team */}
+        <Section tone="mist">
+          <SectionHeader
+            eyebrow="Administrative & support"
+            index="04"
+            title="Administrative & *Support Team.*"
+          />
+          <Stagger
+            gap={0.05}
+            className="mt-16 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8"
+          >
+            {supportTeam.map((profile) => (
+              <TeamCard key={profile.slug} profile={profile} />
+            ))}
+          </Stagger>
+        </Section>
       </main>
       <Footer />
-    </div>
+    </>
   );
 }
