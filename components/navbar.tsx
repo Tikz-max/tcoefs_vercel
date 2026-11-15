@@ -5,55 +5,35 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Mail, Menu, Phone, X } from "lucide-react";
 import { navItems, site, socials, type NavItem } from "@/lib/site";
-import { EASE } from "@/components/site/motion";
 
 export { Navbar };
 
-function Brand({ inverse }: { inverse: boolean }) {
+function Brand() {
   return (
-    <Link
-      href="/"
-      aria-label="TCoEFS home"
-      className="group flex items-center gap-3"
-    >
-      <span className="grid size-11 shrink-0 place-items-center rounded-full bg-white shadow-[0_0_0_1px_rgb(8_23_15_/_0.08)] transition-transform duration-700 ease-expo group-hover:rotate-[8deg]">
-        <Image
-          src="/brand/tcoefs-logo.png"
-          alt=""
-          width={72}
-          height={62}
-          priority
-          className="h-auto w-8"
-        />
-      </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-[1.35rem] tracking-[-0.02em]">
+    <Link href="/" aria-label="TCoEFS home" className="flex items-center gap-3">
+      <Image
+        src="/brand/tcoefs-logo.png"
+        alt=""
+        width={104}
+        height={90}
+        priority
+        className="h-12 w-auto"
+      />
+      <span className="flex flex-col leading-tight">
+        <span className="text-[1.0625rem] font-semibold tracking-[-0.01em] text-ink">
           TCoEFS
         </span>
-        <span
-          className={`eyebrow mt-1 !text-[0.5625rem] transition-colors duration-500 ${
-            inverse ? "text-white/60" : "text-stone"
-          }`}
-        >
-          University of Jos
+        <span className="hidden text-[0.75rem] text-stone sm:block">
+          TETFund Centre of Excellence in Food Security
         </span>
       </span>
     </Link>
   );
 }
 
-function DesktopItem({
-  item,
-  pathname,
-  inverse,
-}: {
-  item: NavItem;
-  pathname: string;
-  inverse: boolean;
-}) {
+function DesktopItem({ item, pathname }: { item: NavItem; pathname: string }) {
   const [open, setOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -61,16 +41,14 @@ function DesktopItem({
     ? item.children.some((c) => !c.external && pathname.startsWith(c.href))
     : item.href === pathname;
 
-  const linkClass = `relative flex items-center gap-1 px-3.5 py-2 text-[0.9375rem] transition-opacity duration-300 ${
-    active ? "opacity-100" : "opacity-75 hover:opacity-100"
+  const linkClass = `relative flex h-full items-center gap-1 px-3.5 text-[0.9375rem] font-medium transition-colors duration-200 ${
+    active ? "text-pine" : "text-ink hover:text-pine"
   }`;
 
-  const dot = active ? (
+  const marker = active ? (
     <span
       aria-hidden="true"
-      className={`absolute -bottom-0.5 left-1/2 size-1 -translate-x-1/2 rounded-full ${
-        inverse ? "bg-wheat" : "bg-wheat-deep"
-      }`}
+      className="absolute inset-x-3.5 bottom-0 h-0.5 bg-pine"
     />
   ) : null;
 
@@ -78,7 +56,7 @@ function DesktopItem({
     return (
       <Link href={item.href!} className={linkClass}>
         {item.label}
-        {dot}
+        {marker}
       </Link>
     );
   }
@@ -88,12 +66,12 @@ function DesktopItem({
     setOpen(true);
   };
   const hide = () => {
-    closeTimer.current = setTimeout(() => setOpen(false), 140);
+    closeTimer.current = setTimeout(() => setOpen(false), 120);
   };
 
   return (
     <div
-      className="relative"
+      className="relative h-full"
       onMouseEnter={show}
       onMouseLeave={hide}
       onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
@@ -110,65 +88,53 @@ function DesktopItem({
       >
         {item.label}
         <ChevronDown
-          className={`size-3.5 transition-transform duration-500 ease-expo ${open ? "rotate-180" : ""}`}
+          className={`size-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
-        {dot}
+        {marker}
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.98 }}
-            transition={{ duration: 0.35, ease: EASE }}
-            className="absolute left-1/2 top-full w-[22rem] -translate-x-1/2 pt-4"
-            style={{ transformOrigin: "top center" }}
-          >
-            <div className="overflow-hidden rounded-xl bg-paper p-2 text-ink shadow-[0_30px_80px_-20px_rgb(8_23_15_/_0.45)] ring-1 ring-ink/10">
-              {item.children.map((child) => {
-                const inner = (
-                  <>
-                    <span>
-                      <span className="block text-[0.9375rem] font-medium">
-                        {child.label}
-                      </span>
-                      {child.description && (
-                        <span className="mt-1 block text-[0.8125rem] leading-snug text-stone">
-                          {child.description}
-                        </span>
-                      )}
+      {open && (
+        <div className="absolute left-0 top-full w-80 pt-px">
+          <div className="rounded-b-lg border border-t-0 border-line bg-white p-2 shadow-[0_16px_40px_-12px_rgb(15_23_42_/_0.18)]">
+            {item.children.map((child) => {
+              const inner = (
+                <>
+                  <span className="block text-[0.9375rem] font-medium text-ink group-hover:text-pine">
+                    {child.label}
+                  </span>
+                  {child.description && (
+                    <span className="mt-0.5 block text-[0.8125rem] leading-snug text-stone">
+                      {child.description}
                     </span>
-                    <ArrowUpRight className="mt-0.5 size-4 shrink-0 -translate-x-1 translate-y-1 opacity-0 transition-all duration-500 ease-expo group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100" />
-                  </>
-                );
-                const cls =
-                  "group flex items-start justify-between gap-4 rounded-lg px-4 py-3.5 transition-colors duration-300 hover:bg-mist";
-                return child.external ? (
-                  <a
-                    key={child.label}
-                    href={child.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cls}
-                  >
-                    {inner}
-                  </a>
-                ) : (
-                  <Link
-                    key={child.label}
-                    href={child.href}
-                    onClick={() => setOpen(false)}
-                    className={cls}
-                  >
-                    {inner}
-                  </Link>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  )}
+                </>
+              );
+              const cls =
+                "group block rounded-md px-3.5 py-3 transition-colors duration-200 hover:bg-mist";
+              return child.external ? (
+                <a
+                  key={child.label}
+                  href={child.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cls}
+                >
+                  {inner}
+                </a>
+              ) : (
+                <Link
+                  key={child.label}
+                  href={child.href}
+                  onClick={() => setOpen(false)}
+                  className={cls}
+                >
+                  {inner}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -178,7 +144,11 @@ function MobileMenu({ pathname }: { pathname: string }) {
 
   useEffect(() => setOpen(false), [pathname]);
 
-  const groups: NavItem[] = [{ label: "Home", href: "/" }, ...navItems];
+  const groups: NavItem[] = [
+    { label: "Home", href: "/" },
+    ...navItems,
+    { label: "Contact", href: "/contact" },
+  ];
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -186,134 +156,97 @@ function MobileMenu({ pathname }: { pathname: string }) {
         <button
           type="button"
           aria-label="Open menu"
-          className="group flex h-11 items-center gap-3 rounded-full border border-current/25 pl-4 pr-3.5 text-[0.9375rem] font-medium"
+          className="grid size-11 place-items-center rounded-md border border-line text-ink"
         >
-          Menu
-          <span aria-hidden="true" className="flex w-4 flex-col gap-[5px]">
-            <span className="h-px w-full bg-current transition-transform duration-500 ease-expo group-hover:translate-x-0.5" />
-            <span className="h-px w-full bg-current transition-transform duration-500 ease-expo group-hover:-translate-x-0.5" />
-          </span>
+          <Menu className="size-5" />
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 z-[60] bg-ink/40" />
         <Dialog.Content
           aria-describedby={undefined}
-          className="fixed inset-0 z-[70] flex flex-col overflow-y-auto bg-ink text-white data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:animate-in data-[state=open]:fade-in duration-300"
+          className="fixed inset-y-0 right-0 z-[70] flex w-full max-w-sm flex-col overflow-y-auto bg-white shadow-xl data-[state=open]:animate-in data-[state=open]:slide-in-from-right duration-200"
         >
-          <Dialog.Title className="sr-only">Site navigation</Dialog.Title>
-          <div className="shell flex h-20 shrink-0 items-center justify-between">
-            <Brand inverse />
+          <div className="flex h-16 shrink-0 items-center justify-between border-b border-line px-5">
+            <Dialog.Title className="text-[1rem] font-semibold text-ink">
+              Menu
+            </Dialog.Title>
             <Dialog.Close asChild>
               <button
                 type="button"
-                className="flex h-11 items-center gap-3 rounded-full border border-white/25 pl-4 pr-3.5 text-[0.9375rem] font-medium"
+                aria-label="Close menu"
+                className="grid size-11 place-items-center rounded-md border border-line text-ink"
               >
-                Close
-                <span aria-hidden="true" className="relative size-4">
-                  <span className="absolute left-0 top-1/2 h-px w-full rotate-45 bg-current" />
-                  <span className="absolute left-0 top-1/2 h-px w-full -rotate-45 bg-current" />
-                </span>
+                <X className="size-5" />
               </button>
             </Dialog.Close>
           </div>
 
-          <nav aria-label="Primary" className="shell flex-1 pb-10 pt-6">
-            <ul>
-              {groups.map((item, i) => (
-                <motion.li
-                  key={item.label}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, ease: EASE, delay: 0.08 + i * 0.05 }}
-                  className="border-t border-line-inverse py-5"
-                >
-                  <div className="flex items-baseline gap-5">
-                    <span className="eyebrow w-6 text-wheat">
-                      {String(i + 1).padStart(2, "0")}
+          <nav aria-label="Primary" className="flex-1 px-5 py-4">
+            <ul className="divide-y divide-line">
+              {groups.map((item) => (
+                <li key={item.label} className="py-3">
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className={`block py-1.5 text-[1.0625rem] font-semibold ${
+                        pathname === item.href ? "text-pine" : "text-ink"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <span className="block py-1.5 text-[1.0625rem] font-semibold text-ink">
+                      {item.label}
                     </span>
-                    {item.href ? (
-                      <Link
-                        href={item.href}
-                        onClick={() => setOpen(false)}
-                        className="display text-[2rem] sm:text-[2.5rem]"
-                      >
-                        {item.label}
-                      </Link>
-                    ) : (
-                      <span className="display text-[2rem] sm:text-[2.5rem]">
-                        {item.label}
-                      </span>
-                    )}
-                  </div>
+                  )}
                   {item.children && (
-                    <ul className="ml-11 mt-3 flex flex-wrap gap-x-6 gap-y-2">
+                    <ul className="mt-1 space-y-1 border-l-2 border-line pl-4">
                       {item.children
                         .filter((c) => c.href !== item.href)
-                        .map((child) =>
-                          child.external ? (
-                            <li key={child.label}>
+                        .map((child) => (
+                          <li key={child.label}>
+                            {child.external ? (
                               <a
                                 href={child.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 text-[0.9375rem] text-white/70"
+                                className="flex min-h-11 items-center gap-1 text-[0.9375rem] text-stone"
                               >
                                 {child.label}
                                 <ArrowUpRight className="size-3.5" />
                               </a>
-                            </li>
-                          ) : (
-                            <li key={child.label}>
+                            ) : (
                               <Link
                                 href={child.href}
                                 onClick={() => setOpen(false)}
-                                className={`text-[0.9375rem] ${
+                                className={`flex min-h-11 items-center text-[0.9375rem] ${
                                   pathname === child.href
-                                    ? "text-wheat"
-                                    : "text-white/70"
+                                    ? "font-medium text-pine"
+                                    : "text-stone"
                                 }`}
                               >
                                 {child.label}
                               </Link>
-                            </li>
-                          ),
-                        )}
+                            )}
+                          </li>
+                        ))}
                     </ul>
                   )}
-                </motion.li>
+                </li>
               ))}
-              <motion.li
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: EASE, delay: 0.08 + groups.length * 0.05 }}
-                className="border-y border-line-inverse py-5"
-              >
-                <div className="flex items-baseline gap-5">
-                  <span className="eyebrow w-6 text-wheat">
-                    {String(groups.length + 1).padStart(2, "0")}
-                  </span>
-                  <Link
-                    href="/contact"
-                    onClick={() => setOpen(false)}
-                    className="display text-[2rem] sm:text-[2.5rem]"
-                  >
-                    Contact
-                  </Link>
-                </div>
-              </motion.li>
             </ul>
           </nav>
 
-          <div className="shell grid shrink-0 gap-6 pb-8 text-[0.875rem] text-white/60 sm:grid-cols-2">
-            <div>
-              <a href={`mailto:${site.email}`} className="block text-white">
-                {site.email}
-              </a>
-              <a href={site.phoneHref} className="mt-1 block">
-                {site.phone}
-              </a>
-            </div>
-            <ul className="flex flex-wrap gap-x-5 gap-y-1 sm:justify-end">
+          <div className="shrink-0 border-t border-line bg-mist px-5 py-5 text-[0.875rem] text-stone">
+            <a href={`mailto:${site.email}`} className="block font-medium text-ink">
+              {site.email}
+            </a>
+            <a href={site.phoneHref} className="mt-1 block">
+              {site.phone}
+            </a>
+            <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
               {socials.map((s) => (
                 <li key={s.label}>
                   <a href={s.href} target="_blank" rel="noopener noreferrer">
@@ -331,58 +264,57 @@ function MobileMenu({ pathname }: { pathname: string }) {
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { scrollY } = useScroll();
-  const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
-
-  useMotionValueEvent(scrollY, "change", (y) => {
-    const previous = scrollY.getPrevious() ?? 0;
-    setScrolled(y > 24);
-    setHidden(y > 480 && y > previous);
-  });
-
-  const inverse = !scrolled;
 
   return (
-    <motion.header
-      animate={{ y: hidden ? "-100%" : "0%" }}
-      transition={{ duration: 0.6, ease: EASE }}
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,color,box-shadow,backdrop-filter] duration-500 ${
-        inverse
-          ? "bg-transparent text-white"
-          : "bg-paper/85 text-ink shadow-[0_1px_0_0_rgb(8_23_15_/_0.08)] backdrop-blur-xl"
-      }`}
-    >
-      <div className="shell flex h-20 items-center justify-between gap-6">
-        <Brand inverse={inverse} />
-
-        <nav aria-label="Primary" className="hidden items-center xl:flex">
-          {navItems.map((item) => (
-            <DesktopItem
-              key={item.label}
-              item={item}
-              pathname={pathname}
-              inverse={inverse}
-            />
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-3">
-          <Link
-            href="/contact"
-            className={`hidden h-11 items-center rounded-full px-6 text-[0.9375rem] font-medium transition-colors duration-500 sm:inline-flex ${
-              inverse
-                ? "bg-white text-ink hover:bg-wheat"
-                : "bg-ink text-paper hover:bg-pine"
-            }`}
-          >
-            Contact us
-          </Link>
-          <div className="xl:hidden">
-            <MobileMenu pathname={pathname} />
+    <header className="sticky top-0 z-50 bg-white">
+      {/* Utility bar */}
+      <div className="hidden bg-forest text-white md:block">
+        <div className="shell flex h-9 items-center justify-between text-[0.8125rem]">
+          <p className="text-white/80">
+            University of Jos, Naraguta Campus, Plateau State, Nigeria
+          </p>
+          <div className="flex items-center gap-6">
+            <a
+              href={`mailto:${site.email}`}
+              className="flex items-center gap-2 text-white/90 hover:text-white"
+            >
+              <Mail className="size-3.5" />
+              {site.email}
+            </a>
+            <a
+              href={site.phoneHref}
+              className="flex items-center gap-2 text-white/90 hover:text-white"
+            >
+              <Phone className="size-3.5" />
+              {site.phone}
+            </a>
           </div>
         </div>
       </div>
-    </motion.header>
+
+      <div className="border-b border-line">
+        <div className="shell flex h-[4.5rem] items-center justify-between gap-6">
+          <Brand />
+
+          <nav aria-label="Primary" className="hidden h-full items-center xl:flex">
+            {navItems.map((item) => (
+              <DesktopItem key={item.label} item={item} pathname={pathname} />
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/contact"
+              className="hidden h-11 items-center rounded-md bg-pine px-5 text-[0.9375rem] font-semibold text-white transition-colors duration-200 hover:bg-leaf sm:inline-flex"
+            >
+              Contact us
+            </Link>
+            <div className="xl:hidden">
+              <MobileMenu pathname={pathname} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }

@@ -133,7 +133,7 @@ export default function PostgraduateProgrammesPage() {
             title="Four thematic *clusters.*"
             lede="Programmes are organised across four interdisciplinary clusters, each aligned to a strategic thematic area within the TCoEFS mandate."
           />
-          <div className="mt-16">
+          <div className="mt-12">
             <ClusterAccordion clusters={clusters} />
           </div>
         </Section>

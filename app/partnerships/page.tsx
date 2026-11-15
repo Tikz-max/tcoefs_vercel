@@ -220,10 +220,10 @@ export default function PartnershipsPage() {
           imageAlt="TCoEFS strategic partnerships and high-level engagement"
         >
           <div className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href="#partnership-form" variant="wheat">
+            <ButtonLink href="#partnership-form" variant="ink">
               Start a partnership
             </ButtonLink>
-            <ButtonLink href="#funding-form" variant="outline-light">
+            <ButtonLink href="#funding-form" variant="outline-dark">
               Support an initiative
             </ButtonLink>
           </div>
@@ -283,7 +283,7 @@ export default function PartnershipsPage() {
             title="How we *collaborate.*"
             lede="TCoEFS offers six structured partnership modalities, each designed to create mutual value and measurable development outcomes."
           />
-          <FeatureGrid items={opportunityCards} className="mt-16" />
+          <FeatureGrid items={opportunityCards} className="mt-12" />
         </Section>
 
         {/* Partners */}
@@ -295,13 +295,13 @@ export default function PartnershipsPage() {
           />
           <Stagger
             gap={0.05}
-            className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+            className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
             itemClassName="h-full"
           >
             {partners.map((partner) => (
               <article
                 key={partner.name}
-                className="group flex h-full flex-col rounded-[3px] bg-white p-7 ring-1 ring-ink/10 transition-shadow duration-700 hover:shadow-[0_30px_60px_-30px_rgb(8_23_15_/_0.35)]"
+                className="group flex h-full flex-col rounded-lg bg-white p-7 ring-1 ring-ink/10 transition-shadow duration-300 hover:shadow-[0_30px_60px_-30px_rgb(8_23_15_/_0.35)]"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="relative h-14 w-40">
@@ -438,7 +438,7 @@ export default function PartnershipsPage() {
           </div>
 
           <Reveal className="mt-20">
-            <figure className="rounded-[3px] bg-mist p-9 sm:p-14">
+            <figure className="rounded-lg bg-mist p-9 sm:p-14">
               <blockquote className="display display-md max-w-4xl text-ink">
                 &ldquo;Every contribution, whether in equipment, expertise, or
                 funding, directly strengthens a Centre that serves farmers,
@@ -462,11 +462,11 @@ export default function PartnershipsPage() {
             title="Start the *conversation.*"
             lede="Whether you are exploring a research partnership or considering a funding commitment, the right form is below."
           />
-          <div className="mt-16 grid gap-6 lg:grid-cols-2">
+          <div className="mt-12 grid gap-6 lg:grid-cols-2">
             <Reveal>
               <div
                 id="partnership-form"
-                className="h-full scroll-mt-28 rounded-[3px] bg-paper p-8 ring-1 ring-ink/10 sm:p-12"
+                className="h-full scroll-mt-28 rounded-lg bg-paper p-8 ring-1 ring-ink/10 sm:p-12"
               >
                 <Eyebrow className="mb-5">Form A</Eyebrow>
                 <h3 className="display display-md text-ink">
@@ -547,7 +547,7 @@ export default function PartnershipsPage() {
             <Reveal delay={0.1}>
               <div
                 id="funding-form"
-                className="h-full scroll-mt-28 rounded-[3px] bg-paper p-8 ring-1 ring-ink/10 sm:p-12"
+                className="h-full scroll-mt-28 rounded-lg bg-paper p-8 ring-1 ring-ink/10 sm:p-12"
               >
                 <Eyebrow className="mb-5">Form B</Eyebrow>
                 <h3 className="display display-md text-ink">
@@ -655,7 +655,7 @@ export default function PartnershipsPage() {
               investment is managed with rigour and purpose.
             </P>
           </div>
-          <FeatureGrid items={governance} className="mt-16" />
+          <FeatureGrid items={governance} className="mt-12" />
         </Section>
 
         {/* Closing */}

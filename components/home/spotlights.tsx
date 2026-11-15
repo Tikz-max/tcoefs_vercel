@@ -52,7 +52,7 @@ function SpotlightStory({ card }: { card: Spotlight }) {
       </Dialog.Title>
 
       {card.videoId && (
-        <div className="relative mt-10 aspect-video overflow-hidden rounded-[3px] bg-ink">
+        <div className="relative mt-10 aspect-video overflow-hidden rounded-lg bg-ink">
           <iframe
             src={`https://www.youtube.com/embed/${card.videoId}?autoplay=1&mute=1&rel=0&playsinline=1&modestbranding=1`}
             title={card.fullContent.title}
@@ -69,7 +69,7 @@ function SpotlightStory({ card }: { card: Spotlight }) {
             <p
               className={
                 i === 0
-                  ? "font-display text-[1.4rem] leading-snug tracking-[-0.01em] text-ink"
+                  ? "text-[1.125rem] font-semibold leading-snug text-ink"
                   : "prose-body text-stone"
               }
             >
@@ -82,7 +82,7 @@ function SpotlightStory({ card }: { card: Spotlight }) {
                 width={1600}
                 height={900}
                 sizes="(min-width: 768px) 720px, 100vw"
-                className="h-auto w-full rounded-[3px]"
+                className="h-auto w-full rounded-lg"
               />
             )}
           </div>
@@ -99,7 +99,7 @@ function SpotlightStory({ card }: { card: Spotlight }) {
               width={1200}
               height={800}
               sizes="(min-width: 640px) 360px, 100vw"
-              className="h-auto w-full rounded-[3px]"
+              className="h-auto w-full rounded-lg"
             />
           ))}
         </div>
@@ -183,7 +183,7 @@ export default function Spotlights() {
     "grid size-12 place-items-center rounded-full border border-ink/25 text-ink transition-colors duration-500 hover:border-ink hover:bg-ink hover:text-paper disabled:pointer-events-none disabled:opacity-30";
 
   return (
-    <section className="overflow-hidden bg-paper py-24 sm:py-32 lg:py-40">
+    <section className="overflow-hidden bg-paper py-16 sm:py-20 lg:py-24">
       <div className="shell flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
         <div>
           <Reveal y={12}>
@@ -229,7 +229,7 @@ export default function Spotlights() {
             ? [0, 1, 2].map((i) => (
                 <li
                   key={i}
-                  className="aspect-[4/5] w-[80vw] shrink-0 animate-pulse rounded-[3px] bg-mist sm:w-[26rem]"
+                  className="aspect-[4/5] w-[80vw] shrink-0 animate-pulse rounded-lg bg-mist sm:w-[26rem]"
                 />
               ))
             : cards.map((card, i) => (
@@ -243,13 +243,13 @@ export default function Spotlights() {
                     onClick={() => setSelected(card)}
                     className="group block w-full text-left"
                   >
-                    <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-forest">
+                    <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-forest">
                       <Image
                         src={card.image || "/placeholder.svg"}
                         alt=""
                         fill
                         sizes="(min-width: 640px) 26rem, 80vw"
-                        className="object-cover transition-transform duration-[1400ms] ease-expo group-hover:scale-[1.07]"
+                        className="object-cover transition-transform duration-500 ease-expo group-hover:scale-[1.03]"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
                       <span className="eyebrow absolute left-5 top-5 text-white/90">

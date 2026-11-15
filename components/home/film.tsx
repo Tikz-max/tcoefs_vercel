@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useScroll, useTransform } from "motion/react";
+import { useInView } from "motion/react";
 import { Volume2, VolumeX } from "lucide-react";
 import { getYouTubeVideo } from "@/lib/services/admin";
 import { Reveal, SplitText } from "@/components/site/motion";
@@ -18,13 +18,6 @@ export default function Film() {
   const [videoId, setVideoId] = useState(FALLBACK_VIDEO);
   const inView = useInView(frameRef, { amount: 0.25 });
   const seen = useInView(frameRef, { once: true, margin: "200px" });
-
-  const { scrollYProgress } = useScroll({
-    target: frameRef,
-    offset: ["start end", "center center"],
-  });
-  const scale = useTransform(scrollYProgress, [0, 1], [0.86, 1]);
-  const radius = useTransform(scrollYProgress, [0, 1], [28, 4]);
 
   useEffect(() => {
     getYouTubeVideo()
@@ -88,19 +81,19 @@ export default function Film() {
   }, [ready, inView, muted]);
 
   return (
-    <section className="grain relative overflow-hidden bg-ink py-24 text-white sm:py-32 lg:py-40">
-      <div className="shell relative">
-        <div className="mb-12 flex flex-col justify-between gap-6 sm:flex-row sm:items-end lg:mb-16">
+    <section className="bg-white py-16 sm:py-20 lg:py-24">
+      <div className="shell">
+        <div className="mb-10 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div>
             <Reveal y={12}>
-              <Eyebrow tone="dark" index="03" className="mb-6">
+              <Eyebrow index="03" className="mb-4">
                 Film
               </Eyebrow>
             </Reveal>
             <SplitText
               as="h2"
               text="See the Centre *at work.*"
-              className="display display-lg block"
+              className="display display-lg block text-ink"
             />
           </div>
           <Reveal delay={0.15}>
@@ -108,17 +101,16 @@ export default function Film() {
               href="https://www.youtube.com/@TETFund_TCoEFS"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex text-[0.9375rem] text-white/70 hover:text-white"
+              className="group inline-flex text-[0.9375rem] font-semibold text-pine"
             >
               <span className="link-draw pb-0.5">More on our YouTube channel</span>
             </a>
           </Reveal>
         </div>
 
-        <motion.div
+        <div
           ref={frameRef}
-          style={{ scale, borderRadius: radius }}
-          className="relative overflow-hidden bg-forest shadow-[0_60px_120px_-40px_rgb(0_0_0_/_0.7)]"
+          className="relative overflow-hidden rounded-lg bg-ink"
         >
           <div className="relative aspect-video">
             <div id="tcoefs-film" className="absolute inset-0 size-full" />
@@ -136,7 +128,7 @@ export default function Film() {
               {muted ? "Sound off" : "Sound on"}
             </button>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -104,7 +104,7 @@ export default function ResearchInnovationPage() {
             index="01"
             title="Our research *philosophy.*"
           />
-          <FeatureGrid items={philosophy} columns={4} className="mt-16" />
+          <FeatureGrid items={philosophy} columns={4} className="mt-12" />
         </Section>
 
         <Section tone="mist">
@@ -113,7 +113,7 @@ export default function ResearchInnovationPage() {
             index="02"
             title="Core research *themes.*"
           />
-          <IndexRows items={themes} className="mt-16" />
+          <IndexRows items={themes} className="mt-12" />
         </Section>
 
         <Section tone="forest" className="grain">
@@ -123,7 +123,7 @@ export default function ResearchInnovationPage() {
             index="03"
             title="Flagship *projects.*"
           />
-          <IndexRows tone="dark" items={projects} className="mt-16" />
+          <IndexRows tone="dark" items={projects} className="mt-12" />
         </Section>
 
         <Section>

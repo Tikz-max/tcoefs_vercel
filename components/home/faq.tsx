@@ -85,7 +85,7 @@ export default function Faq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="bg-mist py-24 sm:py-32 lg:py-40">
+    <section className="bg-mist py-16 sm:py-20 lg:py-24">
       <div className="shell grid gap-x-12 gap-y-12 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-32">
@@ -128,7 +128,7 @@ export default function Faq() {
                         className="group flex w-full items-start justify-between gap-6 py-6 text-left"
                       >
                         <span
-                          className={`font-display text-[1.25rem] leading-snug tracking-[-0.01em] transition-colors duration-300 sm:text-[1.4rem] ${
+                          className={`text-[1.125rem] font-semibold leading-snug transition-colors duration-300 sm:text-[1.4rem] ${
                             isOpen ? "text-pine" : "text-ink group-hover:text-pine"
                           }`}
                         >

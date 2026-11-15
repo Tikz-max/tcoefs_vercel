@@ -27,7 +27,7 @@ import { site } from "@/lib/site";
 
 function FeaturedCard({ newsletter }: { newsletter: Newsletter }) {
   return (
-    <article className="grain relative flex h-full flex-col overflow-hidden rounded-[3px] bg-pine p-8 text-white sm:p-12">
+    <article className="grain relative flex h-full flex-col overflow-hidden rounded-lg bg-pine p-8 text-white sm:p-12">
       <Contours
         seed={9}
         className="absolute -right-1/4 -top-1/4 h-[150%] w-[80%] text-white/[0.07]"
@@ -71,7 +71,7 @@ function FeaturedCard({ newsletter }: { newsletter: Newsletter }) {
 
 function EventCard({ event }: { event: UpcomingEvent | null }) {
   return (
-    <article className="flex h-full flex-col rounded-[3px] bg-wheat p-8 text-ink sm:p-10">
+    <article className="flex h-full flex-col rounded-lg bg-wheat p-8 text-ink sm:p-10">
       <p className="eyebrow">Upcoming event</p>
       {event ? (
         <>
@@ -133,7 +133,7 @@ function ArchiveRow({
         </p>
       </div>
       <div className="lg:col-span-7">
-        <h3 className="font-display text-[1.4rem] leading-snug tracking-[-0.01em] text-ink">
+        <h3 className="text-[1.125rem] font-semibold leading-snug text-ink">
           {newsletter.title}
         </h3>
         <p className="mt-2 line-clamp-2 max-w-2xl text-[0.9375rem] leading-relaxed text-stone">
@@ -201,8 +201,8 @@ export default function NewslettersEventsPage() {
         <Section>
           {loading ? (
             <div className="grid gap-6 lg:grid-cols-12">
-              <div className="h-96 animate-pulse rounded-[3px] bg-mist lg:col-span-8" />
-              <div className="h-96 animate-pulse rounded-[3px] bg-mist lg:col-span-4" />
+              <div className="h-96 animate-pulse rounded-lg bg-mist lg:col-span-8" />
+              <div className="h-96 animate-pulse rounded-lg bg-mist lg:col-span-4" />
             </div>
           ) : !latestNewsletter && !event ? (
             <p className="display display-md border-y border-line py-16 text-center text-stone">
@@ -214,7 +214,7 @@ export default function NewslettersEventsPage() {
                 {latestNewsletter ? (
                   <FeaturedCard newsletter={latestNewsletter} />
                 ) : (
-                  <div className="grid h-full min-h-64 place-items-center rounded-[3px] bg-mist p-10 text-center font-display text-[1.4rem] text-stone">
+                  <div className="grid h-full min-h-64 place-items-center rounded-lg bg-mist p-10 text-center font-display text-[1.4rem] text-stone">
                     No newsletter marked as latest yet.
                   </div>
                 )}

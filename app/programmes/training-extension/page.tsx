@@ -86,8 +86,8 @@ export default function TrainingExtensionPage() {
             index="02"
             title="Training *initiatives.*"
           />
-          <Reveal className="mt-16">
-            <article className="grid overflow-hidden rounded-[3px] bg-paper ring-1 ring-ink/10 lg:grid-cols-12">
+          <Reveal className="mt-12">
+            <article className="grid overflow-hidden rounded-lg bg-paper ring-1 ring-ink/10 lg:grid-cols-12">
               <div className="flex flex-col justify-between gap-12 bg-wheat p-9 text-ink sm:p-12 lg:col-span-4">
                 <p className="eyebrow">Short course</p>
                 <p className="display text-[clamp(2.5rem,4.4vw,3.75rem)] leading-[0.98]">
@@ -136,7 +136,7 @@ export default function TrainingExtensionPage() {
             </div>
             <div className="lg:col-span-6 lg:col-start-7">
               <NumberedList items={shortCourses} className="border-b border-line" />
-              <P className="mt-8 font-display text-[1.3rem] leading-snug tracking-[-0.01em] text-ink">
+              <P className="mt-8 text-[1.125rem] font-semibold leading-snug text-ink">
                 Each programme is designed to integrate theory, demonstration,
                 and enterprise application.
               </P>
@@ -185,7 +185,7 @@ export default function TrainingExtensionPage() {
             aspect="aspect-[4/3] lg:aspect-[5/6]"
           >
             <CheckList items={communityItems} className="border-b border-line" />
-            <P className="font-display text-[1.3rem] leading-snug tracking-[-0.01em] text-ink">
+            <P className="text-[1.125rem] font-semibold leading-snug text-ink">
               The Centre integrates participatory approaches to ensure farmers
               are co-creators and beneficiaries of innovation.
             </P>

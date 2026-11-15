@@ -218,7 +218,7 @@ export default function EnterpriseDemonstrationPage() {
             title="Sustainability through *integrated* enterprise."
             lede="By integrating enterprise with academic and research activities, TCoEFS ensures operational resilience and long-term impact."
           />
-          <FeatureGrid items={sustainabilityCards} className="mt-16" />
+          <FeatureGrid items={sustainabilityCards} className="mt-12" />
         </Section>
       </main>
       <Footer />

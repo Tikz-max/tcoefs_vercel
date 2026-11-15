@@ -27,16 +27,16 @@ function TeamCard({ profile }: { profile: TeamProfile }) {
       href={`/about/leadership/${profile.slug}`}
       className="group block h-full"
     >
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-mist">
-        <div className="absolute inset-0 transition-transform duration-[1400ms] ease-expo group-hover:scale-[1.05]">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-mist">
+        <div className="absolute inset-0 transition-transform duration-500 ease-expo group-hover:scale-[1.03]">
           <Portrait profile={profile} />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         <span className="absolute bottom-4 right-4 grid size-11 translate-y-3 place-items-center rounded-full bg-wheat text-ink opacity-0 transition-all duration-500 ease-expo group-hover:translate-y-0 group-hover:opacity-100">
           <ArrowUpRight className="size-[1.125rem]" />
         </span>
       </div>
-      <h3 className="mt-5 font-display text-[1.3rem] leading-tight tracking-[-0.01em] text-ink">
+      <h3 className="mt-5 text-[1.125rem] font-semibold leading-snug text-ink">
         <span className="link-draw pb-0.5">{profile.name}</span>
       </h3>
       <p className="mt-2 text-[0.875rem] leading-snug text-stone">
@@ -61,7 +61,7 @@ export default function LeadershipPage() {
         <Section>
           <div className="grid gap-x-12 gap-y-12 lg:grid-cols-12">
             <Reveal className="lg:col-span-5">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-mist lg:sticky lg:top-28">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-mist lg:sticky lg:top-28">
                 <Portrait
                   profile={director}
                   priority
@@ -112,11 +112,11 @@ export default function LeadershipPage() {
             index="02"
             title="Director & *Deputies.*"
           />
-          <div className="mt-16 grid gap-8 lg:grid-cols-2">
+          <div className="mt-12 grid gap-8 lg:grid-cols-2">
             {deputies.map((profile, i) => (
               <Reveal key={profile.slug} delay={i * 0.1}>
-                <article className="group grid h-full gap-7 rounded-[3px] bg-paper p-5 sm:grid-cols-5 sm:p-6">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-mist sm:col-span-2">
+                <article className="group grid h-full gap-7 rounded-lg bg-paper p-5 sm:grid-cols-5 sm:p-6">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-mist sm:col-span-2">
                     <Portrait profile={profile} sizes="(min-width: 640px) 20vw, 100vw" />
                   </div>
                   <div className="flex flex-col sm:col-span-3 sm:py-2">
@@ -152,7 +152,7 @@ export default function LeadershipPage() {
           />
           <Stagger
             gap={0.05}
-            className="mt-16 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8"
+            className="mt-12 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8"
           >
             {scientificTeam.map((profile) => (
               <TeamCard key={profile.slug} profile={profile} />
@@ -169,7 +169,7 @@ export default function LeadershipPage() {
           />
           <Stagger
             gap={0.05}
-            className="mt-16 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8"
+            className="mt-12 grid grid-cols-2 gap-x-5 gap-y-12 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-8"
           >
             {supportTeam.map((profile) => (
               <TeamCard key={profile.slug} profile={profile} />

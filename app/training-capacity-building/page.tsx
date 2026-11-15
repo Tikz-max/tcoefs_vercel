@@ -158,12 +158,12 @@ export default function TrainingCapacityBuildingPage() {
             title="Key capacity-building *areas.*"
             lede="Comprehensive training programs designed to address every aspect of the agricultural value chain."
           />
-          <ul className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {areas.map((area, i) => {
               const Icon = area.icon;
               return (
                 <Reveal as="li" key={area.title} delay={(i % 3) * 0.07}>
-                  <article className="flex h-full flex-col rounded-[3px] bg-paper p-8 ring-1 ring-ink/10">
+                  <article className="flex h-full flex-col rounded-lg bg-paper p-8 ring-1 ring-ink/10">
                     <Icon strokeWidth={1.2} className="size-7 text-pine" />
                     <h3 className="display display-sm mt-10 text-ink">
                       {area.title}
@@ -193,14 +193,14 @@ export default function TrainingCapacityBuildingPage() {
             title="Our training *models.*"
             lede="Flexible learning approaches designed to meet diverse needs and schedules."
           />
-          <ol className="mt-16 border-b border-line-inverse">
+          <ol className="mt-12 border-b border-line-inverse">
             {models.map((model, i) => (
               <Reveal as="li" key={model.title} delay={i * 0.05} y={16}>
                 <div className="group grid gap-x-10 gap-y-2 border-t border-line-inverse py-8 lg:grid-cols-12 lg:items-center">
                   <span className="eyebrow text-wheat lg:col-span-1">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="display display-md text-white transition-transform duration-700 ease-expo group-hover:translate-x-2 lg:col-span-5">
+                  <h3 className="display display-md text-white transition-transform duration-300 ease-expo lg:col-span-5">
                     {model.title}
                   </h3>
                   <p className="text-[0.9875rem] text-white/65 lg:col-span-4">

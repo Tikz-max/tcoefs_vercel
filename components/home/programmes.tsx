@@ -33,7 +33,7 @@ const programmes = [
 
 export default function Programmes() {
   return (
-    <section className="bg-mist py-24 sm:py-32 lg:py-40">
+    <section className="bg-mist py-16 sm:py-20 lg:py-24">
       <div className="shell">
         <SectionHeader
           eyebrow="Our programmes"
@@ -44,7 +44,7 @@ export default function Programmes() {
 
         <Stagger
           gap={0.12}
-          className="mt-16 grid gap-6 md:grid-cols-3 lg:mt-20 lg:gap-8"
+          className="mt-12 grid gap-6 md:grid-cols-3 lg:mt-20 lg:gap-8"
         >
           {programmes.map((p, i) => (
             <Link
@@ -52,15 +52,15 @@ export default function Programmes() {
               href={p.href}
               className="group flex h-full flex-col"
             >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-forest">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-forest">
                 <Image
                   src={p.image}
                   alt={p.alt}
                   fill
                   sizes="(min-width: 768px) 30vw, 100vw"
-                  className="object-cover transition-transform duration-[1400ms] ease-expo group-hover:scale-[1.07]"
+                  className="object-cover transition-transform duration-500 ease-expo group-hover:scale-[1.03]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/5 to-ink/35 transition-opacity duration-700 group-hover:opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/5 to-ink/35 transition-opacity duration-300 group-hover:opacity-80" />
                 <span className="eyebrow absolute left-5 top-5 text-white/90">
                   {String(i + 1).padStart(2, "0")}
                 </span>

@@ -39,7 +39,7 @@ export default function News({ items }: { items?: NewsItem[] }) {
   const secondary = rest.slice(0, 3);
 
   return (
-    <section className="bg-mist py-24 sm:py-32 lg:py-40">
+    <section className="bg-mist py-16 sm:py-20 lg:py-24">
       <div className="shell">
         <SectionHeader
           eyebrow="Latest news"
@@ -58,15 +58,15 @@ export default function News({ items }: { items?: NewsItem[] }) {
           href={linkFor(lead)}
           target="_blank"
           rel="noopener noreferrer"
-          className="group mt-16 grid gap-x-12 gap-y-8 lg:mt-20 lg:grid-cols-12 lg:items-end"
+          className="group mt-12 grid gap-x-12 gap-y-8 lg:mt-20 lg:grid-cols-12 lg:items-end"
         >
           <RevealImage
             src={lead.image || "/hero/compressed/2.jpg"}
             alt={lead.title}
             sizes="(min-width: 1024px) 58vw, 100vw"
             parallax={5}
-            className="aspect-[16/10] rounded-[3px] bg-forest lg:col-span-7"
-            imageClassName="transition-transform duration-[1400ms] ease-expo group-hover:scale-[1.04]"
+            className="aspect-[16/10] rounded-lg bg-forest lg:col-span-7"
+            imageClassName="transition-transform duration-500 ease-expo group-hover:scale-[1.04]"
           />
           <Reveal delay={0.1} className="lg:col-span-5 lg:pb-4">
             <p className="eyebrow flex flex-wrap items-center gap-x-3 gap-y-1 text-stone">
@@ -94,7 +94,7 @@ export default function News({ items }: { items?: NewsItem[] }) {
         {secondary.length > 0 && (
           <Stagger
             gap={0.1}
-            className="mt-16 grid gap-x-8 gap-y-12 border-t border-line pt-12 md:grid-cols-3 lg:mt-20"
+            className="mt-12 grid gap-x-8 gap-y-12 border-t border-line pt-12 md:grid-cols-3 lg:mt-20"
           >
             {secondary.map((item) => (
               <a
@@ -104,20 +104,20 @@ export default function News({ items }: { items?: NewsItem[] }) {
                 rel="noopener noreferrer"
                 className="group block"
               >
-                <div className="relative aspect-[3/2] overflow-hidden rounded-[3px] bg-forest">
+                <div className="relative aspect-[3/2] overflow-hidden rounded-lg bg-forest">
                   <Image
                     src={item.image || "/hero/compressed/2.jpg"}
                     alt={item.title}
                     fill
                     sizes="(min-width: 768px) 30vw, 100vw"
-                    className="object-cover transition-transform duration-[1400ms] ease-expo group-hover:scale-[1.06]"
+                    className="object-cover transition-transform duration-500 ease-expo group-hover:scale-[1.03]"
                   />
                 </div>
                 <p className="eyebrow mt-5 flex gap-3 text-stone">
                   <span className="text-pine">{item.category}</span>
                   {item.date && <span>{item.date}</span>}
                 </p>
-                <h3 className="mt-3 font-display text-[1.3rem] leading-snug tracking-[-0.01em] text-ink">
+                <h3 className="mt-3 text-[1.125rem] font-semibold leading-snug text-ink">
                   <span className="link-draw pb-0.5">{item.title}</span>
                 </h3>
               </a>

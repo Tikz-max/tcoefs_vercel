@@ -116,7 +116,7 @@ export default function ResearchInnovationPage() {
             index="01"
             title="Core research *areas.*"
           />
-          <FeatureGrid items={researchAreas} className="mt-16" />
+          <FeatureGrid items={researchAreas} className="mt-12" />
         </Section>
 
         <Section tone="forest" className="grain">

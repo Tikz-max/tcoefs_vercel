@@ -36,7 +36,7 @@ const areas = [
 
 export default function Research() {
   return (
-    <section className="bg-paper py-24 sm:py-32 lg:py-40">
+    <section className="bg-mist py-16 sm:py-20 lg:py-24">
       <div className="shell">
         <SectionHeader
           eyebrow="Research focus"
@@ -51,7 +51,7 @@ export default function Research() {
           }
         />
 
-        <IndexRows items={areas} className="mt-16 lg:mt-20" />
+        <IndexRows items={areas} className="mt-12" />
       </div>
     </section>
   );

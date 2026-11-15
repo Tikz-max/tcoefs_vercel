@@ -46,7 +46,7 @@ export default function Pillars() {
 
         <Stagger
           gap={0.1}
-          className="mt-16 grid sm:grid-cols-2 lg:mt-24 lg:grid-cols-4"
+          className="mt-12 grid sm:grid-cols-2 lg:mt-24 lg:grid-cols-4"
           itemClassName="h-full"
         >
           {pillars.map((pillar, i) => {
@@ -54,7 +54,7 @@ export default function Pillars() {
             return (
               <article
                 key={pillar.title}
-                className={`group flex h-full flex-col border-t border-white/25 py-8 transition-colors duration-700 hover:border-t-wheat sm:pr-7 ${
+                className={`group flex h-full flex-col border-t border-white/25 py-8 transition-colors duration-300 hover:border-t-wheat sm:pr-7 ${
                   i % 2 === 1 ? "sm:pl-7" : ""
                 } ${i > 0 ? "lg:border-l lg:border-l-white/10 lg:pl-7" : "lg:pl-0"}`}
               >
@@ -64,7 +64,7 @@ export default function Pillars() {
                   </span>
                   <Icon
                     strokeWidth={1.2}
-                    className="size-7 text-sage transition-all duration-700 ease-expo group-hover:-translate-y-1 group-hover:text-wheat"
+                    className="size-7 text-sage transition-all duration-300 ease-expo group-hover:-translate-y-1 group-hover:text-wheat"
                   />
                 </div>
                 <h3 className="display display-sm mt-14 text-white lg:mt-24">

@@ -28,19 +28,19 @@ export default function Bulletin() {
     return (
       <section className="bg-paper py-24 sm:py-28">
         <div className="shell grid gap-6 lg:grid-cols-12">
-          <div className="h-80 animate-pulse rounded-[3px] bg-mist lg:col-span-8" />
-          <div className="h-80 animate-pulse rounded-[3px] bg-mist lg:col-span-4" />
+          <div className="h-80 animate-pulse rounded-lg bg-mist lg:col-span-8" />
+          <div className="h-80 animate-pulse rounded-lg bg-mist lg:col-span-4" />
         </div>
       </section>
     );
   }
 
   return (
-    <section className="bg-paper py-24 sm:py-28 lg:py-32">
+    <section className="bg-paper py-16 sm:py-20 lg:py-24">
       <div className="shell grid gap-6 lg:grid-cols-12">
         {newsletter && (
           <Reveal className="lg:col-span-8">
-            <article className="grain relative flex h-full flex-col overflow-hidden rounded-[3px] bg-pine p-8 text-white sm:p-12">
+            <article className="grain relative flex h-full flex-col overflow-hidden rounded-lg bg-pine p-8 text-white sm:p-12">
               <Contours
                 seed={9}
                 className="absolute -right-1/4 -top-1/4 h-[150%] w-[80%] text-white/[0.07]"
@@ -88,7 +88,7 @@ export default function Bulletin() {
           delay={0.1}
           className={newsletter ? "lg:col-span-4" : "lg:col-span-6"}
         >
-          <article className="flex h-full flex-col rounded-[3px] bg-wheat p-8 text-ink sm:p-10">
+          <article className="flex h-full flex-col rounded-lg bg-wheat p-8 text-ink sm:p-10">
             <p className="eyebrow">Upcoming event</p>
             {event ? (
               <>

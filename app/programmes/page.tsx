@@ -97,7 +97,7 @@ export default function ProgrammesPage() {
             index="02"
             title="Three pathways, one *mission.*"
           />
-          <ol className="mt-16 border-b border-ink/20">
+          <ol className="mt-12 border-b border-ink/20">
             {pathways.map((pathway, i) => (
               <Reveal as="li" key={pathway.title} delay={i * 0.08}>
                 <Link
@@ -109,7 +109,7 @@ export default function ProgrammesPage() {
                   </span>
                   <div className="lg:col-span-4">
                     <p className="eyebrow mb-4 text-stone">{pathway.overline}</p>
-                    <h3 className="display display-lg text-ink transition-transform duration-700 ease-expo group-hover:translate-x-2">
+                    <h3 className="display display-lg text-ink transition-transform duration-300 ease-expo">
                       {pathway.title}
                     </h3>
                   </div>
@@ -122,13 +122,13 @@ export default function ProgrammesPage() {
                       <ArrowUpRight className="size-4 transition-transform duration-500 ease-expo group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </span>
                   </div>
-                  <div className="relative aspect-[3/2] overflow-hidden rounded-[3px] bg-forest lg:col-span-3">
+                  <div className="relative aspect-[3/2] overflow-hidden rounded-lg bg-forest lg:col-span-3">
                     <Image
                       src={pathway.image}
                       alt={pathway.alt}
                       fill
                       sizes="(min-width: 1024px) 22vw, 100vw"
-                      className="object-cover transition-transform duration-[1400ms] ease-expo group-hover:scale-[1.08]"
+                      className="object-cover transition-transform duration-500 ease-expo group-hover:scale-[1.03]"
                     />
                   </div>
                 </Link>

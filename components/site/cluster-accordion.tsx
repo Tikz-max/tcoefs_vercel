@@ -83,13 +83,13 @@ export function ClusterAccordion({ clusters }: { clusters: Cluster[] }) {
                     <ul className="grid gap-px pb-10 lg:grid-cols-12 lg:gap-x-10">
                       <li className="hidden lg:col-span-1 lg:block" />
                       <li className="lg:col-span-10">
-                        <ul className="overflow-hidden rounded-[3px] bg-white ring-1 ring-ink/10">
+                        <ul className="overflow-hidden rounded-lg bg-white ring-1 ring-ink/10">
                           {cluster.programmes.map((programme) => (
                             <li
                               key={programme.title}
                               className="flex flex-col justify-between gap-3 border-b border-line px-6 py-5 last:border-b-0 sm:flex-row sm:items-center"
                             >
-                              <span className="font-display text-[1.2rem] leading-snug tracking-[-0.01em] text-ink">
+                              <span className="text-[1.125rem] font-semibold leading-snug text-ink">
                                 {programme.title}
                               </span>
                               <span className="flex shrink-0 gap-1.5">

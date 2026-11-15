@@ -128,7 +128,7 @@ export default function AboutPage() {
 
           <div className="mt-20 grid gap-6 lg:grid-cols-2">
             <Reveal>
-              <article className="grain relative flex h-full flex-col overflow-hidden rounded-[3px] bg-pine p-9 text-white sm:p-12">
+              <article className="grain relative flex h-full flex-col overflow-hidden rounded-lg bg-pine p-9 text-white sm:p-12">
                 <Contours
                   seed={3}
                   className="absolute -right-1/3 -top-1/3 h-[170%] w-[90%] text-white/[0.07]"
@@ -142,7 +142,7 @@ export default function AboutPage() {
               </article>
             </Reveal>
             <Reveal delay={0.1}>
-              <article className="flex h-full flex-col rounded-[3px] bg-mist p-9 sm:p-12">
+              <article className="flex h-full flex-col rounded-lg bg-mist p-9 sm:p-12">
                 <p className="eyebrow text-wheat-deep">Our mission</p>
                 <p className="display display-md mt-20 text-ink sm:mt-28">
                   To enhance access by all people to safe and nutritious food
@@ -181,7 +181,7 @@ export default function AboutPage() {
             index="03"
             title="Our strategic *focus areas.*"
           />
-          <IndexRows items={focusAreas} className="mt-16 lg:mt-20" />
+          <IndexRows items={focusAreas} className="mt-12" />
         </Section>
 
         {/* Approach */}
@@ -221,7 +221,7 @@ export default function AboutPage() {
             index="05"
             title="Progress in *numbers.*"
           />
-          <StatRow stats={metrics} className="mt-16" />
+          <StatRow stats={metrics} className="mt-12" />
         </Section>
       </main>
       <Footer />

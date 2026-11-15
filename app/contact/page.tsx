@@ -75,7 +75,7 @@ export default function ContactPage() {
                         key={line}
                         className={
                           j === 0 && lines.length === 1
-                            ? "break-words font-display text-[1.35rem] leading-snug tracking-[-0.01em] text-ink"
+                            ? "break-words text-[1.125rem] font-semibold leading-snug text-ink"
                             : j === 0
                               ? "font-display text-[1.15rem] leading-snug tracking-[-0.01em] text-ink"
                               : "mt-1 text-[0.9375rem] text-stone"
@@ -137,7 +137,7 @@ export default function ContactPage() {
               </div>
             </div>
             <Reveal delay={0.1} className="lg:col-span-6 lg:col-start-7">
-              <div className="rounded-[3px] bg-white p-8 ring-1 ring-ink/10 sm:p-12">
+              <div className="rounded-lg bg-white p-8 ring-1 ring-ink/10 sm:p-12">
                 <EnquiryForm
                   id="contact"
                   submitLabel="Send message"
@@ -209,7 +209,7 @@ export default function ContactPage() {
             title="Follow our *work.*"
             lede="Stay informed on research updates, training announcements, and institutional news across our official channels."
           />
-          <ul className="mt-16 border-b border-ink/20">
+          <ul className="mt-12 border-b border-ink/20">
             {socials.map((s, i) => (
               <Reveal as="li" key={s.label} delay={i * 0.06} y={14}>
                 <a
@@ -221,7 +221,7 @@ export default function ContactPage() {
                   <span className="eyebrow text-wheat-deep lg:col-span-1">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="display display-lg text-ink transition-transform duration-700 ease-expo group-hover:translate-x-2 lg:col-span-5">
+                  <span className="display display-lg text-ink transition-transform duration-300 ease-expo lg:col-span-5">
                     {s.label}
                   </span>
                   <span className="col-span-2 col-start-2 row-start-2 mt-1 text-[0.9375rem] text-stone lg:col-span-5 lg:col-start-auto lg:row-start-auto lg:mt-0">
@@ -245,7 +245,7 @@ export default function ContactPage() {
             lede="University of Jos, Naraguta Campus, Plateau State, Nigeria."
           />
           <Reveal className="mt-14">
-            <div className="overflow-hidden rounded-[3px] ring-1 ring-ink/10">
+            <div className="overflow-hidden rounded-lg ring-1 ring-ink/10">
               <iframe
                 src="https://maps.google.com/maps?q=9.964017,8.880296&z=16&output=embed&hl=en"
                 className="block h-[26rem] w-full border-0 grayscale-[35%] sm:h-[32rem]"

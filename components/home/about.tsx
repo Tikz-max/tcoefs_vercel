@@ -32,7 +32,7 @@ const stats = [
 
 export default function About() {
   return (
-    <section id="about" className="bg-paper py-24 sm:py-32 lg:py-40">
+    <section id="about" className="bg-paper py-16 sm:py-20 lg:py-24">
       <div className="shell">
         <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
           <Reveal y={12} className="lg:col-span-3">
@@ -40,7 +40,7 @@ export default function About() {
           </Reveal>
           <div className="lg:col-span-9">
             <ScrubText
-              className="display display-lg text-ink"
+              className="text-[clamp(1.25rem,1.9vw,1.625rem)] font-medium leading-snug tracking-[-0.01em] text-ink"
               text="The TETFund Centre of Excellence in Food Security, University of Jos, is a multidisciplinary research and training institution established to strengthen sustainable food systems in Nigeria and across Africa."
             />
           </div>
@@ -52,7 +52,7 @@ export default function About() {
               src="/spotlight-images/spotlight-card3/img3.png"
               alt="TCoEFS staff and partners outside the Centre building at the University of Jos"
               sizes="(min-width: 1024px) 34vw, 60vw"
-              className="col-span-3 aspect-[4/5] rounded-[3px]"
+              className="col-span-3 aspect-[4/5] rounded-lg"
             />
             <RevealImage
               src="/hero/compressed/1.jpg"
@@ -60,7 +60,7 @@ export default function About() {
               sizes="(min-width: 1024px) 22vw, 40vw"
               delay={0.15}
               parallax={10}
-              className="col-span-2 aspect-[3/4] rounded-[3px]"
+              className="col-span-2 aspect-[3/4] rounded-lg"
               imageClassName="object-[center_20%]"
             />
           </div>
@@ -78,7 +78,7 @@ export default function About() {
               <Reveal delay={0.05}>
                 <div className="border-t border-line py-6">
                   <dt className="eyebrow mb-3 text-wheat-deep">Our vision</dt>
-                  <dd className="font-display text-[1.375rem] leading-snug tracking-[-0.01em]">
+                  <dd className="text-[1.125rem] font-semibold leading-snug">
                     To be a Centre of Excellence for training and applied
                     research that enhances household food security and improves
                     livelihoods in Nigeria and Africa.
@@ -88,7 +88,7 @@ export default function About() {
               <Reveal delay={0.1}>
                 <div className="border-y border-line py-6">
                   <dt className="eyebrow mb-3 text-wheat-deep">Our mission</dt>
-                  <dd className="font-display text-[1.375rem] leading-snug tracking-[-0.01em]">
+                  <dd className="text-[1.125rem] font-semibold leading-snug">
                     To enhance access by all people to safe and nutritious food
                     needed to maintain a healthy and active life.
                   </dd>

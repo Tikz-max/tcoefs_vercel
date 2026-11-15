@@ -23,19 +23,19 @@ export function IndexRows({
         return (
           <Reveal as="li" key={item.title} delay={i * 0.04} y={18}>
             <div
-              className={`group relative grid gap-x-10 gap-y-3 border-t py-8 lg:grid-cols-12 lg:py-10 ${rule}`}
+              className={`group relative grid gap-x-10 gap-y-2 border-t py-7 lg:grid-cols-12 lg:items-baseline ${rule}`}
             >
               <span
                 aria-hidden="true"
-                className={`absolute inset-x-0 -top-px h-px origin-left scale-x-0 transition-transform duration-700 ease-expo group-hover:scale-x-100 ${dark ? "bg-wheat" : "bg-pine"}`}
+                className={`absolute inset-x-0 -top-px h-px origin-left scale-x-0 transition-transform duration-300 ease-expo group-hover:scale-x-100 ${dark ? "bg-wheat" : "bg-pine"}`}
               />
               <span
-                className={`eyebrow flex items-center gap-4 pt-2 lg:col-span-1 ${dark ? "text-wheat" : "text-wheat-deep"}`}
+                className={`eyebrow lg:col-span-1 ${dark ? "text-wheat" : "text-wheat-deep"}`}
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
               <h3
-                className={`display display-md transition-transform duration-700 ease-expo group-hover:translate-x-2 lg:col-span-5 ${dark ? "text-white" : "text-ink"}`}
+                className={`display display-md transition-transform duration-300 ease-expo lg:col-span-5 ${dark ? "text-white" : "text-ink"}`}
               >
                 {item.title}
               </h3>
@@ -143,7 +143,7 @@ export function FeatureGrid({
   }[columns];
   return (
     <ul
-      className={`grid gap-px overflow-hidden rounded-[3px] ${dark ? "bg-white/15" : "bg-ink/15"} ${cols} ${className}`}
+      className={`grid gap-px overflow-hidden rounded-lg ${dark ? "bg-white/15" : "bg-ink/15"} ${cols} ${className}`}
       style={{ boxShadow: dark ? "0 0 0 1px rgb(255 255 255 / 0.15)" : "0 0 0 1px rgb(8 23 15 / 0.15)" }}
     >
       {items.map((item, i) => {
@@ -165,7 +165,7 @@ export function FeatureGrid({
                 {Icon && (
                   <Icon
                     strokeWidth={1.2}
-                    className={`size-7 transition-transform duration-700 ease-expo group-hover:-translate-y-1 ${dark ? "text-sage" : "text-pine"}`}
+                    className={`size-7 transition-transform duration-300 ease-expo group-hover:-translate-y-1 ${dark ? "text-sage" : "text-pine"}`}
                   />
                 )}
               </div>
@@ -229,7 +229,7 @@ export function SplitFeature({
           src={image}
           alt={imageAlt}
           sizes="(min-width: 1024px) 46vw, 100vw"
-          className={`${aspect} rounded-[3px] bg-forest`}
+          className={`${aspect} rounded-lg bg-forest`}
           imageClassName={imagePosition}
         />
         {secondaryImage && (
@@ -239,7 +239,7 @@ export function SplitFeature({
             sizes="(min-width: 1024px) 18vw, 40vw"
             delay={0.2}
             parallax={10}
-            className={`absolute -bottom-8 hidden aspect-[4/3] w-[42%] rounded-[3px] bg-forest shadow-[0_30px_60px_-20px_rgb(8_23_15_/_0.5)] ring-4 sm:block ${
+            className={`absolute -bottom-8 hidden aspect-[4/3] w-[42%] rounded-lg bg-forest shadow-[0_30px_60px_-20px_rgb(8_23_15_/_0.5)] ring-4 sm:block ${
               dark ? "ring-forest" : "ring-paper"
             } ${reverse ? "-left-6" : "-right-6"}`}
           />
@@ -247,7 +247,7 @@ export function SplitFeature({
         {badge && (
           <Reveal
             delay={0.3}
-            className={`absolute top-6 rounded-[3px] bg-wheat px-5 py-4 text-ink ${reverse ? "right-6" : "left-6"}`}
+            className={`absolute top-6 rounded-lg bg-wheat px-5 py-4 text-ink ${reverse ? "right-6" : "left-6"}`}
           >
             <p className="display text-[2.25rem] leading-none">{badge.value}</p>
             <p className="eyebrow mt-2">{badge.label}</p>
@@ -334,7 +334,7 @@ export function CtaPanel({
   return (
     <Reveal>
       <div
-        className={`grain relative grid gap-x-12 gap-y-8 overflow-hidden rounded-[3px] p-9 sm:p-14 lg:grid-cols-12 lg:items-end lg:p-16 ${
+        className={`grain relative grid gap-x-12 gap-y-8 overflow-hidden rounded-lg p-9 sm:p-14 lg:grid-cols-12 lg:items-end lg:p-16 ${
           dark ? "bg-pine text-white" : "bg-mist text-ink"
         }`}
       >

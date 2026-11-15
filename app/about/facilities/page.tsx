@@ -86,7 +86,7 @@ export default function FacilitiesPage() {
                   <span className="eyebrow text-wheat-deep">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <p className="font-display text-[1.25rem] leading-snug tracking-[-0.01em] text-ink">
+                  <p className="text-[1.125rem] font-semibold leading-snug text-ink">
                     {snapshot}
                   </p>
                 </div>
@@ -217,7 +217,7 @@ export default function FacilitiesPage() {
             tone="dark"
             columns={4}
             items={protectionMeasures}
-            className="mt-16"
+            className="mt-12"
           />
         </Section>
       </main>

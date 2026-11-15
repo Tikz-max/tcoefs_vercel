@@ -42,28 +42,19 @@ function SmartLink({
 }
 
 const buttonVariants = {
-  wheat: "bg-wheat text-ink hover:bg-white",
-  ink: "bg-ink text-paper hover:bg-pine",
-  pine: "bg-pine text-paper hover:bg-ink",
+  wheat: "bg-wheat text-ink hover:bg-[#f2c84b]",
+  ink: "bg-pine text-white hover:bg-leaf",
+  pine: "bg-pine text-white hover:bg-leaf",
   "outline-light":
-    "border border-white/30 text-white hover:bg-white hover:text-ink hover:border-white",
+    "border border-white/50 text-white hover:bg-white hover:text-ink",
   "outline-dark":
-    "border border-ink/25 text-ink hover:bg-ink hover:text-paper hover:border-ink",
-} as const;
-
-const dotVariants = {
-  wheat: "bg-ink text-wheat",
-  ink: "bg-wheat text-ink",
-  pine: "bg-wheat text-ink",
-  "outline-light": "bg-white text-ink group-hover/btn:bg-ink group-hover/btn:text-white",
-  "outline-dark": "bg-ink text-paper group-hover/btn:bg-wheat group-hover/btn:text-ink",
+    "border border-[#cbd5e1] bg-white text-ink hover:border-ink",
 } as const;
 
 export type ButtonVariant = keyof typeof buttonVariants;
 
 function ButtonInner({
   children,
-  variant,
   icon,
 }: {
   children: ReactNode;
@@ -74,21 +65,18 @@ function ButtonInner({
   return (
     <>
       <span>{children}</span>
-      <span
+      <Icon
         aria-hidden="true"
-        className={`relative grid size-9 shrink-0 place-items-center overflow-hidden rounded-full transition-colors duration-500 ${dotVariants[variant]}`}
-      >
-        <Icon className="size-4 transition-transform duration-500 ease-expo group-hover/btn:translate-x-7" />
-        <Icon className="absolute size-4 -translate-x-7 transition-transform duration-500 ease-expo group-hover/btn:translate-x-0" />
-      </span>
+        className="size-4 transition-transform duration-200 group-hover/btn:translate-x-0.5"
+      />
     </>
   );
 }
 
 export const buttonClass = (variant: ButtonVariant, className = "") =>
-  `group/btn inline-flex items-center justify-between gap-4 rounded-full py-1.5 pl-6 pr-1.5 text-[0.9375rem] font-medium leading-none transition-colors duration-500 disabled:opacity-60 ${buttonVariants[variant]} ${className}`;
+  `group/btn inline-flex h-12 items-center justify-center gap-2.5 rounded-md px-6 text-[0.9375rem] font-semibold leading-none transition-colors duration-200 disabled:opacity-60 ${buttonVariants[variant]} ${className}`;
 
-/** Pill call-to-action with a sliding arrow. */
+/** Primary call-to-action button. */
 export function ButtonLink({
   href,
   children,
@@ -155,22 +143,21 @@ export function TextLink({
   return (
     <SmartLink
       href={href}
-      className={`group inline-flex items-center gap-2 text-[0.9375rem] font-medium ${className}`}
+      className={`group inline-flex items-center gap-1.5 text-[0.9375rem] font-semibold ${className}`}
     >
       <span className="link-draw pb-0.5">{children}</span>
       {icon !== "none" && (
-        <Icon className="size-4 transition-transform duration-500 ease-expo group-hover:translate-x-1" />
+        <Icon className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
       )}
     </SmartLink>
   );
 }
 
-/** Mono label with a leading tick mark. */
+/** Small uppercase label above a heading. */
 export function Eyebrow({
   children,
   tone = "light",
   className = "",
-  index,
 }: {
   children: ReactNode;
   tone?: Tone;
@@ -179,16 +166,9 @@ export function Eyebrow({
 }) {
   return (
     <p
-      className={`eyebrow flex items-center gap-3 ${
-        tone === "dark" ? "text-sage" : "text-pine"
-      } ${className}`}
+      className={`eyebrow ${tone === "dark" ? "text-wheat" : "text-pine"} ${className}`}
     >
-      <span
-        aria-hidden="true"
-        className={`inline-block h-px w-8 ${tone === "dark" ? "bg-wheat" : "bg-wheat-deep"}`}
-      />
-      {index && <span className="opacity-60">{index}</span>}
-      <span>{children}</span>
+      {children}
     </p>
   );
 }
@@ -222,7 +202,7 @@ export function SectionHeader({
       <div className="lg:col-span-7">
         {eyebrow && (
           <Reveal y={12}>
-            <Eyebrow tone={tone} index={index} className="mb-6">
+            <Eyebrow tone={tone} index={index} className="mb-4">
               {eyebrow}
             </Eyebrow>
           </Reveal>
@@ -346,7 +326,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`relative py-20 sm:py-28 lg:py-36 ${surface} ${className}`}
+      className={`relative py-16 sm:py-20 lg:py-24 ${surface} ${className}`}
     >
       <div className="shell relative">{children}</div>
     </section>
@@ -355,59 +335,11 @@ export function Section({
 
 export { DrawRule };
 
-/**
- * Contour lines, a nod to the Jos Plateau on which the Centre stands.
- * Deterministic so it renders identically on server and client.
- */
-export function Contours({
-  className = "",
-  rings = 13,
-  seed = 1,
-}: {
+/** Decorative background removed in the restrained design; kept as a no-op. */
+export function Contours(_props: {
   className?: string;
   rings?: number;
   seed?: number;
 }) {
-  const paths: string[] = [];
-  const points = 72;
-  for (let r = 0; r < rings; r++) {
-    const base = 46 + r * 38;
-    const coords: [number, number][] = [];
-    for (let i = 0; i < points; i++) {
-      const a = (i / points) * Math.PI * 2;
-      const wobble =
-        Math.sin(a * 3 + seed * 1.7 + r * 0.22) * (10 + r * 2.6) +
-        Math.sin(a * 5 - seed * 0.9 + r * 0.41) * (5 + r * 1.3) +
-        Math.cos(a * 2 + seed * 2.3) * (14 + r * 3.1);
-      const radius = base + wobble;
-      coords.push([
-        500 + Math.cos(a) * radius * 1.25,
-        500 + Math.sin(a) * radius * 0.9,
-      ]);
-    }
-    const d = coords
-      .map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`)
-      .join(" ");
-    paths.push(`${d} Z`);
-  }
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 1000 1000"
-      fill="none"
-      className={`pointer-events-none ${className}`}
-      preserveAspectRatio="xMidYMid slice"
-    >
-      {paths.map((d, i) => (
-        <path
-          key={i}
-          d={d}
-          stroke="currentColor"
-          strokeWidth={i % 4 === 0 ? 1.4 : 0.7}
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-        />
-      ))}
-    </svg>
-  );
+  return null;
 }

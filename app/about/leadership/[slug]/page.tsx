@@ -85,7 +85,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
             seed={profile.name.length}
             className="absolute -left-[25%] top-[-20%] h-[150%] w-[95%] text-white/[0.06]"
           />
-          <div className="shell relative grid gap-x-12 gap-y-10 pb-16 pt-32 sm:pt-40 lg:grid-cols-12 lg:items-end lg:pb-24">
+          <div className="shell relative grid gap-x-12 gap-y-10 py-12 lg:grid-cols-12 lg:items-center lg:py-16">
             <div className="lg:col-span-7">
               <Link
                 href="/about/leadership"
@@ -94,7 +94,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 <ArrowLeft className="size-4 transition-transform duration-500 ease-expo group-hover:-translate-x-1" />
                 Back to leadership
               </Link>
-              <p className="eyebrow mt-12 text-wheat">{profile.group}</p>
+              <p className="eyebrow mt-8 text-wheat">{profile.group}</p>
               <h1 className="display display-xl mt-5">{profile.name}</h1>
               <p className="mt-6 text-[1.125rem] font-medium text-white">
                 {profile.roleAtCentre ?? profile.role}
@@ -109,7 +109,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               )}
             </div>
             <div className="lg:col-span-4 lg:col-start-9">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[3px] bg-pine">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-pine">
                 <Portrait
                   profile={profile}
                   priority
@@ -208,7 +208,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                         key={paragraph}
                         className={
                           i === 0
-                            ? "font-display text-[1.4rem] leading-snug tracking-[-0.01em] text-ink"
+                            ? "text-[1.125rem] font-semibold leading-snug text-ink"
                             : "prose-body text-stone"
                         }
                       >

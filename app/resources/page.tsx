@@ -103,7 +103,7 @@ function LibraryRow({ resource, index }: { resource: Resource; index: number }) 
         {String(index + 1).padStart(2, "0")}
       </span>
       <div className="lg:col-span-5">
-        <h3 className="font-display text-[1.3rem] leading-snug tracking-[-0.01em] text-ink">
+        <h3 className="text-[1.125rem] font-semibold leading-snug text-ink">
           {resource.title}
         </h3>
         <p className="eyebrow mt-3 flex flex-wrap gap-x-3 gap-y-1 text-stone">
@@ -234,17 +234,17 @@ export default function ResourcesPage() {
           lede="Access publications, reports, training materials, and knowledge products of the TETFund Centre of Excellence in Food Security."
         >
           {!loading && (
-            <dl className="mt-4 flex flex-wrap gap-x-12 gap-y-6 border-t border-line-inverse pt-8">
+            <dl className="mt-8 flex flex-wrap gap-x-12 gap-y-6 border-t border-[#cbd5e1] pt-6">
               {[
                 { label: "Total resources", value: resources.length },
                 { label: "Categories", value: CATEGORIES.length },
                 { label: "Featured", value: featuredResources.length },
               ].map(({ label, value }) => (
                 <div key={label}>
-                  <dd className="display text-[2.75rem] leading-none text-wheat">
+                  <dd className="display text-[2.25rem] leading-none text-pine">
                     {value}
                   </dd>
-                  <dt className="eyebrow mt-3 text-white/60">{label}</dt>
+                  <dt className="mt-2 text-[0.875rem] text-stone">{label}</dt>
                 </div>
               ))}
             </dl>
@@ -260,7 +260,7 @@ export default function ResourcesPage() {
             lede="Select a category to filter the resource library below."
           />
           <ul
-            className="mt-16 grid gap-px overflow-hidden rounded-[3px] bg-ink/15 sm:grid-cols-2 lg:grid-cols-3"
+            className="mt-12 grid gap-px overflow-hidden rounded-lg bg-ink/15 sm:grid-cols-2 lg:grid-cols-3"
             style={{ boxShadow: "0 0 0 1px rgb(8 23 15 / 0.15)" }}
           >
             {CATEGORIES.map((cat) => {
@@ -288,7 +288,7 @@ export default function ResourcesPage() {
                       </span>
                       <Icon
                         strokeWidth={1.2}
-                        className={`size-7 transition-transform duration-700 ease-expo group-hover:-translate-y-1 ${
+                        className={`size-7 transition-transform duration-300 ease-expo group-hover:-translate-y-1 ${
                           active ? "text-sage" : "text-pine"
                         }`}
                       />
@@ -339,7 +339,7 @@ export default function ResourcesPage() {
                         {r.category}
                         <span className="ml-3 text-white/50">{r.year}</span>
                       </span>
-                      <span className="display display-md text-white transition-transform duration-700 ease-expo group-hover:translate-x-2 lg:col-span-5">
+                      <span className="display display-md text-white transition-transform duration-300 ease-expo lg:col-span-5">
                         {r.title}
                       </span>
                       <span className="line-clamp-2 text-[0.9375rem] leading-relaxed text-white/60 lg:col-span-4">
@@ -359,7 +359,7 @@ export default function ResourcesPage() {
         {/* Library */}
         <section
           ref={libraryRef}
-          className="scroll-mt-20 bg-paper py-20 sm:py-28 lg:py-36"
+          className="scroll-mt-20 bg-paper py-16 sm:py-20 lg:py-24"
         >
           <div className="shell">
             <SectionHeader
