@@ -227,7 +227,7 @@ export default function ResourcesPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[{ label: "Resources" }]}
           title="Knowledge *repository.*"

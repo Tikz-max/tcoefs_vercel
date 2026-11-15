@@ -35,6 +35,28 @@ export const viewport: Viewport = {
   themeColor: "#12294a",
 };
 
+// Structured data so search engines can identify the Centre
+const organisationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ResearchOrganization",
+  name: "TETFund Centre of Excellence in Food Security (TCoEFS)",
+  alternateName: "TCoEFS",
+  url: "https://www.tcoefs-unijos.org",
+  logo: "https://www.tcoefs-unijos.org/brand/tcoefs-logo.png",
+  email: "tcoefs@unijos.edu.ng",
+  telephone: "+2348034377953",
+  parentOrganization: {
+    "@type": "CollegeOrUniversity",
+    name: "University of Jos",
+  },
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "University of Jos, Naraguta Campus",
+    addressRegion: "Plateau State",
+    addressCountry: "NG",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -50,6 +72,12 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organisationJsonLd),
+          }}
+        />
         <MotionProvider>{children}</MotionProvider>
       </body>
     </html>

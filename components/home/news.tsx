@@ -39,7 +39,7 @@ export default function News({ items }: { items?: NewsItem[] }) {
   const secondary = rest.slice(0, 3);
 
   return (
-    <section className="bg-mist py-16 sm:py-20 lg:py-24">
+    <section className="bg-white py-16 sm:py-20 lg:py-24">
       <div className="shell">
         <SectionHeader
           eyebrow="Latest news"

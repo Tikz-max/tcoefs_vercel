@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUp } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ArrowRight, ArrowUp } from "lucide-react";
 import { site, socials } from "@/lib/site";
 import { ButtonLink } from "@/components/site/ui";
 
@@ -36,12 +37,92 @@ function FooterLink({ href, children }: { href: string; children: string }) {
   );
 }
 
+// Suggested next pages, shown above the footer on inner pages so a visitor
+// always has somewhere relevant to go next.
+const related = [
+  {
+    label: "Programmes",
+    text: "Postgraduate study, research, and training pathways.",
+    href: "/programmes",
+  },
+  {
+    label: "Facilities",
+    text: "Greenhouse, laboratory and research farmland.",
+    href: "/about/facilities",
+  },
+  {
+    label: "Enterprise & Demonstration",
+    text: "Production models that sustain the Centre.",
+    href: "/enterprise-demonstration",
+  },
+  {
+    label: "Leadership",
+    text: "The Director, deputies and scientific team.",
+    href: "/about/leadership",
+  },
+  {
+    label: "Partnerships",
+    text: "Ways to collaborate with or support the Centre.",
+    href: "/partnerships",
+  },
+  {
+    label: "Resources",
+    text: "Publications, reports and training materials.",
+    href: "/resources",
+  },
+  {
+    label: "Newsletters & Events",
+    text: "Quarterly issues and upcoming events.",
+    href: "/news/newsletters-events",
+  },
+];
+
+function ContinueExploring({ pathname }: { pathname: string }) {
+  if (pathname === "/") return null;
+  const links = related
+    .filter((r) => !pathname.startsWith(r.href))
+    .slice(0, 3);
+  return (
+    <nav
+      aria-label="Continue exploring"
+      className="border-t border-line bg-mist py-14"
+    >
+      <div className="shell">
+        <p className="eyebrow text-pine">Continue exploring</p>
+        <ul className="mt-6 grid gap-4 md:grid-cols-3">
+          {links.map((l) => (
+            <li key={l.href}>
+              <Link
+                href={l.href}
+                className="group flex h-full items-start justify-between gap-4 rounded-lg border border-line bg-white p-6 transition-colors duration-200 hover:border-pine"
+              >
+                <span>
+                  <span className="block text-[1.0625rem] font-semibold text-ink group-hover:text-pine">
+                    {l.label}
+                  </span>
+                  <span className="mt-1.5 block text-[0.9375rem] leading-relaxed text-stone">
+                    {l.text}
+                  </span>
+                </span>
+                <ArrowRight className="mt-1 size-5 shrink-0 text-pine transition-transform duration-200 group-hover:translate-x-0.5" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+  );
+}
+
 export { Footer };
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const pathname = usePathname();
 
   return (
+    <>
+    <ContinueExploring pathname={pathname} />
     <footer className="bg-forest text-white">
       {/* Call to action */}
       <div className="border-b border-line-inverse">
@@ -160,5 +241,6 @@ export default function Footer() {
         </div>
       </div>
     </footer>
+    </>
   );
 }

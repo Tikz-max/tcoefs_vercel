@@ -26,17 +26,17 @@ export default function Bulletin() {
 
   if (loading) {
     return (
-      <section className="bg-paper py-24 sm:py-28">
+      <section className="bg-mist py-16 sm:py-20 lg:py-24">
         <div className="shell grid gap-6 lg:grid-cols-12">
-          <div className="h-80 animate-pulse rounded-lg bg-mist lg:col-span-8" />
-          <div className="h-80 animate-pulse rounded-lg bg-mist lg:col-span-4" />
+          <div className="h-80 animate-pulse rounded-lg bg-white lg:col-span-8" />
+          <div className="h-80 animate-pulse rounded-lg bg-white lg:col-span-4" />
         </div>
       </section>
     );
   }
 
   return (
-    <section className="bg-paper py-16 sm:py-20 lg:py-24">
+    <section className="bg-mist py-16 sm:py-20 lg:py-24">
       <div className="shell grid gap-6 lg:grid-cols-12">
         {newsletter && (
           <Reveal className="lg:col-span-8">
@@ -78,6 +78,26 @@ export default function Bulletin() {
                   className="text-white/80"
                 >
                   All issues
+                </TextLink>
+              </div>
+            </article>
+          </Reveal>
+        )}
+
+        {!newsletter && (
+          <Reveal className="lg:col-span-6">
+            <article className="flex h-full flex-col rounded-lg border border-line bg-white p-8 sm:p-10">
+              <p className="eyebrow text-pine">Newsletter</p>
+              <h2 className="display display-md mt-16 text-ink sm:mt-24">
+                Quarterly updates from the Centre
+              </h2>
+              <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-stone">
+                Browse and download every published edition of the TCoEFS
+                Newsletter.
+              </p>
+              <div className="mt-auto pt-8">
+                <TextLink href="/news/newsletters-events" className="text-pine">
+                  View the archive
                 </TextLink>
               </div>
             </article>

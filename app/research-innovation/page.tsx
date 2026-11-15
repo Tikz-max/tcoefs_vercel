@@ -89,7 +89,7 @@ export default function ResearchInnovationPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[{ label: "Research" }]}
           title="Turning science into *solutions.*"

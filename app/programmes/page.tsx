@@ -59,7 +59,7 @@ export default function ProgrammesPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[{ label: "Programmes" }]}
           title="Programmes."

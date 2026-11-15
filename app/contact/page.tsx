@@ -49,7 +49,7 @@ export default function ContactPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[{ label: "Contact" }]}
           title="Contact *us.*"

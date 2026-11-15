@@ -50,7 +50,7 @@ export default function LeadershipPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[{ label: "About", href: "/about" }, { label: "Leadership" }]}
           title="Leadership and *Scientific Team.*"

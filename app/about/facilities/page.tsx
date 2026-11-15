@@ -63,7 +63,7 @@ export default function FacilitiesPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[{ label: "About", href: "/about" }, { label: "Facilities" }]}
           title="Research Infrastructure and *Facilities.*"

@@ -31,7 +31,7 @@ const pillars = [
 
 export default function Pillars() {
   return (
-    <section className="grain relative overflow-hidden bg-forest py-24 text-white sm:py-32 lg:py-40">
+    <section className="bg-forest py-16 text-white sm:py-20 lg:py-24">
       <Contours
         seed={7}
         className="absolute -right-[30%] top-[-30%] h-[160%] w-[90%] text-white/[0.05]"

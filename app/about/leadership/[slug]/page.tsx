@@ -79,7 +79,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <section className="grain relative overflow-hidden bg-forest text-white">
           <Contours
             seed={profile.name.length}

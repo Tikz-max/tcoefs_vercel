@@ -47,7 +47,7 @@ export default function TrainingExtensionPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[
             { label: "Programmes", href: "/programmes" },

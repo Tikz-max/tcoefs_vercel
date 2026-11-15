@@ -6,7 +6,7 @@ export default function NotFound() {
   return (
     <>
       <Navbar />
-      <main className="grain relative overflow-hidden bg-forest text-white">
+      <main id="main" className="bg-forest text-white">
         <Contours
           seed={6}
           className="absolute -left-[20%] -top-[20%] h-[150%] w-[100%] text-white/[0.06]"

@@ -76,7 +76,7 @@ export default function ResearchInnovationPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[
             { label: "Programmes", href: "/programmes" },

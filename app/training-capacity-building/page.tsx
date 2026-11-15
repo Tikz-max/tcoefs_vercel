@@ -124,7 +124,7 @@ export default function TrainingCapacityBuildingPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[{ label: "Training" }]}
           title="Training & *Capacity Building.*"

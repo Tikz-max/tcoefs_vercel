@@ -183,7 +183,7 @@ export default function Spotlights() {
     "grid size-12 place-items-center rounded-full border border-ink/25 text-ink transition-colors duration-500 hover:border-ink hover:bg-ink hover:text-paper disabled:pointer-events-none disabled:opacity-30";
 
   return (
-    <section className="overflow-hidden bg-paper py-16 sm:py-20 lg:py-24">
+    <section className="overflow-hidden bg-mist py-16 sm:py-20 lg:py-24">
       <div className="shell flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
         <div>
           <Reveal y={12}>
@@ -229,7 +229,7 @@ export default function Spotlights() {
             ? [0, 1, 2].map((i) => (
                 <li
                   key={i}
-                  className="aspect-[4/5] w-[80vw] shrink-0 animate-pulse rounded-lg bg-mist sm:w-[26rem]"
+                  className="aspect-[4/5] w-[80vw] shrink-0 animate-pulse rounded-lg bg-white sm:w-[26rem]"
                 />
               ))
             : cards.map((card, i) => (

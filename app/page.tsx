@@ -2,6 +2,9 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import Hero from "@/components/home/hero";
 import PartnersStrip from "@/components/home/partners-strip";
+import Pathways from "@/components/home/pathways";
+import Director from "@/components/home/director";
+import Facilities from "@/components/home/facilities";
 import About from "@/components/home/about";
 import Programmes from "@/components/home/programmes";
 import Film from "@/components/home/film";
@@ -43,17 +46,20 @@ export default async function Home() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <Hero />
-        <PartnersStrip />
+        <Pathways />
         <About />
+        <Director />
         <Programmes />
-        <Film />
         <Research />
+        <Facilities />
         <Pillars />
+        <Film />
         <Spotlights />
         <News items={news} />
         <Bulletin />
+        <PartnersStrip />
         <Faq />
       </main>
       <Footer />

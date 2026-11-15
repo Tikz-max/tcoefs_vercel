@@ -267,6 +267,12 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 bg-white">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-[60] focus:rounded-md focus:bg-pine focus:px-4 focus:py-2 focus:text-white"
+      >
+        Skip to main content
+      </a>
       {/* Utility bar */}
       <div className="hidden bg-forest text-white md:block">
         <div className="shell flex h-9 items-center justify-between text-[0.8125rem]">

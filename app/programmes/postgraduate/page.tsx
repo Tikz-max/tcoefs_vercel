@@ -89,7 +89,7 @@ export default function PostgraduateProgrammesPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[
             { label: "Programmes", href: "/programmes" },

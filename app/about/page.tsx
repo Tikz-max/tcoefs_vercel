@@ -84,7 +84,7 @@ export default function AboutPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[{ label: "About" }]}
           title="About the TETFund Centre of Excellence in *Food Security.*"

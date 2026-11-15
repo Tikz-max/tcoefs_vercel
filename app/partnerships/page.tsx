@@ -211,7 +211,7 @@ export default function PartnershipsPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[{ label: "Partnerships" }]}
           title="Partnerships and *Strategic Engagement.*"

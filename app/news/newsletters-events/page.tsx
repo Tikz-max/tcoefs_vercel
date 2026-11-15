@@ -190,7 +190,7 @@ export default function NewslettersEventsPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main id="main">
         <PageHero
           crumbs={[{ label: "News" }, { label: "Newsletters & Events" }]}
           title="Newsletters & *Events.*"
