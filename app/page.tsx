@@ -1,84 +1,68 @@
 import { Navbar } from "@/components/navbar";
-import HeroSection from "@/components/hero-section";
-import AboutSection from "@/components/about-section";
-import NewsSection from "@/components/news-section";
-import PillarsSection from "@/components/pillars-section";
-import HomeNewsSection from "@/components/home-news-section";
-import ResearchAreasSection from "@/components/research-areas-section";
 import { Footer } from "@/components/footer";
-import FAQSection from "@/components/faq-section";
-import SpotlightsSection from "@/components/spotlights-section";
-import { AnimatedSection } from "@/components/animated-section";
-import PartnersMarquee from "@/components/partners/partners-marquee";
-import ProgrammesPreviewSection from "@/components/programmes-preview-section";
-import NewsletterSection from "@/components/newsletter-section";
+import Hero from "@/components/home/hero";
+import PartnersStrip from "@/components/home/partners-strip";
+import Pathways from "@/components/home/pathways";
+import Director from "@/components/home/director";
+import Facilities from "@/components/home/facilities";
+import About from "@/components/home/about";
+import Programmes from "@/components/home/programmes";
+import Film from "@/components/home/film";
+import Research from "@/components/home/research";
+import Pillars from "@/components/home/pillars";
+import Spotlights from "@/components/home/spotlights";
+import News, { type NewsItem } from "@/components/home/news";
+import Bulletin from "@/components/home/bulletin";
+import Faq from "@/components/home/faq";
 
-export default async function Home() {
-  // Load latest news items from blog API
-  let homeNewsItems: any[] = [];
+async function getLatestNews(): Promise<NewsItem[]> {
   try {
     const res = await fetch("https://blog.tcoefs-unijos.org/api/latest-news", {
-      cache: "no-store",
-      next: { revalidate: 300 }, // Revalidate every 5 minutes
+      next: { revalidate: 300 },
+      signal: AbortSignal.timeout(6000),
     });
-
-    if (res.ok) {
-      const data = await res.json();
-      if (data.success && Array.isArray(data.articles)) {
-        homeNewsItems = data.articles.map((article: any) => ({
-          id: article.id,
-          category: article.category || "News",
-          title: article.title,
-          excerpt: article.excerpt || "",
-          date: article.date || "",
-          image: article.image || "/news-collage.png",
-          readTime: article.readTime || "5 min read",
-          url: article.url,
-        }));
-      }
-    }
+    if (!res.ok) return [];
+    const data = await res.json();
+    if (!data.success || !Array.isArray(data.articles)) return [];
+    return data.articles.map((article: any) => ({
+      id: article.id,
+      category: article.category || "News",
+      title: article.title,
+      excerpt: article.excerpt || "",
+      date: article.date || "",
+      image: article.image || "/hero/compressed/2.jpg",
+      readTime: article.readTime || "5 min read",
+      url: article.url,
+    }));
   } catch (error) {
     console.error("Error fetching latest news:", error);
+    return [];
   }
+}
+
+export default async function Home() {
+  const news = await getLatestNews();
 
   return (
-    <div className="min-h-screen bg-white overflow-x-clip">
+    <>
       <Navbar />
-      <HeroSection />
-      <AnimatedSection animation="slide-right">
-        <AboutSection />
-      </AnimatedSection>
-      <AnimatedSection animation="fade" delay={100}>
-        <NewsSection />
-      </AnimatedSection>
-      <AnimatedSection animation="slide-up" delay={100}>
-        <ProgrammesPreviewSection />
-      </AnimatedSection>
-      <AnimatedSection animation="slide-left" delay={150}>
-        <ResearchAreasSection />
-      </AnimatedSection>
-      <AnimatedSection animation="slide-up" delay={200}>
-        <PillarsSection />
-      </AnimatedSection>
-      <AnimatedSection animation="fade" delay={100}>
-        <HomeNewsSection items={homeNewsItems} />
-      </AnimatedSection>
-
-      <AnimatedSection animation="fade" delay={100}>
-        <SpotlightsSection />
-      </AnimatedSection>
-
-      <AnimatedSection animation="fade" delay={100}>
-        <NewsletterSection />
-      </AnimatedSection>
-
-      <AnimatedSection animation="fade" delay={100}>
-        <PartnersMarquee />
-      </AnimatedSection>
-      <AnimatedSection animation="fade" delay={100}>
-        <FAQSection />
-      </AnimatedSection>
+      <main id="main">
+        <Hero />
+        <Pathways />
+        <About />
+        <Director />
+        <Programmes />
+        <Research />
+        <Facilities />
+        <Pillars />
+        <Film />
+        <Spotlights />
+        <News items={news} />
+        <Bulletin />
+        <PartnersStrip />
+        <Faq />
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }

@@ -1,460 +1,326 @@
 "use client";
 
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-  SheetClose,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import { ArrowUpRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useRef } from "react";
-
-type NavChild = {
-  label: string;
-  href: string;
-  external?: boolean;
-};
-
-type NavItem =
-  | { label: string; href: string; children?: undefined }
-  | { label: string; href?: string; children: NavChild[] };
-
-const navItems: NavItem[] = [
-  { label: "Home", href: "/" },
-  {
-    label: "About",
-    children: [
-      { label: "Overview", href: "/about" },
-      { label: "Leadership", href: "/about/leadership" },
-      { label: "Facilities", href: "/about/facilities" },
-    ],
-  },
-  {
-    label: "Programmes",
-    href: "/programmes",
-    children: [
-      { label: "Programmes", href: "/programmes" },
-      { label: "Postgraduate Programmes", href: "/programmes/postgraduate" },
-      {
-        label: "Research & Innovation",
-        href: "/programmes/research-innovation",
-      },
-      { label: "Training & Extension", href: "/programmes/training-extension" },
-    ],
-  },
-  { label: "Enterprise & Demonstration", href: "/enterprise-demonstration" },
-  { label: "Partnerships", href: "/partnerships" },
-  {
-    label: "News & Events",
-    children: [
-      { label: "News", href: "https://blog.tcoefs-unijos.org", external: true },
-      { label: "Newsletters & Events", href: "/news/newsletters-events" },
-    ],
-  },
-  { label: "Resources", href: "/resources" },
-];
+import { useEffect, useRef, useState } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
+import { ArrowUpRight, ChevronDown, Mail, Menu, Phone, X } from "lucide-react";
+import { navItems, site, socials, type NavItem } from "@/lib/site";
 
 export { Navbar };
 
-export default function Navbar() {
-  const pathname = usePathname();
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
-  const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+function Brand() {
+  return (
+    <Link href="/" aria-label="TCoEFS home" className="flex items-center gap-3">
+      <Image
+        src="/brand/tcoefs-logo.png"
+        alt=""
+        width={104}
+        height={90}
+        priority
+        className="h-12 w-auto"
+      />
+      <span className="flex flex-col leading-tight">
+        <span className="text-[1.0625rem] font-semibold tracking-[-0.01em] text-ink">
+          TCoEFS
+        </span>
+        <span className="hidden text-[0.75rem] text-stone sm:block">
+          TETFund Centre of Excellence in Food Security
+        </span>
+      </span>
+    </Link>
+  );
+}
 
-  const handleMouseEnter = (label: string) => {
-    if (leaveTimer.current) clearTimeout(leaveTimer.current);
-    setOpenDropdown(label);
-  };
+function DesktopItem({ item, pathname }: { item: NavItem; pathname: string }) {
+  const [open, setOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleMouseLeave = () => {
-    leaveTimer.current = setTimeout(() => setOpenDropdown(null), 120);
-  };
+  const active = item.children
+    ? item.children.some((c) => !c.external && pathname.startsWith(c.href))
+    : item.href === pathname;
 
-  const isExactActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    return pathname === href;
-  };
+  const linkClass = `relative flex h-full items-center gap-1 px-3.5 text-[0.9375rem] font-medium transition-colors duration-200 ${
+    active ? "text-pine" : "text-ink hover:text-pine"
+  }`;
 
-  const isParentActive = (children: NavChild[]) => {
-    return children.some(
-      (child) => !child.external && pathname.startsWith(child.href),
+  const marker = active ? (
+    <span
+      aria-hidden="true"
+      className="absolute inset-x-3.5 bottom-0 h-0.5 bg-pine"
+    />
+  ) : null;
+
+  if (!item.children) {
+    return (
+      <Link href={item.href!} className={linkClass}>
+        {item.label}
+        {marker}
+      </Link>
     );
-  };
+  }
 
-  const toggleMobileSection = (label: string) => {
-    setExpandedMobile((prev) => (prev === label ? null : label));
+  const show = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpen(true);
+  };
+  const hide = () => {
+    closeTimer.current = setTimeout(() => setOpen(false), 120);
   };
 
   return (
-    <nav
-      className="w-full bg-white border-b border-gray-100 px-6 py-4 sticky top-0 z-50"
-      suppressHydrationWarning
+    <div
+      className="relative h-full"
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setOpen(false);
+      }}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-3 flex-shrink-0"
-          aria-label="TCoEFS Home"
-        >
-          <Image
-            src="/brand/tcoefs-logo.png"
-            alt="TCoEFS Logo"
-            width={44}
-            height={44}
-            className="rounded-full"
-          />
-          <span className="text-sm font-semibold" style={{ color: "#2f3e2f" }}>
-            TCoEFS
-          </span>
-        </Link>
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="true"
+        onClick={() => setOpen((v) => !v)}
+        className={linkClass}
+      >
+        {item.label}
+        <ChevronDown
+          className={`size-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+        {marker}
+      </button>
 
-        {/* Desktop Nav */}
-        <div className="hidden lg:flex items-center gap-1">
-          {navItems.map((item) => {
-            if (!item.children) {
-              // Single link
-              const active = isExactActive(item.href);
-              return (
-                <div key={item.label} className="relative group px-3 py-2">
-                  <Link
-                    href={item.href}
-                    className="text-sm font-medium transition-colors relative block pb-0.5"
-                    style={{ color: active ? "#2f3e2f" : "#4a5b4a" }}
-                  >
-                    {item.label}
-                    {active && (
-                      <span
-                        className="absolute -bottom-0.5 left-0 right-0 h-0.5 transition-all duration-200 group-hover:opacity-0"
-                        style={{ backgroundColor: "#2d5a2d" }}
-                      />
-                    )}
-                    <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-                  </Link>
-                </div>
-              );
-            }
-
-            // Dropdown
-            const parentActive =
-              isParentActive(item.children) ||
-              !!(item.href && isExactActive(item.href));
-            const isOpen = openDropdown === item.label;
-
-            return (
-              <div
-                key={item.label}
-                className="relative px-3 py-2"
-                onMouseEnter={() => handleMouseEnter(item.label)}
-                onMouseLeave={handleMouseLeave}
-              >
-                {item.href ? (
-                  <Link
-                    href={item.href}
-                    className="flex items-center gap-1 text-sm font-medium transition-colors relative pb-0.5 group"
-                    style={{
-                      color: parentActive || isOpen ? "#2f3e2f" : "#4a5b4a",
-                    }}
-                    aria-expanded={isOpen}
-                    aria-haspopup="true"
-                  >
-                    {item.label}
-                    <ChevronDown
-                      className="w-3.5 h-3.5 transition-transform duration-200 flex-shrink-0"
-                      style={{
-                        transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                      }}
-                    />
-                    {parentActive && !isOpen && (
-                      <span
-                        className="absolute -bottom-0.5 left-0 right-0 h-0.5"
-                        style={{ backgroundColor: "#2d5a2d" }}
-                      />
-                    )}
-                    <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-                  </Link>
-                ) : (
-                  <button
-                    className="flex items-center gap-1 text-sm font-medium transition-colors relative pb-0.5 group"
-                    style={{
-                      color: parentActive || isOpen ? "#2f3e2f" : "#4a5b4a",
-                    }}
-                    aria-expanded={isOpen}
-                    aria-haspopup="true"
-                  >
-                    {item.label}
-                    <ChevronDown
-                      className="w-3.5 h-3.5 transition-transform duration-200 flex-shrink-0"
-                      style={{
-                        transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                      }}
-                    />
-                    {parentActive && !isOpen && (
-                      <span
-                        className="absolute -bottom-0.5 left-0 right-0 h-0.5"
-                        style={{ backgroundColor: "#2d5a2d" }}
-                      />
-                    )}
-                    <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-gradient-to-r from-[#5a7c65] to-[#f4c542] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-                  </button>
-                )}
-
-                {/* Dropdown Panel */}
-                <div
-                  className={`absolute top-full left-1/2 -translate-x-1/2 mt-3 bg-white rounded-xl shadow-lg border border-gray-100 py-1.5 min-w-[220px] transition-all duration-200 ${
-                    isOpen
-                      ? "opacity-100 translate-y-0 pointer-events-auto"
-                      : "opacity-0 -translate-y-1 pointer-events-none"
-                  }`}
-                  onMouseEnter={() => handleMouseEnter(item.label)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  {item.children.map((child, childIndex) => {
-                    const childActive =
-                      !child.external && isExactActive(child.href);
-                    const isFirstAndParentLink =
-                      childIndex === 0 && item.href && child.href === item.href;
-                    if (child.external) {
-                      return (
-                        <a
-                          key={child.label}
-                          href={child.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-between px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#2d5a2d]/5"
-                          style={{ color: "#4a5b4a" }}
-                          onClick={() => setOpenDropdown(null)}
-                        >
-                          {child.label}
-                          <ArrowUpRight className="w-3.5 h-3.5 opacity-60 flex-shrink-0" />
-                        </a>
-                      );
-                    }
-                    return (
-                      <div key={child.label}>
-                        <Link
-                          href={child.href}
-                          className="block px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#2d5a2d]/5"
-                          style={{ color: childActive ? "#2f3e2f" : "#4a5b4a" }}
-                          onClick={() => setOpenDropdown(null)}
-                        >
-                          {child.label}
-                          {childActive && (
-                            <span className="ml-2 inline-block w-1.5 h-1.5 rounded-full bg-[#2d5a2d] align-middle" />
-                          )}
-                        </Link>
-                        {isFirstAndParentLink && (
-                          <div className="mx-4 my-1 h-px bg-gray-100" />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Contact CTA */}
-        <div className="hidden lg:block flex-shrink-0">
-          <Link href="/contact">
-            <Button className="text-white font-medium px-5 py-2 rounded-full transition-all duration-300 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#1e4a1e] hover:to-[#2d5a2d] shadow-md hover:shadow-lg hover:scale-105 text-sm">
-              Contact Us
-            </Button>
-          </Link>
-        </div>
-
-        {/* Mobile: Contact + Hamburger */}
-        <div className="flex items-center gap-3 lg:hidden">
-          <Link href="/contact">
-            <Button className="h-9 px-4 text-white font-medium rounded-full transition-all duration-300 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#4a5b4a] hover:to-[#2d5a2d] shadow-md text-sm">
-              Contact Us
-            </Button>
-          </Link>
-
-          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-            <SheetTrigger asChild>
-              <button
-                className="p-2"
-                aria-label={menuOpen ? "Close menu" : "Open menu"}
-                suppressHydrationWarning
-              >
-                {menuOpen ? (
-                  <svg
-                    className="w-5 h-5"
-                    style={{ color: "#2f3e2f" }}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    className="w-5 h-5"
-                    style={{ color: "#2f3e2f" }}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
-                )}
-              </button>
-            </SheetTrigger>
-
-            <SheetContent side="right" className="bg-white p-0 w-[300px]">
-              <SheetTitle className="sr-only">Navigation</SheetTitle>
-
-              <div className="flex flex-col h-full overflow-y-auto">
-                <div className="px-6 py-5 border-b border-gray-100">
-                  <span
-                    className="text-base font-semibold"
-                    style={{ color: "#2f3e2f" }}
-                  >
-                    Menu
+      {open && (
+        <div className="absolute left-0 top-full w-80 pt-px">
+          <div className="rounded-b-lg border border-t-0 border-line bg-white p-2 shadow-[0_16px_40px_-12px_rgb(15_23_42_/_0.18)]">
+            {item.children.map((child) => {
+              const inner = (
+                <>
+                  <span className="block text-[0.9375rem] font-medium text-ink group-hover:text-pine">
+                    {child.label}
                   </span>
-                </div>
+                  {child.description && (
+                    <span className="mt-0.5 block text-[0.8125rem] leading-snug text-stone">
+                      {child.description}
+                    </span>
+                  )}
+                </>
+              );
+              const cls =
+                "group block rounded-md px-3.5 py-3 transition-colors duration-200 hover:bg-mist";
+              return child.external ? (
+                <a
+                  key={child.label}
+                  href={child.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cls}
+                >
+                  {inner}
+                </a>
+              ) : (
+                <Link
+                  key={child.label}
+                  href={child.href}
+                  onClick={() => setOpen(false)}
+                  className={cls}
+                >
+                  {inner}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
-                <nav className="flex-1 px-3 py-3">
-                  {navItems.map((item) => {
-                    if (!item.children) {
-                      return (
-                        <SheetClose asChild key={item.label}>
-                          <Link
-                            href={item.href}
-                            className="block px-3 py-3 text-sm font-medium rounded-lg transition-colors hover:bg-[#2d5a2d]/5"
-                            style={{
-                              color: isExactActive(item.href)
-                                ? "#2f3e2f"
-                                : "#4a5b4a",
-                            }}
-                          >
-                            {item.label}
-                          </Link>
-                        </SheetClose>
-                      );
-                    }
+function MobileMenu({ pathname }: { pathname: string }) {
+  const [open, setOpen] = useState(false);
 
-                    const isExpanded = expandedMobile === item.label;
-                    const parentActive = isParentActive(item.children);
+  useEffect(() => setOpen(false), [pathname]);
 
-                    return (
-                      <div key={item.label}>
-                        <div className="w-full flex items-center justify-between rounded-lg hover:bg-[#2d5a2d]/5 transition-colors">
-                          {item.href ? (
-                            <SheetClose asChild>
-                              <Link
-                                href={item.href}
-                                className="flex-1 px-3 py-3 text-sm font-medium text-left"
-                                style={{
-                                  color:
-                                    parentActive || isExpanded
-                                      ? "#2f3e2f"
-                                      : "#4a5b4a",
-                                }}
+  const groups: NavItem[] = [
+    { label: "Home", href: "/" },
+    ...navItems,
+    { label: "Contact", href: "/contact" },
+  ];
+
+  return (
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger asChild>
+        <button
+          type="button"
+          aria-label="Open menu"
+          className="grid size-11 place-items-center rounded-md border border-line text-ink"
+        >
+          <Menu className="size-5" />
+        </button>
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 z-[60] bg-ink/40" />
+        <Dialog.Content
+          aria-describedby={undefined}
+          className="fixed inset-y-0 right-0 z-[70] flex w-full max-w-sm flex-col overflow-y-auto bg-white shadow-xl data-[state=open]:animate-in data-[state=open]:slide-in-from-right duration-200"
+        >
+          <div className="flex h-16 shrink-0 items-center justify-between border-b border-line px-5">
+            <Dialog.Title className="text-[1rem] font-semibold text-ink">
+              Menu
+            </Dialog.Title>
+            <Dialog.Close asChild>
+              <button
+                type="button"
+                aria-label="Close menu"
+                className="grid size-11 place-items-center rounded-md border border-line text-ink"
+              >
+                <X className="size-5" />
+              </button>
+            </Dialog.Close>
+          </div>
+
+          <nav aria-label="Primary" className="flex-1 px-5 py-4">
+            <ul className="divide-y divide-line">
+              {groups.map((item) => (
+                <li key={item.label} className="py-3">
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className={`block py-1.5 text-[1.0625rem] font-semibold ${
+                        pathname === item.href ? "text-pine" : "text-ink"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <span className="block py-1.5 text-[1.0625rem] font-semibold text-ink">
+                      {item.label}
+                    </span>
+                  )}
+                  {item.children && (
+                    <ul className="mt-1 space-y-1 border-l-2 border-line pl-4">
+                      {item.children
+                        .filter((c) => c.href !== item.href)
+                        .map((child) => (
+                          <li key={child.label}>
+                            {child.external ? (
+                              <a
+                                href={child.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex min-h-11 items-center gap-1 text-[0.9375rem] text-stone"
                               >
-                                {item.label}
+                                {child.label}
+                                <ArrowUpRight className="size-3.5" />
+                              </a>
+                            ) : (
+                              <Link
+                                href={child.href}
+                                onClick={() => setOpen(false)}
+                                className={`flex min-h-11 items-center text-[0.9375rem] ${
+                                  pathname === child.href
+                                    ? "font-medium text-pine"
+                                    : "text-stone"
+                                }`}
+                              >
+                                {child.label}
                               </Link>
-                            </SheetClose>
-                          ) : (
-                            <span
-                              className="flex-1 px-3 py-3 text-sm font-medium"
-                              style={{
-                                color:
-                                  parentActive || isExpanded
-                                    ? "#2f3e2f"
-                                    : "#4a5b4a",
-                              }}
-                            >
-                              {item.label}
-                            </span>
-                          )}
-                          <button
-                            onClick={() => toggleMobileSection(item.label)}
-                            className="px-3 py-3"
-                            aria-label={`${isExpanded ? "Collapse" : "Expand"} ${item.label}`}
-                            style={{
-                              color:
-                                parentActive || isExpanded
-                                  ? "#2f3e2f"
-                                  : "#4a5b4a",
-                            }}
-                          >
-                            <ChevronDown
-                              className="w-4 h-4 transition-transform duration-200 flex-shrink-0"
-                              style={{
-                                transform: isExpanded
-                                  ? "rotate(180deg)"
-                                  : "rotate(0deg)",
-                              }}
-                            />
-                          </button>
-                        </div>
+                            )}
+                          </li>
+                        ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-                        {isExpanded && (
-                          <div className="ml-3 mb-1 border-l border-gray-100 pl-3">
-                            {item.children.map((child) => {
-                              if (child.external) {
-                                return (
-                                  <SheetClose asChild key={child.label}>
-                                    <a
-                                      href={child.href}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-colors hover:bg-[#2d5a2d]/5"
-                                      style={{ color: "#4a5b4a" }}
-                                    >
-                                      {child.label}
-                                      <ArrowUpRight className="w-3.5 h-3.5 opacity-50 flex-shrink-0" />
-                                    </a>
-                                  </SheetClose>
-                                );
-                              }
-                              return (
-                                <SheetClose asChild key={child.label}>
-                                  <Link
-                                    href={child.href}
-                                    className="block px-3 py-2.5 text-sm font-medium rounded-lg transition-colors hover:bg-[#2d5a2d]/5"
-                                    style={{
-                                      color: isExactActive(child.href)
-                                        ? "#2f3e2f"
-                                        : "#4a5b4a",
-                                    }}
-                                  >
-                                    {child.label}
-                                  </Link>
-                                </SheetClose>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </nav>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <div className="shrink-0 border-t border-line bg-mist px-5 py-5 text-[0.875rem] text-stone">
+            <a href={`mailto:${site.email}`} className="block font-medium text-ink">
+              {site.email}
+            </a>
+            <a href={site.phoneHref} className="mt-1 block">
+              {site.phone}
+            </a>
+            <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
+              {socials.map((s) => (
+                <li key={s.label}>
+                  <a href={s.href} target="_blank" rel="noopener noreferrer">
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+}
+
+export default function Navbar() {
+  const pathname = usePathname();
+
+  return (
+    <header className="sticky top-0 z-50 bg-white">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-[60] focus:rounded-md focus:bg-pine focus:px-4 focus:py-2 focus:text-white"
+      >
+        Skip to main content
+      </a>
+      {/* Utility bar */}
+      <div className="hidden bg-forest text-white md:block">
+        <div className="shell flex h-9 items-center justify-between text-[0.8125rem]">
+          <p className="text-white/80">
+            University of Jos, Naraguta Campus, Plateau State, Nigeria
+          </p>
+          <div className="flex items-center gap-6">
+            <a
+              href={`mailto:${site.email}`}
+              className="flex items-center gap-2 text-white/90 hover:text-white"
+            >
+              <Mail className="size-3.5" />
+              {site.email}
+            </a>
+            <a
+              href={site.phoneHref}
+              className="flex items-center gap-2 text-white/90 hover:text-white"
+            >
+              <Phone className="size-3.5" />
+              {site.phone}
+            </a>
+          </div>
         </div>
       </div>
-    </nav>
+
+      <div className="border-b border-line">
+        <div className="shell flex h-[4.5rem] items-center justify-between gap-6">
+          <Brand />
+
+          <nav aria-label="Primary" className="hidden h-full items-center xl:flex">
+            {navItems.map((item) => (
+              <DesktopItem key={item.label} item={item} pathname={pathname} />
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/contact"
+              className="hidden h-11 items-center rounded-md bg-pine px-5 text-[0.9375rem] font-semibold text-white transition-colors duration-200 hover:bg-leaf sm:inline-flex"
+            >
+              Contact us
+            </Link>
+            <div className="xl:hidden">
+              <MobileMenu pathname={pathname} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }

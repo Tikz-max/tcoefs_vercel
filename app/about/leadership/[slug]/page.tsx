@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Mail, Phone, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Mail, Phone } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { Portrait } from "@/components/site/profile";
+import { Contours } from "@/components/site/ui";
+import { Reveal } from "@/components/site/motion";
 import {
   getLeadershipProfile,
   leadershipProfiles,
-  type TeamProfile,
 } from "@/lib/data/leadership";
 
 type ProfilePageProps = {
@@ -20,207 +21,252 @@ export function generateStaticParams() {
   return leadershipProfiles.map((profile) => ({ slug: profile.slug }));
 }
 
-export async function generateMetadata({ params }: ProfilePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ProfilePageProps): Promise<Metadata> {
   const { slug } = await params;
   const profile = getLeadershipProfile(slug);
-
-  if (!profile) {
-    return { title: "Leadership Profile | TCoEFS" };
-  }
-
+  if (!profile) return { title: "Leadership Profile" };
   return {
-    title: `${profile.name} | Leadership and Scientific Team | TCoEFS`,
+    title: `${profile.name} | Leadership and Scientific Team`,
     description: `${profile.name} - ${profile.role}, ${profile.specialization}.`,
   };
 }
 
-function ProfileImage({ profile }: { profile: TeamProfile }) {
-  if (profile.image) {
-    return (
-      <div className="relative h-full w-full">
-        <Image
-          src={profile.image}
-          alt={profile.name}
-          fill
-          className="object-cover"
-          style={{ objectPosition: profile.imagePosition ?? "center top" }}
-          priority
-        />
-      </div>
-    );
-  }
-
-  const initials = profile.name
-    .replace(/^(Prof\.|Dr\.|Mr\.|Mrs\.|Ms\.)\s+/i, "")
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join("");
-
-  return (
-    <div className="flex h-full w-full items-center justify-center bg-[radial-gradient(circle_at_30%_20%,rgba(244,197,66,0.26),transparent_32%),linear-gradient(135deg,rgba(45,90,45,0.12),rgba(90,124,101,0.22))]">
-      <span className="text-5xl font-bold tracking-tight text-[#2f3e2f]/55">
-        {initials}
-      </span>
-    </div>
-  );
-}
-
 function ContentSection({
+  id,
+  index,
   title,
   children,
 }: {
+  id: string;
+  index: string;
   title: string;
   children: ReactNode;
 }) {
   return (
-    <section className="border-t border-[#2d5a2d]/12 py-8 first:border-t-0 first:pt-0">
-      <h2 className="text-2xl font-bold tracking-[-0.02em] text-[#2f3e2f]">
-        {title}
-      </h2>
-      <div className="mt-4 text-base leading-8 text-[#4a5b4a]">{children}</div>
-    </section>
+    <Reveal as="section">
+      <div id={id} className="scroll-mt-28 border-t border-line py-10">
+        <h2 className="eyebrow flex items-center gap-4 text-wheat-deep">
+          <span>{index}</span>
+          <span className="text-pine">{title}</span>
+        </h2>
+        <div className="mt-7">{children}</div>
+      </div>
+    </Reveal>
   );
 }
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const { slug } = await params;
   const profile = getLeadershipProfile(slug);
-
   if (!profile) notFound();
 
-  return (
-    <div className="min-h-screen bg-[#fbfcf8] text-[#2f3e2f]">
-      <Navbar />
-      <main>
-        <section className="px-4 pb-16 pt-16 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-6xl">
-            <Link
-              href="/about/leadership"
-              className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-[#2d5a2d]"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Leadership
-            </Link>
+  const sections = [
+    profile.profileSummary?.length
+      ? { id: "summary", title: "Professional summary" }
+      : null,
+    profile.qualifications?.length
+      ? { id: "qualifications", title: "Qualifications" }
+      : null,
+    profile.researchInterests?.length
+      ? { id: "interests", title: "Research interests" }
+      : null,
+  ].filter(Boolean) as { id: string; title: string }[];
 
-            <div className="grid gap-8 rounded-[2rem] bg-white p-5 shadow-[0_24px_80px_rgba(47,62,47,0.1)] ring-1 ring-[#2d5a2d]/10 md:grid-cols-[0.75fr_1.25fr] md:p-8">
-              <div className="min-h-[380px] overflow-hidden rounded-[1.5rem] bg-[#eef3ed]">
-                <ProfileImage profile={profile} />
-              </div>
-              <div className="flex flex-col justify-center py-4">
-                <p className="mb-4 text-sm font-semibold uppercase tracking-[0.08em] text-[#2d5a2d]">
-                  {profile.group}
+  const hasContact = profile.email || profile.phone || profile.googleScholar;
+
+  return (
+    <>
+      <Navbar />
+      <main id="main">
+        <section className="grain relative overflow-hidden bg-forest text-white">
+          <Contours
+            seed={profile.name.length}
+            className="absolute -left-[25%] top-[-20%] h-[150%] w-[95%] text-white/[0.06]"
+          />
+          <div className="shell relative grid gap-x-12 gap-y-10 py-12 lg:grid-cols-12 lg:items-center lg:py-16">
+            <div className="lg:col-span-7">
+              <Link
+                href="/about/leadership"
+                className="eyebrow group inline-flex items-center gap-3 text-sage transition-colors hover:text-white"
+              >
+                <ArrowLeft className="size-4 transition-transform duration-500 ease-expo group-hover:-translate-x-1" />
+                Back to leadership
+              </Link>
+              <p className="eyebrow mt-8 text-wheat">{profile.group}</p>
+              <h1 className="display display-xl mt-5">{profile.name}</h1>
+              <p className="mt-6 text-[1.125rem] font-medium text-white">
+                {profile.roleAtCentre ?? profile.role}
+              </p>
+              <p className="mt-1.5 max-w-xl text-[1rem] text-white/65">
+                {profile.specialization}
+              </p>
+              {profile.institution && (
+                <p className="mt-1.5 max-w-xl text-[0.9375rem] text-white/50">
+                  {profile.institution}
                 </p>
-                <h1 className="text-4xl font-bold leading-tight tracking-[-0.03em] text-[#2f3e2f] md:text-6xl">
-                  {profile.name}
-                </h1>
-                <p className="mt-5 text-xl font-semibold text-[#2d5a2d]">
-                  {profile.roleAtCentre ?? profile.role}
-                </p>
-                <p className="mt-3 max-w-2xl text-base leading-7 text-[#4a5b4a]">
-                  {profile.specialization}
-                </p>
-                {profile.institution && (
-                  <p className="mt-2 max-w-2xl text-sm leading-7 text-[#4a5b4a]/80">
-                    {profile.institution}
-                  </p>
-                )}
-                <div className="mt-8 rounded-2xl bg-[#fbfcf8] p-5 ring-1 ring-[#2d5a2d]/10">
-                  <p className="text-sm font-semibold uppercase tracking-[0.08em] text-[#2d5a2d]/75">
-                    Contact
-                  </p>
-                  <div className="mt-3 space-y-2.5">
-                    {profile.email && (
-                      <a
-                        href={`mailto:${profile.email}`}
-                        className="flex items-center gap-2.5 text-sm text-[#4a5b4a] hover:text-[#2d5a2d]"
-                      >
-                        <Mail className="h-4 w-4 shrink-0 text-[#2d5a2d]/70" />
-                        {profile.email}
-                      </a>
-                    )}
-                    {profile.phone && (
-                      <a
-                        href={`tel:${profile.phone}`}
-                        className="flex items-center gap-2.5 text-sm text-[#4a5b4a] hover:text-[#2d5a2d]"
-                      >
-                        <Phone className="h-4 w-4 shrink-0 text-[#2d5a2d]/70" />
-                        {profile.phone}
-                      </a>
-                    )}
-                    {profile.googleScholar && (
-                      <a
-                        href={profile.googleScholar}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2.5 text-sm text-blue-600 hover:text-blue-800"
-                      >
-                        <ExternalLink className="h-4 w-4 shrink-0" />
-                        Google Scholar Profile
-                      </a>
-                    )}
-                    {!profile.email && !profile.phone && !profile.googleScholar && (
-                      <p className="text-sm text-[#4a5b4a]">
-                        Contact details will be shown once approved for publication.
-                      </p>
-                    )}
-                  </div>
-                </div>
+              )}
+            </div>
+            <div className="lg:col-span-4 lg:col-start-9">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-pine">
+                <Portrait
+                  profile={profile}
+                  priority
+                  sizes="(min-width: 1024px) 32vw, 100vw"
+                />
               </div>
             </div>
           </div>
         </section>
 
-        <section className="px-4 pb-20 sm:px-6 lg:px-8">
-          <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[260px_1fr]">
-            <aside className="h-fit rounded-2xl bg-[#244f2b] p-6 text-white lg:sticky lg:top-28">
-              <p className="text-sm font-semibold uppercase tracking-[0.08em] text-[#f4c542]">
-                Profile Sections
-              </p>
-              <div className="mt-5 space-y-3 text-sm text-white/76">
-                <p>Professional Summary</p>
-                <p>Qualifications</p>
-                <p>Research Interests</p>
+        <section className="bg-paper py-16 sm:py-24">
+          <div className="shell grid gap-x-12 gap-y-12 lg:grid-cols-12">
+            <aside className="lg:col-span-4">
+              <div className="space-y-10 lg:sticky lg:top-28">
+                <div>
+                  <p className="eyebrow mb-5 text-stone">Contact</p>
+                  {hasContact ? (
+                    <ul className="space-y-3 text-[0.9375rem]">
+                      {profile.email && (
+                        <li>
+                          <a
+                            href={`mailto:${profile.email}`}
+                            className="group inline-flex items-center gap-3 break-all text-ink"
+                          >
+                            <Mail className="size-4 shrink-0 text-pine" />
+                            <span className="link-draw pb-0.5">
+                              {profile.email}
+                            </span>
+                          </a>
+                        </li>
+                      )}
+                      {profile.phone && (
+                        <li>
+                          <a
+                            href={`tel:${profile.phone}`}
+                            className="group inline-flex items-center gap-3 text-ink"
+                          >
+                            <Phone className="size-4 shrink-0 text-pine" />
+                            <span className="link-draw pb-0.5">
+                              {profile.phone}
+                            </span>
+                          </a>
+                        </li>
+                      )}
+                      {profile.googleScholar && (
+                        <li>
+                          <a
+                            href={profile.googleScholar}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group inline-flex items-center gap-3 text-ink"
+                          >
+                            <ArrowUpRight className="size-4 shrink-0 text-pine" />
+                            <span className="link-draw pb-0.5">
+                              Google Scholar profile
+                            </span>
+                          </a>
+                        </li>
+                      )}
+                    </ul>
+                  ) : (
+                    <p className="text-[0.9375rem] leading-relaxed text-stone">
+                      Contact details will be shown once approved for
+                      publication.
+                    </p>
+                  )}
+                </div>
+
+                {sections.length > 0 && (
+                  <nav aria-label="Profile sections" className="hidden lg:block">
+                    <p className="eyebrow mb-5 text-stone">Profile sections</p>
+                    <ul className="space-y-2.5 text-[0.9375rem]">
+                      {sections.map((s) => (
+                        <li key={s.id}>
+                          <a href={`#${s.id}`} className="group text-ink">
+                            <span className="link-draw pb-0.5">{s.title}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                )}
               </div>
             </aside>
 
-            <div className="rounded-2xl bg-white p-6 shadow-[0_18px_60px_rgba(47,62,47,0.08)] ring-1 ring-[#2d5a2d]/10 md:p-8">
+            <div className="lg:col-span-7 lg:col-start-6">
               {profile.profileSummary?.length ? (
-                <ContentSection title="Professional Summary">
+                <ContentSection
+                  id="summary"
+                  index="01"
+                  title="Professional summary"
+                >
                   <div className="space-y-5">
-                    {profile.profileSummary.map((paragraph) => (
-                      <p key={paragraph}>{paragraph}</p>
+                    {profile.profileSummary.map((paragraph, i) => (
+                      <p
+                        key={paragraph}
+                        className={
+                          i === 0
+                            ? "text-[1.125rem] font-semibold leading-snug text-ink"
+                            : "prose-body text-stone"
+                        }
+                      >
+                        {paragraph}
+                      </p>
                     ))}
                   </div>
                 </ContentSection>
               ) : null}
 
               {profile.qualifications?.length ? (
-                <ContentSection title="Qualifications">
-                  <ul className="list-disc space-y-2 pl-5">
+                <ContentSection
+                  id="qualifications"
+                  index="02"
+                  title="Qualifications"
+                >
+                  <ul>
                     {profile.qualifications.map((qualification) => (
-                      <li key={qualification}>{qualification}</li>
+                      <li
+                        key={qualification}
+                        className="border-b border-line py-3.5 font-display text-[1.2rem] tracking-[-0.01em] text-ink first:pt-0 last:border-b-0"
+                      >
+                        {qualification}
+                      </li>
                     ))}
                   </ul>
                 </ContentSection>
               ) : null}
 
               {profile.researchInterests?.length ? (
-                <ContentSection title="Research Interests">
-                  <ul className="list-disc space-y-2 pl-5">
+                <ContentSection
+                  id="interests"
+                  index="03"
+                  title="Research interests"
+                >
+                  <ul className="flex flex-wrap gap-2">
                     {profile.researchInterests.map((interest) => (
-                      <li key={interest}>{interest}</li>
+                      <li
+                        key={interest}
+                        className="rounded-full border border-ink/20 px-4 py-2 text-[0.9rem] text-ink"
+                      >
+                        {interest}
+                      </li>
                     ))}
                   </ul>
                 </ContentSection>
               ) : null}
 
+              {sections.length === 0 && (
+                <p className="prose-body border-t border-line pt-10 text-stone">
+                  A full profile will be published here shortly.
+                </p>
+              )}
             </div>
           </div>
         </section>
       </main>
       <Footer />
-    </div>
+    </>
   );
 }

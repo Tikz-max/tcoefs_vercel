@@ -1,13 +1,60 @@
 import type React from "react";
-import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import type { Metadata, Viewport } from "next";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
 import "./globals.css";
+import { MotionProvider } from "@/components/site/motion";
 
 export const metadata: Metadata = {
-  title: "TETFund Center of Excellence for Food Security",
+  metadataBase: new URL("https://www.tcoefs-unijos.org"),
+  title: {
+    default:
+      "TETFund Centre of Excellence in Food Security | University of Jos",
+    template: "%s | TCoEFS, University of Jos",
+  },
   description:
-    "TETFund Center of Excellence for Food Security, University of Jos",
+    "The TETFund Centre of Excellence in Food Security (TCoEFS), University of Jos, advances climate-smart agriculture, postgraduate education, enterprise-driven demonstration, and strategic partnerships for resilient food systems.",
+  icons: {
+    icon: "/brand/tcoefs-logo.png",
+    apple: "/brand/tcoefs-logo.png",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "TCoEFS, University of Jos",
+    title: "TETFund Centre of Excellence in Food Security",
+    description:
+      "Research, postgraduate education, enterprise and partnerships for resilient food systems in Nigeria and across Africa.",
+    images: ["/hero/compressed/2.jpg"],
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#12294a",
+};
+
+// Structured data so search engines can identify the Centre
+const organisationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ResearchOrganization",
+  name: "TETFund Centre of Excellence in Food Security (TCoEFS)",
+  alternateName: "TCoEFS",
+  url: "https://www.tcoefs-unijos.org",
+  logo: "https://www.tcoefs-unijos.org/brand/tcoefs-logo.png",
+  email: "tcoefs@unijos.edu.ng",
+  telephone: "+2348034377953",
+  parentOrganization: {
+    "@type": "CollegeOrUniversity",
+    name: "University of Jos",
+  },
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "University of Jos, Naraguta Campus",
+    addressRegion: "Plateau State",
+    addressCountry: "NG",
+  },
 };
 
 export default function RootLayout({
@@ -18,29 +65,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
           rel="preconnect"
           href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com"
           crossOrigin=""
         />
-        <link rel="icon" href="/brand/tcoefs-logo.png" type="image/png" />
-        <link
-          rel="alternate icon"
-          href="/brand/tcoefs-logo.png"
-          type="image/png"
-        />
-        <link rel="apple-touch-icon" href="/brand/tcoefs-logo.png" />
-        <meta name="theme-color" content="#2d5a2d" />
-        <style>{`
-html {
-  font-family: ${GeistSans.style.fontFamily};
-  --font-sans: ${GeistSans.variable};
-  --font-mono: ${GeistMono.variable};
-}
-        `}</style>
       </head>
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organisationJsonLd),
+          }}
+        />
+        <MotionProvider>{children}</MotionProvider>
+      </body>
     </html>
   );
 }

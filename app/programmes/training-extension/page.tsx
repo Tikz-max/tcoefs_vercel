@@ -1,11 +1,22 @@
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { AnimatedSection } from "@/components/animated-section";
+import { PageHero } from "@/components/site/page-hero";
+import {
+  ButtonLink,
+  CheckList,
+  NumberedList,
+  Section,
+  SectionHeader,
+} from "@/components/site/ui";
+import { CtaPanel, P, SplitFeature } from "@/components/site/blocks";
+import { Reveal } from "@/components/site/motion";
 
-// ─── Data ──────────────────────────────────────────────────────────────────────
+export const metadata: Metadata = {
+  title: "Training & Extension",
+  description:
+    "Translating research into practical skills, enterprise development, and community impact.",
+};
 
 const shortCourses = [
   "Wholesome Animal Products Processing (Meat, Egg, Milk)",
@@ -32,296 +43,179 @@ const communityItems = [
   "Institutional and stakeholder engagement",
 ];
 
-// ─── Page ──────────────────────────────────────────────────────────────────────
-
 export default function TrainingExtensionPage() {
   return (
-    <div className="min-h-screen bg-white overflow-x-clip">
+    <>
       <Navbar />
+      <main id="main">
+        <PageHero
+          crumbs={[
+            { label: "Programmes", href: "/programmes" },
+            { label: "Training & Extension" },
+          ]}
+          title="Training & *Extension.*"
+          lede="Translating research into practical skills, enterprise development, and community impact."
+          image="/agricultural-training-workshop.jpg"
+          imageAlt="Training workshop at TCoEFS"
+        />
 
-      {/* ── Hero — split panel: content left, image right ────────────────────── */}
-      <section className="relative min-h-[65vh] grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
-        {/* Left: content */}
-        <div className="relative flex flex-col justify-center px-8 sm:px-12 lg:px-16 xl:px-20 pt-28 pb-16 bg-white z-10">
-          {/* Breadcrumb-style overline */}
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2d5a2d]/55 mb-6">
-            Programmes / Training & Extension
-          </p>
-
-          <h1 className="text-5xl md:text-6xl font-bold text-[#2f3e2f] leading-none tracking-tight mb-2">
-            Training
-          </h1>
-          <h1 className="text-5xl md:text-6xl font-normal text-[#4a5b4a] leading-none tracking-tight mb-8">
-            & Extension.
-          </h1>
-
-          {/* Left-anchored rule */}
-          <div className="w-10 h-px bg-gradient-to-r from-[#2d5a2d]/50 to-transparent mb-8" />
-
-          <p className="text-lg text-[#4a5b4a] leading-relaxed max-w-md">
-            Translating research into practical skills, enterprise development,
-            and community impact.
-          </p>
-        </div>
-
-        {/* Right: image panel — visible, no veil ─────────────────────────── */}
-        <div className="relative hidden lg:block">
-          <Image
-            src="/agricultural-training-workshop.jpg"
-            alt="Training workshop at TCoEFS"
-            fill
-            priority
-            sizes="50vw"
-            className="object-cover"
-          />
-          {/* Subtle left-edge fade to blend with white content panel */}
-          <div
-            className="absolute inset-y-0 left-0 w-20 pointer-events-none z-10"
-            style={{
-              background:
-                "linear-gradient(to right, rgba(255,255,255,0.9), transparent)",
-            }}
-          />
-        </div>
-
-        {/* Mobile: faint image background */}
-        <div className="lg:hidden absolute inset-0 z-0" aria-hidden="true">
-          <Image
-            src="/agricultural-training-workshop.jpg"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-10"
-          />
-        </div>
-      </section>
-
-      {/* ── Section 1: Introduction — centered lead, no heading ──────────────── */}
-      <AnimatedSection animation="fade">
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2d5a2d]/55 mb-8">
-              Overview
-            </p>
-            <p className="text-xl text-[#4a5b4a] leading-relaxed mb-5">
+        <Section>
+          <SectionHeader eyebrow="Overview" index="01" title="From research to *field-level* impact." />
+          <div className="prose-body mt-12 grid gap-x-12 gap-y-6 text-stone lg:grid-cols-12">
+            <P className="lg:col-span-5">
               The TETFund Centre of Excellence in Food Security delivers
               structured training programmes, farmer-focused extension clinics,
               and capacity-building workshops designed to translate research
               into measurable field-level impact.
-            </p>
-            <p className="text-[#4a5b4a] leading-relaxed">
-              Our training initiatives bridge academic knowledge and practical
-              application, strengthening productivity, enterprise development,
-              and sustainable agricultural practices across value chains.
-            </p>
-          </div>
-        </section>
-      </AnimatedSection>
-
-      {/* ── Section 2: Featured Training Initiative — event card ─────────────── */}
-      <AnimatedSection animation="slide-up" delay={100}>
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50/30">
-          <div className="max-w-6xl mx-auto">
-            {/* Section opening */}
-            <div className="mb-10">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#2d5a2d]/10 text-[#2d5a2d] text-sm font-medium mb-4">
-                Current & Recent Training
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-[#2f3e2f] leading-tight max-w-xl">
-                Training Initiatives
-              </h2>
+            </P>
+            <div className="lg:col-span-5 lg:col-start-8">
+              <P delay={0.08}>
+                Our training initiatives bridge academic knowledge and
+                practical application, strengthening productivity, enterprise
+                development, and sustainable agricultural practices across
+                value chains.
+              </P>
             </div>
+          </div>
+        </Section>
 
-            {/* Event card */}
-            <div className="bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl shadow-lg overflow-hidden flex flex-col lg:flex-row">
-              {/* Date panel */}
-              <div className="lg:w-52 bg-[#2d5a2d]/[0.06] border-b lg:border-b-0 lg:border-r border-[#2d5a2d]/[0.08] p-8 flex flex-col justify-center flex-shrink-0">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#2d5a2d]/55 mb-4">
-                  Short Course
-                </p>
-                <p className="text-3xl font-bold text-[#2f3e2f] leading-tight">
-                  16 Feb —
-                </p>
-                <p className="text-3xl font-bold text-[#2f3e2f] leading-tight">
-                  1 Mar
-                </p>
-                <p className="text-base font-medium text-[#4a5b4a] mt-2">
+        {/* Current training */}
+        <Section tone="mist">
+          <SectionHeader
+            eyebrow="Current & recent training"
+            index="02"
+            title="Training *initiatives.*"
+          />
+          <Reveal className="mt-12">
+            <article className="grid overflow-hidden rounded-lg bg-paper ring-1 ring-ink/10 lg:grid-cols-12">
+              <div className="flex flex-col justify-between gap-12 bg-wheat p-9 text-ink sm:p-12 lg:col-span-4">
+                <p className="eyebrow">Short course</p>
+                <p className="display text-[clamp(2.5rem,4.4vw,3.75rem)] leading-[0.98]">
+                  16 Feb
+                  <span className="block italic opacity-70">to 1 Mar</span>
                   2026
                 </p>
               </div>
-
-              {/* Content */}
-              <div className="flex-1 p-8 lg:p-10">
-                <h3 className="text-2xl font-bold text-[#2f3e2f] leading-tight mb-5">
+              <div className="p-9 sm:p-12 lg:col-span-8">
+                <h3 className="display display-lg text-ink">
                   Post-Harvest Management of Fresh Produce
                 </h3>
-                <div className="space-y-4">
-                  <p className="text-[#4a5b4a] leading-relaxed">
+                <div className="prose-body mt-7 max-w-2xl space-y-5 text-stone">
+                  <p>
                     A structured short course focused on reducing post-harvest
                     losses, improving produce handling, value addition,
                     packaging systems, and market readiness.
                   </p>
-                  <p className="text-[#4a5b4a] leading-relaxed border-l-4 border-[#2d5a2d] pl-5">
+                  <p>
                     Participants engaged in both theoretical sessions and
                     hands-on practical demonstrations designed to enhance
                     product quality and shelf-life management.
                   </p>
                 </div>
               </div>
+            </article>
+          </Reveal>
+        </Section>
+
+        {/* Short courses */}
+        <Section>
+          <div className="grid gap-x-12 gap-y-12 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <div className="lg:sticky lg:top-32">
+                <SectionHeader
+                  eyebrow="Short courses"
+                  index="03"
+                  title="Specialised training *areas.*"
+                  className="lg:!grid-cols-1"
+                />
+                <P className="prose-body mt-7 max-w-md text-stone">
+                  The Centre offers and continues to develop specialised
+                  training in the following areas:
+                </P>
+              </div>
+            </div>
+            <div className="lg:col-span-6 lg:col-start-7">
+              <NumberedList items={shortCourses} className="border-b border-line" />
+              <P className="mt-8 text-[1.125rem] font-semibold leading-snug text-ink">
+                Each programme is designed to integrate theory, demonstration,
+                and enterprise application.
+              </P>
             </div>
           </div>
-        </section>
-      </AnimatedSection>
+        </Section>
 
-      {/* ── Section 3: Short Courses — 2-col flat list ───────────────────────── */}
-      <AnimatedSection animation="slide-right">
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-          <div className="max-w-4xl mx-auto">
-            {/* Section opening */}
-            <div className="mb-10">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#2d5a2d]/10 text-[#2d5a2d] text-sm font-medium mb-4">
-                Short Courses
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-[#2f3e2f] leading-tight max-w-xl">
-                Specialized Training Areas
-              </h2>
-              <p className="text-lg text-[#4a5b4a] leading-relaxed mt-4 max-w-2xl">
-                The Centre offers and continues to develop specialized training
-                in the following areas:
-              </p>
-            </div>
+        {/* Workshop */}
+        <Section tone="forest" className="grain overflow-hidden">
+          <SplitFeature
+            tone="dark"
+            reverse
+            eyebrow="Capacity-building workshop"
+            index="04"
+            title="Four days of institutional *realignment* and delivery."
+            image="/news/news1_images_optimized/img3.webp"
+            imageAlt="Participants at the TCoEFS capacity-building workshop, September 2025"
+            aspect="aspect-[4/3] lg:aspect-[5/6]"
+            badge={{ value: "Sept 2025", label: "Four-day workshop" }}
+          >
+            <P>
+              In September 2025, the Centre convened a four-day
+              capacity-building workshop to strengthen institutional alignment,
+              enterprise activation, and research integration. This initiative
+              marked a strategic step in enhancing institutional delivery.
+            </P>
+            <P>The workshop emphasised:</P>
+            <CheckList
+              tone="dark"
+              items={workshopPoints}
+              className="!mt-4 border-b border-line-inverse"
+            />
+          </SplitFeature>
+        </Section>
 
-            {/* 2-col course list */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 mb-8">
-              {shortCourses.map((course, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-3 py-4 border-b border-gray-100"
-                >
-                  <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#2d5a2d] mt-2" />
-                  <span className="text-[#2f3e2f] font-medium text-sm leading-relaxed">
-                    {course}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <p className="text-sm text-[#4a5b4a] leading-relaxed border-l-4 border-[#2d5a2d]/30 pl-5">
-              Each programme is designed to integrate theory, demonstration, and
-              enterprise application.
-            </p>
-          </div>
-        </section>
-      </AnimatedSection>
-
-      {/* ── Section 4: Capacity Workshop — tinted, no badge+H2 ───────────────── */}
-      <AnimatedSection animation="slide-left" delay={100}>
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#2d5a2d]/[0.05]">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-              {/* Left: narrative */}
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2d5a2d] mb-2">
-                  September 2025
-                </p>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2d5a2d]/55 mb-6">
-                  Capacity-Building Workshop
-                </p>
-                <p className="text-3xl md:text-4xl font-bold text-[#2f3e2f] leading-tight mb-6">
-                  Four days of institutional realignment and delivery.
-                </p>
-                <p className="text-[#4a5b4a] leading-relaxed mb-4">
-                  In September 2025, the Centre convened a four-day
-                  capacity-building workshop to strengthen institutional
-                  alignment, enterprise activation, and research integration.
-                </p>
-                <p className="text-sm text-[#4a5b4a] leading-relaxed border-l-4 border-[#2d5a2d] pl-5">
-                  This initiative marked a strategic step in enhancing
-                  institutional delivery.
-                </p>
-              </div>
-
-              {/* Right: emphasis points */}
-              <div>
-                <p className="text-sm font-semibold text-[#2f3e2f] mb-6">
-                  The workshop emphasised:
-                </p>
-                <div className="space-y-4">
-                  {workshopPoints.map((point, i) => (
-                    <div key={i} className="flex items-center gap-4">
-                      <div className="flex-shrink-0 w-8 h-px bg-gradient-to-r from-[#2d5a2d]/50 to-transparent" />
-                      <p className="text-[#4a5b4a] text-base leading-relaxed">
-                        {point}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </AnimatedSection>
-
-      {/* ── Section 5: Extension & Community — stacked accent strips ─────────── */}
-      <AnimatedSection animation="fade" delay={100}>
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-          <div className="max-w-6xl mx-auto">
-            {/* Section opening */}
-            <div className="mb-10">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#2d5a2d]/10 text-[#2d5a2d] text-sm font-medium mb-4">
-                Community Engagement
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-[#2f3e2f] leading-tight max-w-xl">
-                Extension & Community Impact
-              </h2>
-            </div>
-
-            {/* Stacked community strips */}
-            <div className="divide-y divide-gray-100 mb-10">
-              {communityItems.map((item, i) => (
-                <div key={i} className="flex items-center gap-5 py-5">
-                  {/* Gradient vertical accent */}
-                  <div className="flex-shrink-0 w-1 h-8 rounded-full bg-gradient-to-b from-[#2d5a2d] to-[#5a7c65]" />
-                  <p className="text-base font-medium text-[#2f3e2f] leading-snug">
-                    {item}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <p className="text-[#4a5b4a] leading-relaxed max-w-2xl border-l-4 border-[#2d5a2d] pl-6">
+        {/* Community */}
+        <Section>
+          <SplitFeature
+            eyebrow="Community engagement"
+            index="05"
+            title="Extension & community *impact.*"
+            image="/news/news3_images_optimized/img13.webp"
+            imageAlt="Farmers and the TCoEFS team on a field visit"
+            secondaryImage="/news/news3_images_optimized/img14.webp"
+            secondaryAlt="Field discussion with extension participants"
+            aspect="aspect-[4/3] lg:aspect-[5/6]"
+          >
+            <CheckList items={communityItems} className="border-b border-line" />
+            <P className="text-[1.125rem] font-semibold leading-snug text-ink">
               The Centre integrates participatory approaches to ensure farmers
               are co-creators and beneficiaries of innovation.
-            </p>
-          </div>
-        </section>
-      </AnimatedSection>
+            </P>
+          </SplitFeature>
+        </Section>
 
-      {/* ── Section 6: Upcoming Training — minimal CTA close ─────────────────── */}
-      <AnimatedSection animation="fade" delay={100}>
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50/30">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#2d5a2d]/10 text-[#2d5a2d] text-sm font-medium mb-6">
-              Upcoming Opportunities
-            </div>
-            <p className="text-lg text-[#4a5b4a] leading-relaxed mb-8">
-              Visitors are encouraged to check regularly for updates on upcoming
-              short courses, specialized workshops, and farmer training
-              sessions.
+        <Section className="!pt-0">
+          <CtaPanel
+            eyebrow="Upcoming opportunities"
+            title="Looking for the next course or workshop?"
+            actions={
+              <>
+                <ButtonLink href="/contact" variant="wheat">
+                  Enquire about training
+                </ButtonLink>
+                <ButtonLink href="/news/newsletters-events" variant="outline-light">
+                  Upcoming events
+                </ButtonLink>
+              </>
+            }
+          >
+            <p>
+              Visitors are encouraged to check regularly for updates on
+              upcoming short courses, specialised workshops, and farmer
+              training sessions.
             </p>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#2d5a2d] to-[#4a5b4a] hover:from-[#4a5b4a] hover:to-[#2d5a2d] text-white px-7 py-3.5 rounded-lg font-medium text-base shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
-            >
-              Enquire About Training
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
-            </Link>
-          </div>
-        </section>
-      </AnimatedSection>
-
+          </CtaPanel>
+        </Section>
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }
