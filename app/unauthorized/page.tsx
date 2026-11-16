@@ -1,61 +1,47 @@
 "use client";
 
 import { useEffect } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ShieldAlert } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 export default function UnauthorizedPage() {
-  const router = useRouter();
   const supabase = createClient();
 
   useEffect(() => {
-    // Sign out the user if they're still logged in
-    const signOut = async () => {
-      await supabase.auth.signOut();
-    };
-    signOut();
+    // Make sure an unauthorised account is not left signed in.
+    supabase.auth.signOut();
   }, [supabase]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 to-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 max-w-md w-full text-center">
-        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-100 mb-6">
-          <ShieldAlert className="w-10 h-10 text-red-600" />
-        </div>
-
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          Access Denied
+    <main className="grid min-h-screen place-items-center bg-mist px-5 py-12">
+      <div className="w-full max-w-md rounded-lg border border-line bg-white p-8 text-center shadow-[0_16px_40px_-20px_rgb(15_23_42_/_0.25)] sm:p-10">
+        <span className="mx-auto grid size-14 place-items-center rounded-full bg-red-50 text-red-700">
+          <ShieldAlert className="size-7" />
+        </span>
+        <h1 className="mt-5 text-[1.5rem] font-semibold text-ink">
+          Access denied
         </h1>
-
-        <p className="text-gray-600 mb-6">
-          You are not authorized to access the TCoEFS Admin Dashboard. This
-          area is restricted to authorized administrators only.
+        <p className="mt-3 text-[0.9375rem] leading-relaxed text-stone">
+          This GitHub account is not on the list of authorised administrators
+          for the TCoEFS dashboard. If you should have access, send the site
+          administrator your GitHub username.
         </p>
-
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-          <p className="text-sm text-red-800">
-            If you believe you should have access, please contact the system
-            administrator with your GitHub username.
-          </p>
-        </div>
-
-        <div className="space-y-3">
-          <button
-            onClick={() => router.push("/login")}
-            className="w-full px-6 py-3 bg-[#2d5a2d] text-white font-semibold rounded-lg hover:bg-[#1e4a1e] transition-colors"
+        <div className="mt-8 grid gap-3">
+          <Link
+            href="/login"
+            className="inline-flex h-12 items-center justify-center rounded-md bg-pine text-[0.9375rem] font-semibold text-white hover:bg-leaf"
           >
-            Try Again with Different Account
-          </button>
-
-          <button
-            onClick={() => router.push("/")}
-            className="w-full px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+            Try a different account
+          </Link>
+          <Link
+            href="/"
+            className="inline-flex h-12 items-center justify-center rounded-md border border-[#cbd5e1] text-[0.9375rem] font-semibold text-ink hover:border-ink"
           >
-            Return to Home
-          </button>
+            Back to the website
+          </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

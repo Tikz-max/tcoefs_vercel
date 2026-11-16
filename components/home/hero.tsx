@@ -1,47 +1,29 @@
 "use client";
 
-import Image from "next/image";
+import { SafeImage } from "@/components/site/safe-image";
+import type { HeroSlideView } from "@/lib/content/defaults";
 import { useEffect, useState } from "react";
 import { ButtonLink } from "@/components/site/ui";
 
-const slides = [
-  {
-    src: "/ENTERPRISE_and_DEMONSTRATION/farm-land-opt.webp",
-    alt: "Research and demonstration farmland at the University of Jos",
-  },
-  {
-    src: "/hero/compressed/4.jpg",
-    alt: "The TCoEFS team and visitors at the Centre's facilities",
-  },
-  {
-    src: "/ENTERPRISE_and_DEMONSTRATION/greenhouse-1-opt.webp",
-    alt: "Visitors at the Centre's greenhouse complex",
-  },
-  {
-    src: "/hero/compressed/2.jpg",
-    alt: "Partners and University of Jos leadership at an institutional engagement",
-  },
-];
-
-export default function Hero() {
+export default function Hero({ slides }: { slides: HeroSlideView[] }) {
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    if (paused) return;
+    if (paused || slides.length < 2) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = setTimeout(
       () => setCurrent((prev) => (prev + 1) % slides.length),
       7000,
     );
     return () => clearTimeout(id);
-  }, [current, paused]);
+  }, [current, paused, slides.length]);
 
   return (
     <section className="relative isolate overflow-hidden bg-forest text-white">
       {slides.map((slide, i) => (
-        <Image
-          key={slide.src}
+        <SafeImage
+          key={`${slide.src}-${i}`}
           src={slide.src}
           alt={i === current ? slide.alt : ""}
           fill
@@ -57,7 +39,7 @@ export default function Hero() {
         className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0b1b33]/90 via-[#0b1b33]/70 to-[#0b1b33]/25"
       />
 
-      <div className="shell flex min-h-[34rem] flex-col justify-center py-20 lg:min-h-[40rem] lg:py-28">
+      <div className="shell animate-in fade-in slide-in-from-bottom-3 duration-700 flex min-h-[34rem] flex-col justify-center py-20 lg:min-h-[40rem] lg:py-28">
         <p className="eyebrow text-wheat">University of Jos, Nigeria</p>
         <h1 className="display display-hero mt-4 max-w-3xl">
           TETFund Centre of Excellence in Food Security
@@ -76,8 +58,9 @@ export default function Hero() {
           </ButtonLink>
         </div>
 
+        <div className="mt-12 flex items-center justify-between gap-4">
         <div
-          className="mt-12 flex items-center gap-2"
+          className="flex items-center gap-2"
           role="group"
           aria-label="Hero photographs"
         >
@@ -100,6 +83,15 @@ export default function Hero() {
               />
             </button>
           ))}
+        </div>
+        {slides[current]?.caption && (
+          <p
+            key={current}
+            className="hidden text-[0.8125rem] text-white/80 animate-in fade-in duration-700 sm:block"
+          >
+            {slides[current].caption}
+          </p>
+        )}
         </div>
       </div>
     </section>

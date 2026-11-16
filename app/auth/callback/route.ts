@@ -1,10 +1,21 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { isAuthorizedAdmin } from "@/lib/auth/authorized";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
   const origin = requestUrl.origin;
+
+  // The sign-in provider reported a problem: show it on the login page.
+  const providerError = requestUrl.searchParams.get("error");
+  if (providerError) {
+    const login = new URL("/login", origin);
+    login.searchParams.set("error", providerError);
+    const description = requestUrl.searchParams.get("error_description");
+    if (description) login.searchParams.set("error_description", description);
+    return NextResponse.redirect(login);
+  }
 
   if (code) {
     const supabase = await createClient();
@@ -21,12 +32,7 @@ export async function GET(request: Request) {
     } = await supabase.auth.getUser();
 
     if (user) {
-      const authorizedAdmins =
-        process.env.NEXT_PUBLIC_AUTHORIZED_ADMINS?.split(",") || [];
-      const userGithubUsername =
-        user.user_metadata?.user_name || user.user_metadata?.preferred_username;
-
-      if (!authorizedAdmins.includes(userGithubUsername)) {
+      if (!isAuthorizedAdmin(user)) {
         // User is not authorized, sign them out
         await supabase.auth.signOut();
         return NextResponse.redirect(`${origin}/unauthorized`);

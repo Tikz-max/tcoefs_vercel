@@ -57,7 +57,7 @@ export default function Facilities() {
             <Link
               key={f.title}
               href={f.href}
-              className="group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white transition-shadow duration-200 hover:shadow-[0_12px_32px_-16px_rgb(15_23_42_/_0.3)]"
+              className="group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-16px_rgb(15_23_42_/_0.3)]"
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-mist">
                 <Image

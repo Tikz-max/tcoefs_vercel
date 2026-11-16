@@ -1,4 +1,5 @@
 // Admin service functions for TCoEFS content management
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 import type {
   YouTubeVideo,
@@ -361,10 +362,11 @@ export async function getLatestNewsletter(): Promise<Newsletter | null> {
  */
 export async function addNewsletter(
   newsletter: NewsletterInsert,
+  db: SupabaseClient = supabase,
 ): Promise<{ success: boolean; error?: string; data?: Newsletter }> {
   // If this is marked as latest, unmark all others first
   if (newsletter.is_latest) {
-    await supabase
+    await db
       .from("newsletters")
       .update({ is_latest: false })
       .eq("is_latest", true);
@@ -374,7 +376,7 @@ export async function addNewsletter(
   const existing = await getNewsletters();
   const displayOrder = newsletter.display_order ?? existing.length + 1;
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("newsletters")
     .insert([{ ...newsletter, display_order: displayOrder }])
     .select()
@@ -421,8 +423,9 @@ export async function updateNewsletter(
  */
 export async function deleteNewsletterEntry(
   id: string,
+  db: SupabaseClient = supabase,
 ): Promise<{ success: boolean; error?: string }> {
-  const { error } = await supabase.from("newsletters").delete().eq("id", id);
+  const { error } = await db.from("newsletters").delete().eq("id", id);
 
   if (error) {
     console.error("Error deleting newsletter entry:", error);
@@ -432,7 +435,7 @@ export async function deleteNewsletterEntry(
   // Reorder remaining
   const remaining = await getNewsletters();
   const reorderPromises = remaining.map((n, index) =>
-    supabase
+    db
       .from("newsletters")
       .update({ display_order: index + 1 })
       .eq("id", n.id),
@@ -511,11 +514,12 @@ export async function getFeaturedResources(): Promise<Resource[]> {
  */
 export async function addResource(
   resource: ResourceInsert,
+  db: SupabaseClient = supabase,
 ): Promise<{ success: boolean; error?: string; data?: Resource }> {
   const existing = await getResources();
   const displayOrder = resource.display_order ?? existing.length + 1;
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("resources")
     .insert([{ ...resource, display_order: displayOrder }])
     .select()
@@ -554,8 +558,9 @@ export async function updateResource(
  */
 export async function deleteResourceEntry(
   id: string,
+  db: SupabaseClient = supabase,
 ): Promise<{ success: boolean; error?: string }> {
-  const { error } = await supabase.from("resources").delete().eq("id", id);
+  const { error } = await db.from("resources").delete().eq("id", id);
 
   if (error) {
     console.error("Error deleting resource entry:", error);
@@ -565,7 +570,7 @@ export async function deleteResourceEntry(
   // Reorder remaining
   const remaining = await getResources();
   const reorderPromises = remaining.map((r, index) =>
-    supabase
+    db
       .from("resources")
       .update({ display_order: index + 1 })
       .eq("id", r.id),

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { PageHero } from "@/components/site/page-hero";
@@ -36,12 +36,16 @@ function TeamCard({ profile }: { profile: TeamProfile }) {
           <ArrowUpRight className="size-[1.125rem]" />
         </span>
       </div>
-      <h3 className="mt-5 text-[1.125rem] font-semibold leading-snug text-ink">
-        <span className="link-draw pb-0.5">{profile.name}</span>
+      <h3 className="mt-4 text-[1.0625rem] font-semibold leading-snug text-ink group-hover:text-pine">
+        {profile.name}
       </h3>
-      <p className="mt-2 text-[0.875rem] leading-snug text-stone">
+      <p className="mt-1.5 text-[0.875rem] leading-snug text-stone">
         {profile.specialization}
       </p>
+      <span className="mt-3 inline-flex min-h-8 items-center gap-1.5 text-[0.875rem] font-semibold text-pine">
+        View profile
+        <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+      </span>
     </Link>
   );
 }

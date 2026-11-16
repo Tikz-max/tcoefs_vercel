@@ -18,7 +18,15 @@ import {
   Star,
   Download,
   BookOpen,
+  Images,
+  Gauge,
 } from "lucide-react";
+import { HeroSlidesPanel } from "@/components/admin/hero-slides-panel";
+import { SiteStatsPanel } from "@/components/admin/site-stats-panel";
+import {
+  GalleryUploadButton,
+  ImageUploadField,
+} from "@/components/admin/image-upload-field";
 import {
   getYouTubeVideo,
   updateYouTubeVideo,
@@ -51,8 +59,8 @@ export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
-    "video" | "spotlight" | "event" | "newsletters" | "resources"
-  >("video");
+    "hero" | "figures" | "video" | "spotlight" | "event" | "newsletters" | "resources"
+  >("hero");
   const router = useRouter();
   const supabase = createClient();
 
@@ -624,6 +632,32 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-6 overflow-x-auto">
             <button
+              onClick={() => setActiveTab("hero")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
+                activeTab === "hero"
+                  ? "border-[#316840] text-[#316840]"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Images className="w-5 h-5" />
+                Homepage Pictures
+              </div>
+            </button>
+            <button
+              onClick={() => setActiveTab("figures")}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
+                activeTab === "figures"
+                  ? "border-[#316840] text-[#316840]"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Gauge className="w-5 h-5" />
+                Homepage Figures
+              </div>
+            </button>
+            <button
               onClick={() => setActiveTab("video")}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
                 activeTab === "video"
@@ -695,6 +729,18 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* YouTube Video Tab */}
+        {activeTab === "hero" && (
+          <HeroSlidesPanel
+            updatedBy={user?.user_metadata?.user_name || user?.email}
+          />
+        )}
+
+        {activeTab === "figures" && (
+          <SiteStatsPanel
+            updatedBy={user?.user_metadata?.user_name || user?.email}
+          />
+        )}
+
         {activeTab === "video" && (
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center gap-3 mb-6">
@@ -891,28 +937,30 @@ export default function AdminDashboard() {
                         />
                       </div>
 
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Card Image URL *
-                        </label>
-                        <input
-                          type="text"
-                          value={spotlightForm.image}
-                          onChange={(e) =>
-                            setSpotlightForm({
-                              ...spotlightForm,
-                              image: e.target.value,
-                            })
-                          }
-                          placeholder="/path/to/image.jpg"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#316840] focus:border-transparent"
-                        />
-                      </div>
+                      <ImageUploadField
+                        label="Card picture *"
+                        value={spotlightForm.image}
+                        onChange={(url) =>
+                          setSpotlightForm({ ...spotlightForm, image: url })
+                        }
+                      />
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           Gallery Images (one per line)
                         </label>
+                        <div className="mb-2">
+                          <GalleryUploadButton
+                            onAdd={(urls) =>
+                              setSpotlightForm({
+                                ...spotlightForm,
+                                images: [spotlightForm.images, ...urls]
+                                  .filter(Boolean)
+                                  .join("\n"),
+                              })
+                            }
+                          />
+                        </div>
                         <textarea
                           value={spotlightForm.images}
                           onChange={(e) =>

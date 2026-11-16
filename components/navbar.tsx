@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
+import { motion, useScroll, useSpring } from "motion/react";
 import { ArrowUpRight, ChevronDown, Mail, Menu, Phone, X } from "lucide-react";
 import { navItems, site, socials, type NavItem } from "@/lib/site";
 
@@ -264,6 +265,8 @@ function MobileMenu({ pathname }: { pathname: string }) {
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 28, mass: 0.4 });
 
   return (
     <header className="sticky top-0 z-50 bg-white">
@@ -298,7 +301,12 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className="border-b border-line">
+      <div className="relative border-b border-line">
+        <motion.div
+          aria-hidden="true"
+          style={{ scaleX: progress }}
+          className="absolute inset-x-0 bottom-[-1px] h-[2px] origin-left bg-pine"
+        />
         <div className="shell flex h-[4.5rem] items-center justify-between gap-6">
           <Brand />
 

@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isAuthorizedAdmin } from "@/lib/auth/authorized";
 
 export async function updateSession(request: NextRequest) {
   // Check if environment variables are available
@@ -60,12 +61,7 @@ export async function updateSession(request: NextRequest) {
     }
 
     // Check if user is authorized admin
-    const authorizedAdmins =
-      process.env.NEXT_PUBLIC_AUTHORIZED_ADMINS?.split(",") || [];
-    const userGithubUsername =
-      user.user_metadata?.user_name || user.user_metadata?.preferred_username;
-
-    if (!authorizedAdmins.includes(userGithubUsername)) {
+    if (!isAuthorizedAdmin(user)) {
       // Redirect to unauthorized page if not in authorized list
       const url = request.nextUrl.clone();
       url.pathname = "/unauthorized";

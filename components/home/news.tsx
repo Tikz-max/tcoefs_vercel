@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SafeImage as Image } from "@/components/site/safe-image";
 import { ArrowUpRight } from "lucide-react";
 import { Reveal, RevealImage, Stagger } from "@/components/site/motion";
 import { ButtonLink, SectionHeader } from "@/components/site/ui";

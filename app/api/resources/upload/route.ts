@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { uploadResource } from "@/lib/r2/resources";
 import { addResource } from "@/lib/services/admin";
+import { requireAdmin } from "@/lib/auth/admin";
 
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const formData = await request.formData();
 
@@ -51,7 +55,7 @@ export async function POST(request: NextRequest) {
       year,
       is_featured: isFeatured,
       updated_by: updatedBy ?? null,
-    });
+    }, auth.supabase);
 
     if (!saveResult.success) {
       return NextResponse.json(
