@@ -14,6 +14,10 @@ import Spotlights from "@/components/home/spotlights";
 import News, { type NewsItem } from "@/components/home/news";
 import Bulletin from "@/components/home/bulletin";
 import Faq from "@/components/home/faq";
+import { getHeroSlides, getSiteStats } from "@/lib/content/server";
+
+// Refresh at most every five minutes; the admin also refreshes it on save.
+export const revalidate = 300;
 
 async function getLatestNews(): Promise<NewsItem[]> {
   try {
@@ -41,15 +45,19 @@ async function getLatestNews(): Promise<NewsItem[]> {
 }
 
 export default async function Home() {
-  const news = await getLatestNews();
+  const [news, heroSlides, stats] = await Promise.all([
+    getLatestNews(),
+    getHeroSlides(),
+    getSiteStats(),
+  ]);
 
   return (
     <>
       <Navbar />
       <main id="main">
-        <Hero />
+        <Hero slides={heroSlides} />
         <Pathways />
-        <About />
+        <About stats={stats} />
         <Director />
         <Programmes />
         <Research />

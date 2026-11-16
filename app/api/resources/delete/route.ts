@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { deleteR2Resource } from "@/lib/r2/resources";
 import { deleteResourceEntry } from "@/lib/services/admin";
+import { requireAdmin } from "@/lib/auth/admin";
 
 export const runtime = "nodejs";
 
 export async function DELETE(request: NextRequest) {
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const { id, r2_key } = await request.json();
 
@@ -22,7 +26,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Delete metadata from Supabase
-    const dbResult = await deleteResourceEntry(id);
+    const dbResult = await deleteResourceEntry(id, auth.supabase);
     if (!dbResult.success) {
       return NextResponse.json(
         { error: dbResult.error ?? "Failed to delete resource from database" },

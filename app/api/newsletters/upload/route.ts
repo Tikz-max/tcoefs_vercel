@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { uploadNewsletter } from "@/lib/r2/newsletters";
 import { addNewsletter } from "@/lib/services/admin";
+import { requireAdmin } from "@/lib/auth/admin";
 
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const formData = await request.formData();
 
@@ -63,7 +67,7 @@ export async function POST(request: NextRequest) {
       r2_key: uploadResult.key,
       is_latest: isLatest,
       updated_by: updatedBy ?? null,
-    });
+    }, auth.supabase);
 
     if (!saveResult.success) {
       return NextResponse.json(

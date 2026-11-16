@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { SafeImage as Image } from "@/components/site/safe-image";
 import { useEffect, useRef, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { ArrowLeft, ArrowRight, ArrowUpRight, X } from "lucide-react";
@@ -69,7 +69,7 @@ function SpotlightStory({ card }: { card: Spotlight }) {
             <p
               className={
                 i === 0
-                  ? "text-[1.125rem] font-semibold leading-snug text-ink"
+                  ? "text-[1.25rem] leading-relaxed text-ink"
                   : "prose-body text-stone"
               }
             >

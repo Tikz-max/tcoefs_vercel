@@ -103,13 +103,49 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 {profile.specialization}
               </p>
               {profile.institution && (
-                <p className="mt-1.5 max-w-xl text-[0.9375rem] text-white/50">
+                <p className="mt-1.5 max-w-xl text-[0.9375rem] text-white/70">
                   {profile.institution}
                 </p>
               )}
+              {hasContact && (
+                <ul className="mt-6 flex flex-wrap gap-2 lg:hidden">
+                  {profile.email && (
+                    <li>
+                      <a
+                        href={`mailto:${profile.email}`}
+                        className="inline-flex h-11 items-center gap-2 rounded-md border border-white/40 px-4 text-[0.9375rem] font-medium text-white"
+                      >
+                        <Mail className="size-4" /> Email
+                      </a>
+                    </li>
+                  )}
+                  {profile.phone && (
+                    <li>
+                      <a
+                        href={`tel:${profile.phone}`}
+                        className="inline-flex h-11 items-center gap-2 rounded-md border border-white/40 px-4 text-[0.9375rem] font-medium text-white"
+                      >
+                        <Phone className="size-4" /> Call
+                      </a>
+                    </li>
+                  )}
+                  {profile.googleScholar && (
+                    <li>
+                      <a
+                        href={profile.googleScholar}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex h-11 items-center gap-2 rounded-md border border-white/40 px-4 text-[0.9375rem] font-medium text-white"
+                      >
+                        <ArrowUpRight className="size-4" /> Scholar
+                      </a>
+                    </li>
+                  )}
+                </ul>
+              )}
             </div>
             <div className="lg:col-span-4 lg:col-start-9">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-pine">
+              <div className="relative aspect-[4/5] max-w-[13rem] overflow-hidden rounded-lg bg-pine sm:max-w-xs lg:max-w-none">
                 <Portrait
                   profile={profile}
                   priority
@@ -122,7 +158,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
         <section className="bg-paper py-16 sm:py-24">
           <div className="shell grid gap-x-12 gap-y-12 lg:grid-cols-12">
-            <aside className="lg:col-span-4">
+            <aside className="order-2 lg:order-1 lg:col-span-4">
               <div className="space-y-10 lg:sticky lg:top-28">
                 <div>
                   <p className="eyebrow mb-5 text-stone">Contact</p>
@@ -195,7 +231,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               </div>
             </aside>
 
-            <div className="lg:col-span-7 lg:col-start-6">
+            <div className="order-1 lg:order-2 lg:col-span-7 lg:col-start-6">
               {profile.profileSummary?.length ? (
                 <ContentSection
                   id="summary"
@@ -208,7 +244,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                         key={paragraph}
                         className={
                           i === 0
-                            ? "text-[1.125rem] font-semibold leading-snug text-ink"
+                            ? "text-[1.1875rem] leading-relaxed text-ink"
                             : "prose-body text-stone"
                         }
                       >

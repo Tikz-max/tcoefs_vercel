@@ -168,3 +168,29 @@ export interface UpcomingEventUpdate {
   is_active?: boolean;
   updated_by?: string | null;
 }
+
+// Homepage hero pictures (managed from the admin dashboard)
+export interface HeroSlide {
+  id: string;
+  image_url: string;
+  alt_text: string;
+  caption: string;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  updated_by: string | null;
+}
+
+// Homepage headline figures (managed from the admin dashboard)
+export interface SiteStat {
+  id: string;
+  label: string;
+  description: string;
+  value: number;
+  suffix: string;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+  updated_by: string | null;
+}

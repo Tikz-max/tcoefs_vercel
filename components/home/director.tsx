@@ -8,7 +8,7 @@ export default function Director() {
   // First two sentences of the published executive profile. Sentence ends
   // must follow a full word so "Prof." and initials do not split the text.
   const profile = director.featuredSummary ?? "";
-  const match = profile.match(/^(.*?[a-z0-9]{4}\.)\s+(.*?[a-z0-9]{4}\.)(?:\s|$)/s);
+  const match = profile.match(/^([\s\S]*?[a-z0-9]{4}\.)\s+([\s\S]*?[a-z0-9]{4}\.)(?:\s|$)/);
   const summary = match ? `${match[1]} ${match[2]}` : profile;
 
   return (

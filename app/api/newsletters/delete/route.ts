@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { deleteNewsletter } from "@/lib/r2/newsletters";
 import { deleteNewsletterEntry } from "@/lib/services/admin";
+import { requireAdmin } from "@/lib/auth/admin";
 
 export const runtime = "nodejs";
 
 export async function DELETE(request: NextRequest) {
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+
   try {
     const { id, r2_key } = await request.json();
 
@@ -23,7 +27,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Delete metadata from Supabase
-    const dbResult = await deleteNewsletterEntry(id);
+    const dbResult = await deleteNewsletterEntry(id, auth.supabase);
 
     if (!dbResult.success) {
       return NextResponse.json(

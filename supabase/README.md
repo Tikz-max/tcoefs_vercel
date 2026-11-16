@@ -2,6 +2,54 @@
 
 This directory contains the database schema for the TCoEFS admin content management system.
 
+## Admin content upgrade (run `cms.sql`)
+
+`cms.sql` is the second setup step. Run it once in **SQL Editor** (it is safe to
+run again). It:
+
+1. Creates the administrator allow-list (`admin_github_users`) and the
+   `is_admin()` check. **Edit the username list at the top before running** and
+   make sure your own GitHub username is in it.
+2. Creates `hero_slides` (homepage pictures) and `site_stats` (homepage figures)
+   with the current content pre-filled.
+3. Replaces the old "any signed-in user may edit" rules with
+   "administrators only" on every content table. The public can still read.
+
+To add another administrator later, run:
+
+```sql
+insert into public.admin_github_users (username) values ('their-github-username');
+```
+
+Also add the same name to the `NEXT_PUBLIC_AUTHORIZED_ADMINS` environment
+variable in Vercel (comma separated), then redeploy.
+
+### Environment variables used by the admin
+
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Database and sign-in |
+| `NEXT_PUBLIC_AUTHORIZED_ADMINS` | Comma-separated GitHub usernames allowed into `/admin` and the admin API routes |
+| `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | Uploads (pictures, PDFs) |
+| `NEXT_PUBLIC_R2_PUBLIC_BASE_URL` | Public address of the R2 bucket; also allows uploaded pictures to be optimised |
+
+### Troubleshooting GitHub sign-in (error 500 "unexpected_failure")
+
+A JSON error like `{"code":500,"error_code":"unexpected_failure"...}` is returned
+by Supabase itself, before the visitor returns to the site. The exact reason is
+in **Supabase > Logs > Auth** (search around the time of the attempt). The usual
+causes are:
+
+- The GitHub account has no verified primary email. Add or verify one at
+  github.com/settings/emails.
+- Supabase is configured with a GitHub *App* instead of an *OAuth App*. A GitHub
+  App must be granted **Account permissions > Email addresses: Read-only**.
+- The Client ID or Client Secret saved under **Authentication > Providers >
+  GitHub** is wrong or expired.
+- A database trigger on `auth.users` is failing (the log names it).
+- The GitHub OAuth App's callback URL must be exactly the one shown on the
+  Supabase GitHub provider page (`https://<project>.supabase.co/auth/v1/callback`).
+
 ## Tables
 
 The admin system uses three main tables:

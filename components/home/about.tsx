@@ -1,36 +1,9 @@
 import { Reveal, RevealImage, ScrubText } from "@/components/site/motion";
 import { StatRow } from "@/components/site/blocks";
+import type { StatView } from "@/lib/content/defaults";
 import { Eyebrow, TextLink } from "@/components/site/ui";
 
-const stats = [
-  {
-    value: 30,
-    suffix: "+",
-    label: "Scientific team members",
-    description: "Researchers, faculty, and field scientists driving TCoEFS work",
-  },
-  {
-    value: 500,
-    suffix: "+",
-    label: "Farmers trained",
-    description: "In climate-smart agriculture and value addition practices",
-  },
-  {
-    value: 15,
-    suffix: "+",
-    label: "Postgraduate programmes developed",
-    description:
-      "Accredited programmes building the next generation of food security experts",
-  },
-  {
-    value: 10,
-    suffix: "+",
-    label: "Strategic partnerships activated",
-    description: "With national institutions, industry, and international bodies",
-  },
-];
-
-export default function About() {
+export default function About({ stats }: { stats: StatView[] }) {
   return (
     <section id="about" className="bg-paper py-16 sm:py-20 lg:py-24">
       <div className="shell">

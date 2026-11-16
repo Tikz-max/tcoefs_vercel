@@ -136,7 +136,7 @@ export default function TrainingExtensionPage() {
             </div>
             <div className="lg:col-span-6 lg:col-start-7">
               <NumberedList items={shortCourses} className="border-b border-line" />
-              <P className="mt-8 text-[1.125rem] font-semibold leading-snug text-ink">
+              <P className="mt-8 text-[1.125rem] leading-relaxed text-ink">
                 Each programme is designed to integrate theory, demonstration,
                 and enterprise application.
               </P>
@@ -185,7 +185,7 @@ export default function TrainingExtensionPage() {
             aspect="aspect-[4/3] lg:aspect-[5/6]"
           >
             <CheckList items={communityItems} className="border-b border-line" />
-            <P className="text-[1.125rem] font-semibold leading-snug text-ink">
+            <P className="text-[1.125rem] leading-relaxed text-ink">
               The Centre integrates participatory approaches to ensure farmers
               are co-creators and beneficiaries of innovation.
             </P>
